@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Admin</title>
+    <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body>
+    {% if request.user.is_authenticated %}
+    <aside>
+        <a href="{% url 'admin_dashboard' code %}" class="brand">Ganesh<span>.</span></a>
+        <small>CONTENT</small>
+        <nav>
+            <a href="{% url 'admin_dashboard' code %}" class="{% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">Dashboard</a>
+            <a href="{% url 'projects' code %}" class="{% if 'project' in request.resolver_match.url_name %}active{% endif %}">Projects</a>
+            <a href="{% url 'skills' code %}" class="{% if 'skill' in request.resolver_match.url_name %}active{% endif %}">Skills</a>
+            <a href="{% url 'experiences' code %}" class="{% if 'experience' in request.resolver_match.url_name %}active{% endif %}">Experience</a>
+            <a href="{% url 'education' code %}" class="{% if 'education' in request.resolver_match.url_name %}active{% endif %}">Education</a>
+            <a href="{% url 'certifications' code %}" class="{% if 'cert' in request.resolver_match.url_name %}active{% endif %}">Certifications</a>
+        </nav>
+        <small>SETTINGS</small>
+        <nav>
+            <a href="{% url 'profile_edit' code %}" class="{% if request.resolver_match.url_name == 'profile_edit' %}active{% endif %}">Profile Info</a>
+            <a href="{% url 'resume_edit' code %}" class="{% if request.resolver_match.url_name == 'resume_edit' %}active{% endif %}">Resume</a>
+            <a href="{% url 'admin_logout' code %}">Logout</a>
+        </nav>
+        <a href="{% url 'home' %}" target="_blank" class="view">View Portfolio ↗</a>
+    </aside>
+    {% endif %}
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

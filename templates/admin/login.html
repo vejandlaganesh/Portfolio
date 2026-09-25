@@ -1,0 +1,23 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<div class="top">
+    <div>
+        <small>ACCESS</small>
+        <h1>Admin Login</h1>
+        <p>Please log in to manage your portfolio content.</p>
+    </div>
+</div>
+<div class="editor" style="max-width: 400px; margin: 0 auto;">
+    <form method="post">
+        {% csrf_token %}
+        {% if error %}<p style="color: var(--danger); margin-bottom: 20px;">{{ error }}</p>{% endif %}
+        <label>Username
+            <input type="text" name="username" required>
+        </label>
+        <label>Password
+            <input type="password" name="password" required>
+        </label>
+        <button class="button" style="width: 100%;">Log In</button>
+    </form>
+</div>
+{% endblock %}

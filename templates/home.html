@@ -1,0 +1,318 @@
+{% extends 'base.html' %}
+{% block content %}
+<main id="home">
+    <div class="intro-poster" id="introPoster">
+        <div class="poster-3d-element"></div>
+        <div class="poster-content">
+            <h1 class="poster-title">VEJANDLA GANESH SHARMA</h1>
+            <p class="poster-subtitle">AI/ML • GENERATIVE AI • FULL STACK • QA AUTOMATION</p>
+            <p class="poster-tagline">Building intelligent digital experiences.</p>
+        </div>
+        <div class="scroll-indicator" id="scrollIndicator">
+            <span class="scroll-text">SCROLL TO ENTER</span>
+            <div class="scroll-line-container">
+                <div class="scroll-dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <section class="hero">
+        <div class="bg-layer"><div class="bg-orb orb-1"></div></div>
+        <div class="container">
+            <div class="hero-inner">
+                <div class="hero-content">
+                    <span class="section-label"><span class="accent-line"></span>AI/ML | Generative AI | Full Stack | QA</span>
+                    <h1>Building digital things that think.</h1>
+            <p>{{profile.summary}}</p>
+            <div class="hero-cta">
+                <a href="#projects" class="btn-primary">View Selected Work</a>
+                {% if profile.resume %}
+                <a href="{{ profile.resume.url }}" target="_blank" class="btn-secondary">View Resume <span class="arrow">↗</span></a>
+                {% endif %}
+            </div>
+            <div class="social-links">
+                <a href="{{profile.github}}" target="_blank">GitHub</a>
+                <a href="{{profile.linkedin}}" target="_blank">LinkedIn</a>
+                <a href="mailto:{{profile.email}}">Email</a>
+            </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="hero-photo-wrapper">
+                        {% if profile.profile_photo %}
+                            <img src="{{ profile.profile_photo.url }}" alt="Profile Photo" class="hero-photo">
+                        {% else %}
+                            <div class="profile-placeholder">
+                                <div class="placeholder-shape"></div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="float-tag tech-python">Python</div>
+                    <div class="float-tag tech-genai">GenAI</div>
+                    <div class="float-tag tech-react">React</div>
+                    <div class="float-tag tech-playwright">Playwright</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about-section">
+        <div class="bg-layer"><div class="bg-ring ring-1"></div><div class="bg-orb orb-2"></div></div>
+        <div class="container">
+        <div class="about-bg-decoration"></div>
+        <span class="section-label"><span class="accent-line"></span>01 / ABOUT</span>
+        
+        <div class="about-top">
+            <h2 class="about-heading">Engineering with curiosity &<br>purpose.</h2>
+            <p class="about-description">{{profile.about}}</p>
+        </div>
+        
+        <hr class="about-divider">
+        
+        <div class="about-metrics">
+            <div class="metric">
+                <h3>30+</h3>
+                <p>Playwright scripts</p>
+            </div>
+            <div class="metric">
+                <h3>60%+</h3>
+                <p>Manual regression effort reduced</p>
+            </div>
+            <div class="metric">
+                <h3>4</h3>
+                <p>Featured projects</p>
+            </div>
+            <div class="metric">
+                <h3>2026</h3>
+                <p>B.Tech AI/ML</p>
+            </div>
+        </div>
+            </div>
+    </section>
+
+    <section id="projects">
+        <div class="bg-layer"><div class="bg-grid"></div><div class="bg-orb orb-3"></div></div>
+        <div class="container">
+        <span class="section-label"><span class="accent-line"></span>02 / SELECTED WORK</span>
+        <h2>Projects with purpose.</h2>
+        
+        <div class="projects-grid">
+            {% for p in projects %}
+            <article class="project-card">
+                <div class="project-content">
+                    <span class="project-num">0{{forloop.counter}} — {{p.category}}</span>
+                    <h3>{{p.title}}</h3>
+                    <p>{{p.description}}</p>
+                    <div class="tech-stack">
+                        {% for tech in p.technologies.split|slice:":5" %}
+                        {% if tech|length > 1 %}<span>{{tech}}</span>{% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="project-links">
+                        {% if p.live_url %}<a href="{{p.live_url}}" target="_blank">Live Demo ↗</a>{% endif %}
+                        {% if p.github_url %}<a href="{{p.github_url}}" target="_blank">GitHub ↗</a>{% endif %}
+                    </div>
+                </div>
+                {% if p.project_image %}
+                <div class="project-visual" style="background-image: url('{{ p.project_image.url }}'); border-left: 1px solid var(--border);"></div>
+                {% else %}
+                <div class="project-visual bg-gradient-{% if forloop.counter|divisibleby:4 %}4{% elif forloop.counter|divisibleby:3 %}3{% elif forloop.counter|divisibleby:2 %}2{% else %}1{% endif %} fallback">
+                    <div class="fallback-shape"></div>
+                </div>
+                {% endif %}
+            </article>
+            {% endfor %}
+        </div>
+            </div>
+    </section>
+
+    <section id="skills" class="skills-section">
+        <div class="bg-layer"><div class="bg-ring ring-2"></div><div class="bg-orb orb-4"></div></div>
+        <div class="container">
+        <div class="skills-bg-decoration"></div>
+        <span class="section-label"><span class="accent-line"></span>03 / CAPABILITIES</span>
+        <h2 class="skills-heading">What I work with.</h2>
+        
+        <div class="skills-grid">
+            {% for s in skills %}
+            <div class="skill-card {% if 'AI' in s.title or 'GenAI' in s.title %}theme-ai{% elif 'Programming' in s.title %}theme-prog{% elif 'Full Stack' in s.title %}theme-fs{% elif 'QA' in s.title or 'Automation' in s.title %}theme-qa{% elif 'Database' in s.title %}theme-db{% elif 'Tool' in s.title %}theme-tools{% endif %}">
+                <div class="skill-3d-visual">
+                    <div class="icon-glow"></div>
+                    {% if "AI" in s.title or "GenAI" in s.title %}
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/scikitlearn/scikitlearn-original.svg" class="main-icon" alt="Machine Learning">
+                    {% elif "Programming" in s.title %}
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" class="main-icon" alt="Python">
+                    {% elif "Full Stack" in s.title %}
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" class="main-icon" alt="HTML5">
+                    {% elif "QA" in s.title or "Automation" in s.title %}
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/playwright/playwright-original.svg" class="main-icon" alt="Playwright">
+                    {% elif "Database" in s.title %}
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg" class="main-icon" alt="MySQL">
+                    {% elif "Tool" in s.title %}
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg" class="main-icon" alt="Git">
+                    {% else %}
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/devicon/devicon-original.svg" class="main-icon" alt="Tech">
+                    {% endif %}
+                </div>
+                <h3 class="skill-title">{{s.title}}</h3>
+                <div class="skill-tags" data-skills="{{s.skills}}"></div>
+            </div>
+            {% endfor %}
+        </div>
+            </div>
+    </section>
+
+    <section id="experience" class="exp-section">
+        <div class="bg-layer"><div class="bg-timeline-graphic"></div></div>
+        <div class="container">
+        <div class="exp-header">
+            <span class="section-label"><span class="accent-line"></span>04 / EXPERIENCE</span>
+            <h2>Professional history.</h2>
+        </div>
+        
+        <div class="exp-journey">
+            {% for e in experiences %}
+            <div class="exp-entry {% if 'Publicis' in e.company %}theme-sapient{% elif 'MANAC' in e.company %}theme-manac{% else %}theme-exp-default{% endif %}">
+                <div class="exp-timeline-col">
+                    <div class="exp-node">0{{forloop.counter}}</div>
+                    <div class="exp-duration-left">
+                        {% if e.start_date %}{{ e.start_date|date:"m/Y" }}{% endif %} &mdash; {% if e.is_current %}Present{% elif e.end_date %}{{ e.end_date|date:"m/Y" }}{% endif %}
+                    </div>
+                    {% if not forloop.last %}<div class="exp-path-line"></div>{% endif %}
+                </div>
+                <div class="exp-card">
+                    <div class="exp-card-header">
+                        <div class="exp-role-info">
+                            <h3 class="exp-role">{{e.role}}</h3>
+                            <div class="exp-company">{{e.company}}</div>
+                            {% if e.team %}<div class="exp-team">{{e.team}}</div>{% endif %}
+                        </div>
+                        <div class="exp-logo-wrapper">
+                            {% if 'Publicis' in e.company %}
+                                <div class="exp-text-logo">PS</div>
+                            {% elif 'MANAC' in e.company %}
+                                <div class="exp-text-logo">M</div>
+                            {% else %}
+                                <div class="exp-text-logo">{{e.company|slice:":1"}}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="exp-meta">
+                        <span class="exp-date">
+                            {% if e.start_date %}{{ e.start_date|date:"m/Y" }}{% endif %} &mdash; {% if e.is_current %}Present{% elif e.end_date %}{{ e.end_date|date:"m/Y" }}{% endif %}
+                        </span>
+                        {% if e.location %}<span class="exp-location">{{e.location}}</span>{% endif %}
+                    </div>
+                    <div class="exp-bullets">
+                        {{e.bullets|linebreaksbr}}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+            </div>
+    </section>
+
+    <section id="education" class="edu-section">
+        <div class="bg-layer"><div class="bg-orbital-paths"></div></div>
+        <div class="container">
+        <span class="section-label"><span class="accent-line"></span>05 / EDUCATION</span>
+        <h2>Academic foundation.</h2>
+        
+        <div class="edu-journey">
+            {% for e in education %}
+            <div class="edu-card-wrapper">
+                <div class="edu-card {% if forloop.first %}theme-edu-first{% elif forloop.counter == 2 %}theme-edu-second{% else %}theme-edu-third{% endif %}">
+                    <div class="edu-card-top">
+                        <span class="edu-number">0{{forloop.counter}}</span>
+                        <div class="edu-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                        </div>
+                    </div>
+                    <h3 class="edu-degree">{{e.degree}}</h3>
+                    <div class="edu-inst">{{e.institution}}</div>
+                    <div class="edu-meta">
+                        <span class="edu-duration">{{e.duration}}</span>
+                        {% if e.location %}<span class="edu-location">{{e.location}}</span>{% endif %}
+                    </div>
+                </div>
+                {% if not forloop.last %}
+                <div class="edu-connector"></div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+            </div>
+    </section>
+    
+    <section id="certifications">
+        <div class="bg-layer"><div class="bg-pattern-dots"></div></div>
+        <div class="container">
+        <span class="section-label"><span class="accent-line"></span>06 / CERTIFICATIONS</span>
+        <h2>Continuous learning.</h2>
+        
+        <div class="cert-grid">
+            {% for c in certifications %}
+            <div class="cert-card {% if 'HackerRank' in c.organization %}theme-hackerrank{% elif 'Udemy' in c.organization %}theme-udemy{% elif 'Adobe' in c.organization %}theme-adobe{% elif 'Aajhub' in c.organization %}theme-aajhub{% else %}theme-default{% endif %}">
+                <div class="cert-header">
+                    <div class="cert-logo-wrapper">
+                        {% if c.cert_image %}
+                            <img src="{{ c.cert_image.url }}" alt="{{c.organization}} Logo" class="cert-logo">
+                        {% elif 'HackerRank' in c.organization %}
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/4/40/HackerRank_Icon-1000px.png" alt="HackerRank" class="cert-logo">
+                        {% elif 'Udemy' in c.organization %}
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e3/Udemy_logo.svg" alt="Udemy" class="cert-logo">
+                        {% elif 'Adobe' in c.organization %}
+                            <img src="https://www.vectorlogo.zone/logos/adobe/adobe-icon.svg" alt="Adobe" class="cert-logo">
+                        {% elif 'Aajhub' in c.organization %}
+                            <div class="cert-logo text-logo">A</div>
+                        {% else %}
+                            <div class="cert-logo text-logo">{{c.organization|slice:":1"}}</div>
+                        {% endif %}
+                    </div>
+                    <span class="cert-year">{{c.year}}</span>
+                </div>
+                
+                <h3 class="cert-title">{{c.name}}</h3>
+                <div class="cert-org">{{c.organization}}</div>
+                
+                {% if c.category %}
+                <div class="cert-category">{{c.category}}</div>
+                {% elif 'Software' in c.name %}
+                <div class="cert-category">SOFTWARE ENGINEERING</div>
+                {% elif 'SQL' in c.name %}
+                <div class="cert-category">DATABASES</div>
+                {% elif 'Prompt' in c.name %}
+                <div class="cert-category">AI / PROMPT ENGINEERING</div>
+                {% elif 'Web' in c.name or 'Python' in c.name %}
+                <div class="cert-category">FULL STACK DEVELOPMENT</div>
+                {% endif %}
+                
+                <div class="cert-footer">
+                    <span class="cert-indicator">CERTIFIED <span class="check">✓</span></span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+            </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <div class="bg-layer"><div class="bg-orb orb-5"></div></div>
+        <div class="container">
+        <span class="section-label"><span class="accent-line"></span>07 / CONTACT</span>
+        <h2>Let's build something.</h2>
+        <p>Currently open for new opportunities and collaborations.</p>
+        
+        <div class="contact-links">
+            <a href="mailto:{{profile.email}}" class="contact-link">{{profile.email}}</a>
+            <span class="contact-separator">|</span>
+            <a href="{{profile.github}}" target="_blank" class="contact-link">GitHub <span class="arrow">↗</span></a>
+            <span class="contact-separator">|</span>
+            <a href="{{profile.linkedin}}" target="_blank" class="contact-link">LinkedIn <span class="arrow">↗</span></a>
+            <span class="contact-separator">|</span>
+            <a href="tel:{{profile.phone}}" class="contact-link">{{profile.phone}}</a>
+        </div>
+            </div>
+    </section>
+</main>
+{% endblock %}

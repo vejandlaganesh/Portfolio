@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Portfolio Admin</title>
+    <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+
+<body>
+    <header><b>Ganesh<span>.</span> Admin</b><a href="/" target="_blank">View Portfolio ↗</a></header>
+    <main>
+        <div class="title"><small>PORTFOLIO CMS</small>
+            <h1>Manage your portfolio.</h1>
+        </div>
+        <form method="post" action="{% url 'save' code %}">{% csrf_token %}<section>
+                <h2>Profile</h2>
+                <div class="grid">{% for x in 'name headline email phone linkedin github'.split %}{% endfor
+                    %}<label>Name<input name="name" value="{{profile.name}}"></label><label>Headline<input
+                            name="headline" value="{{profile.headline}}"></label><label>Email<input name="email"
+                            value="{{profile.email}}"></label><label>Phone<input name="phone"
+                            value="{{profile.phone}}"></label><label>LinkedIn<input name="linkedin"
+                            value="{{profile.linkedin}}"></label><label>GitHub<input name="github"
+                            value="{{profile.github}}"></label></div><label>Summary<textarea
+                        name="summary">{{profile.summary}}</textarea></label><label>About<textarea
+                        name="about">{{profile.about}}</textarea></label>
+            </section>
+            <section>
+                <h2>Skills</h2>{% for s in skills %}<label>Category<input name="st{{s.id}}"
+                        value="{{s.title}}"></label><label>Skills<textarea
+                        name="ss{{s.id}}">{{s.skills}}</textarea></label>{% endfor %}
+            </section>
+            <section>
+                <h2>Experience</h2>{% for e in experiences %}<div class="item"><label>Company<input
+                            name="ecompany{{e.id}}" value="{{e.company}}"></label><label>Role<input name="erole{{e.id}}"
+                            value="{{e.role}}"></label><label>Team<input name="eteam{{e.id}}"
+                            value="{{e.team}}"></label><label>Duration<input name="eduration{{e.id}}"
+                            value="{{e.duration}}"></label><label>Location<input name="elocation{{e.id}}"
+                            value="{{e.location}}"></label><label>Bullets<textarea
+                            name="ebullets{{e.id}}">{{e.bullets}}</textarea></label></div>{% endfor %}
+            </section>
+            <section>
+                <h2>Projects</h2>{% for p in projects %}<div class="item"><label>Title<input name="ptitle{{p.id}}"
+                            value="{{p.title}}"></label><label>Category<input name="pcategory{{p.id}}"
+                            value="{{p.category}}"></label><label>Description<textarea
+                            name="pdescription{{p.id}}">{{p.description}}</textarea></label><label>Technologies<textarea
+                            name="ptechnologies{{p.id}}">{{p.technologies}}</textarea></label><label>GitHub<input
+                            name="pgithub_url{{p.id}}" value="{{p.github_url}}"></label><label>Live URL<input
+                            name="plive_url{{p.id}}" value="{{p.live_url}}"></label><label><input type="checkbox"
+                            name="pf{{p.id}}" {% if p.featured %}checked{% endif %}> Featured</label></div>{% endfor %}
+            </section>
+            <section>
+                <h2>Education</h2>{% for e in education %}<div class="item"><label>Institution<input
+                            name="dinstitution{{e.id}}" value="{{e.institution}}"></label><label>Degree<input
+                            name="ddegree{{e.id}}" value="{{e.degree}}"></label><label>Duration<input
+                            name="dduration{{e.id}}" value="{{e.duration}}"></label><label>Location<input
+                            name="dlocation{{e.id}}" value="{{e.location}}"></label></div>{% endfor %}
+            </section>
+            <section>
+                <h2>Certifications</h2>{% for c in certifications %}<div class="item"><label>Name<input
+                            name="cname{{c.id}}" value="{{c.name}}"></label><label>Organization<input
+                            name="corganization{{c.id}}" value="{{c.organization}}"></label><label>Year<input
+                            name="cyear{{c.id}}" value="{{c.year}}"></label></div>{% endfor %}
+            </section><button class="save">Save All Changes</button>
+        </form>
+    </main>
+</body>
+
+</html>

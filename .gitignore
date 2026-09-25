@@ -1,0 +1,21 @@
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Database
+db.sqlite3
+db.sqlite3-journal
+
+# Media files
+media/
+*.media
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
