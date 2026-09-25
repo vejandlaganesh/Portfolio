@@ -1,3 +1,5 @@
+import os
+from datetime import date
 from django.conf import settings
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
@@ -6,11 +8,16 @@ from django.contrib.auth.models import User
 from .models import *
 
 def seed():
- if not User.objects.filter(username='V.D.V.G.S').exists(): User.objects.create_superuser('V.D.V.G.S', '', '9490360499')
+ if not User.objects.filter(username=os.environ.get('DJANGO_SUPERUSER_USERNAME', 'V.D.V.G.S')).exists():
+  User.objects.create_superuser(
+   os.environ.get('DJANGO_SUPERUSER_USERNAME', 'V.D.V.G.S'),
+   os.environ.get('DJANGO_SUPERUSER_EMAIL', 'ganeshvejandla@gmail.com'),
+   os.environ.get('DJANGO_SUPERUSER_PASSWORD', 'change-this-password-9490360499'),
+  )
  if not Portfolio.objects.exists(): Portfolio.objects.create(name='Vejandla Ganesh Sharma',headline='Building intelligent digital experiences.',summary='B.Tech graduate in AI/ML with hands-on experience building Generative AI applications and Full Stack web solutions.',email='ganeshvejandla@gmail.com',phone='+91 9490360499',linkedin='https://linkedin.com/in/vejandla-ganesh',github='https://github.com/vejandlaganesh',about='Focused on Generative AI, full-stack development, and QA automation.')
  if not Skill.objects.exists():
   for i,(a,b) in enumerate([('AI / ML & GenAI','Machine Learning, Deep Learning, Generative AI, LLMs, NLP, Computer Vision, OpenCV, Scikit-learn'),('Programming','Python, Java, JavaScript, TypeScript, SQL'),('Full Stack','HTML5, CSS3, React, Node.js, Express.js, Django'),('QA & Automation','Playwright, Karate, API Testing, POM'),('Databases','MySQL, Firebase Firestore'),('Tools','Git, GitHub, VS Code, Maven')]): Skill.objects.create(title=a,skills=b,order=i)
- if not Experience.objects.exists(): Experience.objects.create(company='PUBLICIS SAPIENT',role='QA Automation Intern',team='Sustain Engineering Team',duration='05/2026 — 06/2026',location='Hyderabad, India',bullets='Reduced manual regression effort by 60%+ using Playwright and Karate.\nDeveloped 30+ reusable Playwright scripts using POM and JavaScript.\nAutomated REST API workflows with Karate, validating JSON and database state.')
+ if not Experience.objects.exists(): Experience.objects.create(company='PUBLICIS SAPIENT',role='QA Automation Intern',team='Sustain Engineering Team',start_date=date(2026,5,1),end_date=date(2026,6,1),is_current=False,location='Hyderabad, India',bullets='Reduced manual regression effort by 60%+ using Playwright and Karate.\nDeveloped 30+ reusable Playwright scripts using POM and JavaScript.\nAutomated REST API workflows with Karate, validating JSON and database state.')
  if not Project.objects.exists():
   ps=[('Edu Carrier','AI • CAREER GUIDANCE','AI-powered career guidance platform for careers, streams, courses, exams, resources and personalized pathways.','React.js, TypeScript, Vite, Tailwind CSS, Node.js, Express.js, Firebase Firestore, Gemini GenAI','','https://career-guidance-f6x9.onrender.com/',1),('Scriptoria AI','GENERATIVE AI • FILM','AI-powered film pre-production platform for story, storyboard and shot planning.','Python, Django, Generative AI, Groq GenAI, Image Generation','https://github.com/vejandlaganesh/Scriptoria','',0),('NewEdu','AI • EDUCATION','Full-stack AI-powered learning platform for personalized practical education with student, teacher, parent and admin modules.','Generative AI, Groq API, HTML, CSS, JavaScript, MySQL','','',0),('Playwright Automation Framework','QA • AUTOMATION','Reusable Playwright framework using JavaScript, POM, ExcelJS and data-driven testing.','JavaScript, Playwright, ExcelJS, POM','','',0)]
   for i,p in enumerate(ps): Project.objects.create(title=p[0],category=p[1],description=p[2],technologies=p[3],github_url=p[4],live_url=p[5],featured=p[6],order=i)

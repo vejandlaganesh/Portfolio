@@ -1164,3 +1164,23 @@ select:focus-visible {
         transition-duration: 0.01ms !important;
     }
 }
+/* Login Page Fix */
+body.no-sidebar main {
+    margin-left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+body.no-sidebar .top {
+    border-bottom: none;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    padding-bottom: 0;
+}
+body.no-sidebar .top::before {
+    display: none;
+}
