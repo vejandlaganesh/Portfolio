@@ -232,7 +232,11 @@
                         {% if e.location %}<span class="exp-location">{{e.location}}</span>{% endif %}
                     </div>
                     <div class="exp-bullets">
-                        {{e.bullets|linebreaksbr}}
+                        <ul>
+                        {% for point in e.bullets|split_lines %}
+                            <li>{{ point }}</li>
+                        {% endfor %}
+                        </ul>
                     </div>
                 </div>
             </div>

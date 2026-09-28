@@ -952,6 +952,20 @@ section {
     font-size: 0.95rem;
 }
 
+.exp-bullets ul {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin: 0;
+}
+
+.exp-bullets li {
+    margin-bottom: 8px;
+}
+
+.exp-bullets li:last-child {
+    margin-bottom: 0;
+}
+
 /* ==========================================================================
    11. EDUCATION
    ========================================================================== */

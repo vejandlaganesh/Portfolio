@@ -23,3 +23,8 @@ def split_csv(value):
     multi-word technologies ("Tailwind CSS") and left trailing commas.
     """
     return [part.strip() for part in str(value or "").split(",") if part.strip()]
+
+@register.filter
+def split_lines(value):
+    """Splits a multiline string into a list of non-empty lines for bullet points."""
+    return [line.strip() for line in str(value or "").splitlines() if line.strip()]
