@@ -302,6 +302,40 @@ section {
     font-weight: 300;
 }
 
+/* Initial states for JS cinematic reveal */
+.poster-title,
+.poster-subtitle,
+.poster-tagline,
+.scroll-indicator,
+.poster-3d-element {
+    opacity: 0;
+}
+
+@keyframes heroTextReveal {
+    to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+@keyframes heroSubtitleReveal {
+    to { opacity: 1; transform: translateY(0); letter-spacing: 4px; }
+}
+
+@keyframes heroFadeUp {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes heroFadeLeft {
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes heroBgReveal {
+    to { opacity: 0.85; transform: scale(1); }
+}
+
+@keyframes heroBgBreathe {
+    0%, 100% { opacity: 0.85; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.04); }
+}
+
 .poster-3d-element {
     position: absolute;
     width: 60vw;
@@ -311,9 +345,7 @@ section {
     background: radial-gradient(circle, rgba(230, 233, 255, 1) 0%, rgba(245, 240, 255, 1) 100%);
     border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
     filter: blur(50px) drop-shadow(0 20px 40px rgba(0, 0, 0, 0.05));
-    opacity: 0.8;
     z-index: 1;
-    animation: morph-slow 20s ease-in-out infinite;
 }
 
 .scroll-indicator {
@@ -354,8 +386,8 @@ section {
     height: 18px;
     border-radius: 4px;
     background: var(--accent);
-    box-shadow: 0 0 8px rgba(106, 90, 205, 0.6);
-    animation: scroll-dot-anim 2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 8px rgba(106, 90, 205, 0.4);
+    animation: heroScrollDot 2.4s infinite ease-in-out;
 }
 
 @keyframes text-pulse {
@@ -363,11 +395,9 @@ section {
     50% { opacity: 1; }
 }
 
-@keyframes scroll-dot-anim {
-    0% { transform: translateY(0); opacity: 0; }
-    15% { opacity: 1; }
-    85% { opacity: 1; }
-    100% { transform: translateY(42px); opacity: 0; }
+@keyframes heroScrollDot {
+    0%, 100% { opacity: 0.35; transform: translateY(0); }
+    50% { opacity: 1; transform: translateY(3px); }
 }
 
 @keyframes morph-slow {
