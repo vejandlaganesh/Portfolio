@@ -1,0 +1,41 @@
+{% extends 'admin/base.html' %}
+{% load admin_tags %}
+{% block content %}
+<div class="top">
+    <div>
+        <small>EDITOR</small>
+        <h1>{{ title }}</h1>
+    </div>
+    <a href="{% url back code %}" class="button secondary">Cancel</a>
+</div>
+
+<div class="editor">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% if error %}<p style="color:var(--danger); margin-bottom: 20px;">{{ error }}</p>{% endif %}
+        
+        {% for field_name, model in fields %}
+        <label style="text-transform: capitalize;">{{ field_name|replace_underscore }}
+            {% if field_name == 'summary' or field_name == 'about' or field_name == 'description' or field_name == 'technologies' or field_name == 'bullets' or field_name == 'skills' %}
+                <textarea name="{{ field_name }}" rows="5">{{ object|get_attr:field_name }}</textarea>
+            {% elif 'image' in field_name or field_name == 'resume' or field_name == 'cert_file' or field_name == 'profile_photo' %}
+                <input type="file" name="{{ field_name }}" style="padding-bottom: 10px;">
+                {% if object and object|get_attr:field_name %}
+                    <br><small>Current file: {{ object|get_attr:field_name }}</small>
+                    <label style="display:inline; margin-top: 10px; text-transform: none; font-weight: normal;"><input type="checkbox" name="clear_{{ field_name }}" style="display: inline; width: auto; margin-right: 5px;"> Clear current file</label>
+                {% endif %}
+            {% elif field_name == 'featured' or field_name == 'is_current' %}
+                <input type="checkbox" name="{{ field_name }}" {% if object and object|get_attr:field_name %}checked{% endif %} style="display: inline; width: auto; margin-top: 10px;">
+            {% elif field_name == 'start_date' or field_name == 'end_date' %}
+                <input type="month" name="{{ field_name }}" value="{{ object|get_attr:field_name|date:'Y-m' }}">
+            {% else %}
+                <input type="text" name="{{ field_name }}" value="{{ object|get_attr:field_name }}">
+            {% endif %}
+        </label>
+        {% endfor %}
+        <div style="margin-top: 30px;">
+            <button class="button">Save Changes</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
