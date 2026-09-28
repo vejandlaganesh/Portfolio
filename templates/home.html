@@ -283,7 +283,7 @@
             
             <div class="cert-grid">
                 {% for c in certifications %}
-                <div class="cert-card cert-item" data-category="{% if 'software' in c.name|lower or 'software' in c.category|default:''|lower %}software{% elif 'sql' in c.name|lower or 'database' in c.category|default:''|lower %}databases{% elif 'prompt' in c.name|lower or 'ai' in c.category|default:''|lower %}ai{% elif 'web' in c.name|lower or 'python' in c.name|lower or 'full stack' in c.category|default:''|lower %}full-stack{% else %}software{% endif %}">
+                <div class="cert-card cert-item" data-category="{% if 'software' in c.name|lower or 'software' in c.category|default:''|lower or 'python' in c.name|lower %}software{% elif 'sql' in c.name|lower or 'database' in c.category|default:''|lower %}databases{% elif 'prompt' in c.name|lower or 'ai' in c.category|default:''|lower %}ai{% elif 'web' in c.name|lower or 'full stack' in c.category|default:''|lower %}full-stack{% else %}software{% endif %}">
                     <div class="cert-header">
                         <div class="cert-logo-wrapper">
                             {% if c.cert_image %}
@@ -302,7 +302,7 @@
                         </div>
                         <div class="cert-badges">
                             {% if forloop.first %}<span class="cert-latest">LATEST</span>{% endif %}
-                            <span class="cert-year cert-year-{% if 'software' in c.name|lower or 'software' in c.category|default:''|lower %}green{% elif 'sql' in c.name|lower or 'database' in c.category|default:''|lower %}green{% elif 'prompt' in c.name|lower or 'ai' in c.category|default:''|lower %}red{% elif 'web' in c.name|lower or 'python' in c.name|lower or 'full stack' in c.category|default:''|lower %}blue{% else %}default{% endif %}">{{c.year}}</span>
+                            <span class="cert-year cert-year-{% if 'software' in c.name|lower or 'software' in c.category|default:''|lower or 'python' in c.name|lower %}green{% elif 'sql' in c.name|lower or 'database' in c.category|default:''|lower %}green{% elif 'prompt' in c.name|lower or 'ai' in c.category|default:''|lower %}red{% elif 'web' in c.name|lower or 'full stack' in c.category|default:''|lower %}blue{% else %}default{% endif %}">{{c.year}}</span>
                         </div>
                     </div>
                     
@@ -315,13 +315,13 @@
                     
                     {% if c.category %}
                     <div class="cert-category">{{c.category|upper}}</div>
-                    {% elif 'Software' in c.name %}
-                    <div class="cert-category">SOFTWARE ENGINEERING</div>
+                    {% elif 'Software' in c.name or 'Python' in c.name %}
+                    <div class="cert-category">SOFTWARE / PROGRAMMING</div>
                     {% elif 'SQL' in c.name %}
                     <div class="cert-category">DATABASES</div>
                     {% elif 'Prompt' in c.name %}
                     <div class="cert-category">AI / PROMPT ENGINEERING</div>
-                    {% elif 'Web' in c.name or 'Python' in c.name %}
+                    {% elif 'Web' in c.name %}
                     <div class="cert-category">FULL STACK DEVELOPMENT</div>
                     {% endif %}
                     
