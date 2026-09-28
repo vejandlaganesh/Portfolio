@@ -7,12 +7,12 @@ ENV/
 env.bak/
 venv.bak/
 
-# Database
-db.sqlite3
+# Database (tracked for this portfolio setup)
+# db.sqlite3
 db.sqlite3-journal
 
-# Media files
-media/
+# Media files (tracked for this portfolio setup)
+# media/
 *.media
 
 # Python cache
