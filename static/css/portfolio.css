@@ -7,6 +7,7 @@
     --bg: #f9f9f8;
     --surface: #ffffff;
     --surface-soft: #fcfbff;
+    --card: #ffffff;
 
     --text-primary: #1c1c1c;
     --text-secondary: #6e6e6e;
@@ -37,6 +38,9 @@
     --space-xl: 48px;
     --space-2xl: 72px;
     --space-section: clamp(80px, 10vw, 120px);
+    
+    --edu-accent: var(--accent);
+    --edu-bg: var(--accent-soft);
 }
 
 /* ==========================================================================
