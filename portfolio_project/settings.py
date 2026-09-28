@@ -91,6 +91,8 @@ SESSION_COOKIE_SECURE = os.environ.get(
     "False" if DEBUG else "True"
 ).lower() in ("1", "true", "yes")
 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
 CSRF_COOKIE_SECURE = os.environ.get(
     "CSRF_COOKIE_SECURE",
     "False" if DEBUG else "True"
