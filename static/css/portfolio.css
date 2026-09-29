@@ -1543,11 +1543,70 @@ section {
     .hero-cta { justify-content: center; }
     .social-links { justify-content: center; flex-wrap: wrap; }
     
-    .hero-visual { display: flex; flex-direction: column; }
-    .hero-photo { display: block; width: min(75vw, 300px); max-width: 100%; height: auto; margin-inline: auto; }
-    .hero-photo-wrapper { width: 100%; max-width: 100%; }
+    .hero-visual {
+        position: relative;
+        width: min(100%, 420px);
+        margin-inline: auto;
+        min-height: 480px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
     
-    .float-tag { position: static; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 24px; animation: none; transform: none; }
+    .hero-photo-wrapper {
+        width: min(65vw, 260px);
+        margin: 0 auto;
+        position: relative;
+        z-index: 5;
+    }
+
+    .hero-photo {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+    
+    .float-tag {
+        font-size: 0.85rem;
+        padding: 8px 14px;
+    }
+
+    .tech-python { top: 5%; left: 2%; }
+    .tech-genai { bottom: 15%; left: 0%; }
+    .tech-react { top: 25%; right: 0%; }
+    .tech-playwright { bottom: 5%; right: 2%; }
+}
+
+@media (max-width: 430px) {
+    .hero-visual {
+        min-height: 440px;
+    }
+    .float-tag {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+    }
+    .tech-python { top: 3%; left: 1%; }
+    .tech-genai { bottom: 10%; left: 1%; }
+    .tech-react { top: 20%; right: 1%; }
+    .tech-playwright { bottom: 2%; right: 1%; }
+}
+
+@media (max-width: 390px) {
+    .hero-visual {
+        min-height: 400px;
+    }
+    .hero-photo-wrapper {
+        width: min(70vw, 240px);
+    }
+    .float-tag {
+        font-size: 0.75rem;
+        padding: 5px 10px;
+    }
+    .tech-python { top: 2%; left: 1%; }
+    .tech-genai { bottom: 8%; left: 1%; }
+    .tech-react { top: 18%; right: 1%; }
+    .tech-playwright { bottom: 0%; right: 1%; }
     
     .about-top { flex-direction: column; text-align: center; gap: 20px; }
     .about-description { max-width: 100%; margin-left: auto; margin-right: auto; }
