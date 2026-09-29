@@ -1520,8 +1520,11 @@ section {
     .cert-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
+
 @media (max-width: 768px) {
     section { padding-top: 72px; padding-bottom: 72px; }
+    
+    /* NAV */
     .navlinks { display: none; }
     .menu-btn { display: block; }
     .navlinks.open {
@@ -1536,6 +1539,10 @@ section {
         border-bottom: 1px solid var(--border-soft);
     }
     
+    /* GLOBAL MOBILE ARCHITECTURE */
+    .container { width: min(100% - 32px, 1200px); padding-inline: 0; }
+    
+    /* HERO */
     .hero-inner { grid-template-columns: 1fr; text-align: center; }
     .hero-content { width: 100%; max-width: 100%; margin-inline: auto; text-align: center; }
     .hero-content h1 { font-size: clamp(2.8rem, 9vw, 7rem); overflow-wrap: break-word; }
@@ -1552,81 +1559,110 @@ section {
         justify-content: center;
         align-items: center;
     }
-    
     .hero-photo-wrapper {
         width: min(65vw, 260px);
         margin: 0 auto;
         position: relative;
         z-index: 5;
     }
-
     .hero-photo {
         width: 100%;
         max-width: 100%;
         height: auto;
         display: block;
     }
-    
-    .float-tag {
-        font-size: 0.85rem;
-        padding: 8px 14px;
-    }
-
+    .float-tag { font-size: 0.85rem; padding: 8px 14px; }
     .tech-python { top: 5%; left: 2%; }
     .tech-genai { bottom: 15%; left: 0%; }
     .tech-react { top: 25%; right: 0%; }
     .tech-playwright { bottom: 5%; right: 2%; }
-}
-
-@media (max-width: 430px) {
-    .hero-visual {
-        min-height: 440px;
-    }
-    .float-tag {
-        font-size: 0.8rem;
-        padding: 6px 12px;
-    }
-    .tech-python { top: 3%; left: 1%; }
-    .tech-genai { bottom: 10%; left: 1%; }
-    .tech-react { top: 20%; right: 1%; }
-    .tech-playwright { bottom: 2%; right: 1%; }
-}
-
-@media (max-width: 390px) {
-    .hero-visual {
-        min-height: 400px;
-    }
-    .hero-photo-wrapper {
-        width: min(70vw, 240px);
-    }
-    .float-tag {
-        font-size: 0.75rem;
-        padding: 5px 10px;
-    }
-    .tech-python { top: 2%; left: 1%; }
-    .tech-genai { bottom: 8%; left: 1%; }
-    .tech-react { top: 18%; right: 1%; }
-    .tech-playwright { bottom: 0%; right: 1%; }
     
-    .about-top { flex-direction: column; text-align: center; gap: 20px; }
+    /* ABOUT */
+    .about-top { display: flex; flex-direction: column; text-align: center; gap: 20px; }
     .about-description { max-width: 100%; margin-left: auto; margin-right: auto; }
     .about-narrative p { font-size: 1.2rem; overflow-wrap: break-word; }
+    .about-pillars { display: grid; grid-template-columns: 1fr; gap: 30px; }
+    .about-metrics { display: grid; grid-template-columns: 1fr; gap: 20px; }
     
-    .projects-grid { grid-template-columns: 1fr; }
-    .project-card { width: 100%; min-width: 0; }
-    .project-card img { width: 100%; max-width: 100%; height: auto; }
+    /* PROJECTS */
+    .projects-grid { display: grid; grid-template-columns: 1fr; gap: 40px; }
+    .project-card {
+        display: flex;
+        flex-direction: column-reverse; /* Usually visual on top or bottom, we'll just stack */
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+    .project-content { padding: 40px 20px; width: 100%; min-width: 0; box-sizing: border-box; }
+    .project-visual { width: 100%; max-width: 100%; min-height: 250px; }
     
-    .exp-entry { flex-direction: column; gap: 20px; width: 100%; min-width: 0; }
-    .exp-timeline-col { width: 100%; flex-direction: row; gap: 15px; justify-content: flex-start; }
+    /* SKILLS */
+    .skills-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .skill-card { width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; }
+    
+    /* EXPERIENCE */
+    .exp-journey { display: flex; flex-direction: column; gap: 60px; }
+    .exp-entry { 
+        display: flex; 
+        flex-direction: column; 
+        gap: 0; 
+        width: 100%; 
+        max-width: 100%; 
+        min-width: 0; 
+        box-sizing: border-box;
+    }
+    .exp-timeline-col { 
+        width: 100%; 
+        max-width: 100%;
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        justify-content: center; 
+        gap: 10px; 
+        margin-bottom: 24px;
+        position: static;
+    }
     .exp-node { margin-bottom: 0; width: 32px; height: 32px; }
+    .exp-duration-left { max-width: 100%; font-size: 0.9rem; }
     .exp-path-line { display: none; }
-    .exp-date, .exp-location { display: inline-block; }
+    .exp-card { 
+        width: 100%; 
+        max-width: 100%; 
+        min-width: 0; 
+        box-sizing: border-box; 
+        padding: 30px 20px; 
+        margin: 0; 
+    }
+    .exp-card * { min-width: 0; }
+    .exp-card-header { display: flex; flex-direction: column; gap: 20px; }
+    .exp-logo-wrapper { max-width: 60px; position: static; }
+    .exp-meta { display: flex; flex-wrap: wrap; gap: 10px; }
+    .exp-date, .exp-location { display: inline-block; white-space: normal; }
+    .exp-bullets { overflow-wrap: break-word; word-wrap: break-word; }
+    .exp-bullets li { width: 100%; max-width: 100%; overflow-wrap: break-word; word-break: break-word; white-space: normal; }
+    .exp-role-info { width: 100%; }
     
-    .edu-card { width: 100%; max-width: 100%; min-width: 0; }
+    /* EDUCATION */
+    .edu-journey { width: 100%; max-width: 100%; }
+    .edu-timeline-item { width: 100%; max-width: 100%; display: flex; flex-direction: column; align-items: center; }
+    .edu-card { width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; padding: 30px 20px; }
+    .edu-pills { display: flex; flex-wrap: wrap; gap: 10px; }
     
+    /* CERTIFICATIONS */
+    .cert-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+    .cert-card { width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; }
+    .cert-filters { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+    
+    /* CONTACT */
+    .contact-cards-grid { display: grid; grid-template-columns: 1fr; gap: 20px; width: 100%; }
+    .contact-card { width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; }
     .contact-headline { font-size: clamp(2rem, 6vw, 3rem); overflow-wrap: break-word; }
-    .contact-card p.cc-value { overflow-wrap: anywhere; word-break: break-word; }
-    .footer-inner { flex-direction: column; gap: 12px; text-align: center; }
+    p.cc-value { overflow-wrap: anywhere; word-break: break-word; }
+    
+    /* FOOTER */
+    .footer-inner { display: flex; flex-direction: column; gap: 12px; text-align: center; }
     .footer-inner * { white-space: normal; }
     
     /* Ensure no animations push elements out of bounds on mobile */
@@ -1636,14 +1672,26 @@ section {
 @media (max-width: 600px) {
     .container { width: min(100% - 28px, 1200px); padding-inline: 0; }
     section { padding-top: 60px; padding-bottom: 60px; width: min(100% - 28px, 1200px); }
-    .about-metrics { grid-template-columns: 1fr; }
-    .about-pillars { grid-template-columns: 1fr; }
     .project-content { padding: 30px 20px; }
+    .exp-card { padding: 25px 20px; }
     .edu-card { padding: 25px 20px; }
-    
-    .skills-grid { grid-template-columns: 1fr; }
-    .skills-list { display: flex; flex-wrap: wrap; gap: 8px; }
-    
-    .cert-grid { grid-template-columns: 1fr; }
-    .cert-filters { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+}
+
+@media (max-width: 430px) {
+    .hero-visual { min-height: 440px; }
+    .float-tag { font-size: 0.8rem; padding: 6px 12px; }
+    .tech-python { top: 3%; left: 1%; }
+    .tech-genai { bottom: 10%; left: 1%; }
+    .tech-react { top: 20%; right: 1%; }
+    .tech-playwright { bottom: 2%; right: 1%; }
+}
+
+@media (max-width: 390px) {
+    .hero-visual { min-height: 400px; }
+    .hero-photo-wrapper { width: min(70vw, 240px); }
+    .float-tag { font-size: 0.75rem; padding: 5px 10px; }
+    .tech-python { top: 2%; left: 1%; }
+    .tech-genai { bottom: 8%; left: 1%; }
+    .tech-react { top: 18%; right: 1%; }
+    .tech-playwright { bottom: 0%; right: 1%; }
 }
