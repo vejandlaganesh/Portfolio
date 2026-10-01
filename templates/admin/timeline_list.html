@@ -1,0 +1,133 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<div class="cms-page-header">
+    <div>
+        <div class="cms-eyebrow">CONTENT</div>
+        <h1 class="cms-page-title">Career Timeline</h1>
+        <p class="cms-body">Manage your education, experience, certifications, projects, and other career milestones.</p>
+    </div>
+    <a href="{% url 'timeline_add' code %}" class="btn-primary">+ Add Timeline Entry</a>
+</div>
+
+<div class="cms-grid cms-grid-4" style="margin-bottom: 32px;">
+    <div class="cms-stat-card">
+        <div class="cms-stat-value">{{ total_count }}</div>
+        <div class="cms-stat-label">TOTAL</div>
+    </div>
+    <div class="cms-stat-card">
+        <div class="cms-stat-value">{{ edu_count }}</div>
+        <div class="cms-stat-label">EDUCATION</div>
+    </div>
+    <div class="cms-stat-card">
+        <div class="cms-stat-value">{{ exp_count }}</div>
+        <div class="cms-stat-label">EXPERIENCE</div>
+    </div>
+    <div class="cms-stat-card">
+        <div class="cms-stat-value">{{ active_count }}</div>
+        <div class="cms-stat-label">ACTIVE</div>
+    </div>
+</div>
+
+<div class="cms-card" style="margin-bottom: 32px; padding: 16px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between;">
+    <input type="text" id="timelineSearch" class="cms-form" style="width: 100%; max-width: 300px; padding: 10px 14px; border: 1px solid var(--cms-border); border-radius: 10px; background: white; font-size: 14px;" placeholder="Search timeline...">
+    <div id="timelineFilters" style="display: flex; flex-wrap: wrap; gap: 8px;">
+        <button class="filter-btn active" data-filter="all" style="padding: 6px 14px; border-radius: 999px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--cms-border); background: var(--cms-text); color: white;">All</button>
+        <button class="filter-btn" data-filter="education" style="padding: 6px 14px; border-radius: 999px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--cms-border); background: white; color: var(--cms-text-secondary);">Education</button>
+        <button class="filter-btn" data-filter="experience" style="padding: 6px 14px; border-radius: 999px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--cms-border); background: white; color: var(--cms-text-secondary);">Experience</button>
+        <button class="filter-btn" data-filter="project" style="padding: 6px 14px; border-radius: 999px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--cms-border); background: white; color: var(--cms-text-secondary);">Project</button>
+        <button class="filter-btn" data-filter="certification" style="padding: 6px 14px; border-radius: 999px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--cms-border); background: white; color: var(--cms-text-secondary);">Certification</button>
+    </div>
+</div>
+
+{% if items %}
+<div style="margin-left: 10px;">
+    {% for item in items %}
+    <div class="timeline-card timeline-admin-item" data-search="{{ item.title|lower }} {{ item.organization|lower }} {{ item.description|lower }}" data-category="{{ item.category|lower }}">
+        <div class="timeline-year">{{ item.date_display }}</div>
+        
+        <div class="cms-card" style="display: flex; flex-direction: column;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                <div>
+                    <div class="cms-eyebrow" style="margin-bottom: 4px;">{{ item.category }}</div>
+                    <h3 style="font-size: 16px; font-weight: 700; color: var(--cms-text);">{{ item.title }}</h3>
+                    {% if item.organization %}
+                    <div style="font-size: 14px; color: var(--cms-text-secondary); margin-top: 2px;">{{ item.organization }}</div>
+                    {% endif %}
+                </div>
+                <div>
+                    {% if item.is_active %}
+                    <span class="cms-badge badge-active"><span class="status-dot"></span> ACTIVE</span>
+                    {% else %}
+                    <span class="cms-badge badge-inactive">INACTIVE</span>
+                    {% endif %}
+                </div>
+            </div>
+            
+            {% if item.description %}
+            <p style="font-size: 14px; color: var(--cms-text-secondary); line-height: 1.5; margin-bottom: 20px;">
+                {{ item.description|truncatewords:25 }}
+            </p>
+            {% endif %}
+            
+            <div style="display: flex; justify-content: flex-end; gap: 8px; border-top: 1px solid var(--cms-border-soft); padding-top: 16px;">
+                <a href="{% url 'timeline_edit' code item.pk %}" class="btn-secondary" style="padding: 6px 14px; font-size: 12px;">Edit</a>
+                <form action="{% url 'timeline_delete' code item.pk %}" method="post" style="display:inline;" onsubmit="return confirm('Delete Timeline Entry?\n\n{{ item.title }}\n\nThis action cannot be undone.');">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-danger" style="padding: 6px 14px; font-size: 12px;">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="cms-empty">
+    <div class="cms-empty-title">No timeline entries yet</div>
+    <div class="cms-empty-desc">Add your first education or experience milestone to build your career timeline.</div>
+    <a href="{% url 'timeline_add' code %}" class="btn-primary">+ Add Timeline Entry</a>
+</div>
+{% endif %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('timelineSearch');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const items = document.querySelectorAll('.timeline-admin-item');
+
+    function filterTimeline() {
+        const query = searchInput.value.toLowerCase();
+        const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+
+        items.forEach(item => {
+            const searchData = item.dataset.search || "";
+            const categoryData = item.dataset.category || "";
+            
+            const matchesSearch = searchData.includes(query);
+            const matchesFilter = activeFilter === 'all' || categoryData.includes(activeFilter);
+            
+            if (matchesSearch && matchesFilter) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+
+    if (searchInput) searchInput.addEventListener('input', filterTimeline);
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => {
+                b.classList.remove('active');
+                b.style.background = 'white';
+                b.style.color = 'var(--cms-text-secondary)';
+            });
+            btn.classList.add('active');
+            btn.style.background = 'var(--cms-text)';
+            btn.style.color = 'white';
+            filterTimeline();
+        });
+    });
+});
+</script>
+{% endblock %}

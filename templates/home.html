@@ -1,21 +1,23 @@
 {% extends 'base.html' %}
 {% load admin_tags %}
+
+{% block intro %}
+<section class="intro-screen">
+    <div class="intro-content">
+        <h1 class="intro-name">VEJANDLA GANESH SHARMA</h1>
+        <div class="intro-specialties">AI/ML • GENERATIVE AI • FULL STACK • QA AUTOMATION</div>
+        <div class="intro-tagline">Building intelligent digital experiences.</div>
+    </div>
+    <div class="intro-scroll">
+        SCROLL TO ENTER
+        <div class="intro-scroll-line"></div>
+    </div>
+</section>
+{% endblock %}
+
 {% block content %}
 <main id="home">
-    <div class="intro-poster" id="introPoster">
-        <div class="poster-3d-element"></div>
-        <div class="poster-content">
-            <h1 class="poster-title">{{ profile.name|upper|default:"VEJANDLA GANESH SHARMA" }}</h1>
-            <p class="poster-subtitle">AI/ML • GENERATIVE AI • FULL STACK • QA AUTOMATION</p>
-            <p class="poster-tagline">{{ profile.headline|default:"Building intelligent digital experiences." }}</p>
-        </div>
-        <div class="scroll-indicator" id="scrollIndicator">
-            <span class="scroll-text">SCROLL TO ENTER</span>
-            <div class="scroll-line-container">
-                <div class="scroll-dot"></div>
-            </div>
-        </div>
-    </div>
+
 
     <section class="hero">
         <div class="bg-layer"><div class="bg-orb orb-1"></div></div>
@@ -25,11 +27,9 @@
                     <span class="section-label"><span class="accent-line"></span>AI/ML | Generative AI | Full Stack | QA</span>
                     <h1>Building digital things that think.</h1>
             <p>{{profile.summary}}</p>
-            <div class="hero-cta">
+            <div class="hero-actions hero-cta">
                 <a href="#projects" class="btn-primary">View Selected Work</a>
-                {% if profile.resume %}
-                <a href="{{ profile.resume.url }}" target="_blank" class="btn-secondary">View Resume <span class="arrow">↗</span></a>
-                {% endif %}
+                <a href="{% url 'resume_public_center' %}" class="resume-button">View Resume ↗</a>
             </div>
             <div class="social-links">
                 {% if profile.github %}<a href="{{profile.github}}" target="_blank" rel="noopener">GitHub</a>{% endif %}
@@ -57,99 +57,133 @@
     </section>
 
     <section id="about" class="about-section">
-        <div class="bg-layer"><div class="bg-ring ring-1"></div><div class="bg-orb orb-2"></div></div>
+        <div class="tech-decoration">
+       AI
+        │
+        ●
+       / \
+      ●   ●
+     /     \
+    ML     WEB
+        </div>
         <div class="container">
-        <div class="about-bg-decoration"></div>
-        <span class="section-label"><span class="accent-line"></span>01 / ABOUT</span>
-        
-        <div class="about-top reveal-on-scroll">
-            <h2 class="about-heading">Engineering with curiosity &<br>purpose.</h2>
-            <p class="about-description">{{profile.about}}</p>
+            <span class="about-eyebrow reveal-on-scroll">01 — ABOUT</span>
+            
+            <div class="about-top-grid reveal-on-scroll">
+                <h2 class="about-heading">Engineering with curiosity<br>& purpose.</h2>
+                <div class="about-supporting">
+                    Focused on Generative AI, full-stack development, and QA automation.
+                </div>
+            </div>
+            
+            <hr class="about-divider reveal-on-scroll">
+            
+            <div class="about-description reveal-on-scroll">
+                I build practical software at the intersection of AI, automation, and modern web development. My work spans Generative AI applications, AI/ML projects, full-stack platforms, and reliable test automation. I enjoy turning complex ideas into usable products while continuously learning new technologies.
+            </div>
+            
+            <div class="about-panels-grid">
+                <div class="focus-panel reveal-on-scroll">
+                    <div class="focus-panel-title">CURRENT FOCUS</div>
+                    <ul class="focus-list">
+                        <li class="focus-item">
+                            <div><span class="focus-num">01</span>Generative AI</div>
+                            <span class="arrow">→</span>
+                        </li>
+                        <li class="focus-item">
+                            <div><span class="focus-num">02</span>AI / Machine Learning</div>
+                            <span class="arrow">→</span>
+                        </li>
+                        <li class="focus-item">
+                            <div><span class="focus-num">03</span>Full-Stack Development</div>
+                            <span class="arrow">→</span>
+                        </li>
+                        <li class="focus-item">
+                            <div><span class="focus-num">04</span>QA Automation</div>
+                            <span class="arrow">→</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="verified-panel reveal-on-scroll reveal-delay-1">
+                    {% if profile.is_verified %}
+                    <div class="verified-card" title="Profile verification indicates that this information is maintained through the authenticated Portfolio CMS.">
+                        <div class="verified-card-header">
+                            <div class="verified-dot"></div>
+                            <div class="verified-label">VERIFIED PROFILE</div>
+                        </div>
+                        <div class="verified-name">{{ profile.name }}</div>
+                        <div class="verified-headline">{{ profile.headline }}</div>
+                        
+                        <div style="margin-top: 30px;">
+                            <div class="verified-cms">PROFILE CMS</div>
+                            <div class="verified-desc">Maintained through authenticated portfolio management.</div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="domain-strip desktop-specialties reveal-on-scroll">
+                AI / ML &nbsp;&nbsp;·&nbsp;&nbsp; GENAI &nbsp;&nbsp;·&nbsp;&nbsp; AUTOMATION &nbsp;&nbsp;·&nbsp;&nbsp; FULL STACK
+            </div>
+            <div class="domain-strip mobile-specialties reveal-on-scroll">
+                <div>AI / ML <span>·</span> GENAI <span>·</span> AUTOMATION</div>
+                <div>FULL STACK</div>
+            </div>
         </div>
-        
-        <hr class="about-divider reveal-on-scroll">
-        
-        <div class="about-narrative reveal-on-scroll reveal-delay-1">
-            <p>I build practical software at the intersection of AI, automation, and modern web development. My work spans Generative AI applications, AI/ML projects, full-stack platforms, and reliable test automation. I enjoy turning complex ideas into usable products while continuously learning new technologies.</p>
-        </div>
-        
-        <hr class="about-divider reveal-on-scroll">
-        
-        <div class="about-pillars">
-            <div class="pillar reveal-on-scroll">
-                <div class="pillar-num">01</div>
-                <h3 class="pillar-title">BUILD</h3>
-                <p class="pillar-desc">AI-powered applications and full-stack products.</p>
-            </div>
-            <div class="pillar reveal-on-scroll reveal-delay-1">
-                <div class="pillar-num">02</div>
-                <h3 class="pillar-title">AUTOMATE</h3>
-                <p class="pillar-desc">Reliable testing and automation with Playwright and API testing.</p>
-            </div>
-            <div class="pillar reveal-on-scroll reveal-delay-2">
-                <div class="pillar-num">03</div>
-                <h3 class="pillar-title">LEARN</h3>
-                <p class="pillar-desc">Continuously exploring AI, Generative AI, software engineering, and emerging technologies.</p>
-            </div>
-        </div>
-        
-        <hr class="about-divider reveal-on-scroll">
-        
-        <div class="about-metrics">
-            <div class="metric reveal-on-scroll">
-                <h3>30+</h3>
-                <p>Playwright scripts</p>
-            </div>
-            <div class="metric reveal-on-scroll reveal-delay-1">
-                <h3>60%+</h3>
-                <p>Manual regression effort reduced</p>
-            </div>
-            <div class="metric reveal-on-scroll reveal-delay-2">
-                <h3>{{ total_projects_count }}</h3>
-                <p>Total projects</p>
-            </div>
-            <div class="metric reveal-on-scroll reveal-delay-3">
-                <h3>2026</h3>
-                <p>B.Tech AI/ML</p>
-            </div>
-        </div>
-            </div>
     </section>
 
     <section id="projects">
         <div class="bg-layer"><div class="bg-grid"></div><div class="bg-orb orb-3"></div></div>
         <div class="container">
-        <span class="section-label"><span class="accent-line"></span>02 / SELECTED WORK</span>
-        <h2>Projects with purpose.</h2>
+        <span class="section-label"><span class="accent-line"></span>SELECTED WORK</span>
+        <div style="margin-bottom: 2rem;">
+            <a href="{% url 'project_compare' %}" class="btn-secondary">Compare Projects ↗</a>
+        </div>
         
-        <div class="projects-grid">
+                <div class="projects-grid" style="display: flex; flex-direction: column; gap: 4rem;">
             {% for p in projects %}
-            <article class="project-card">
-                <div class="project-content">
-                    <span class="project-num">0{{forloop.counter}} — {{p.category}}</span>
-                    <h3>{{p.title}}</h3>
-                    <p>{{p.description}}</p>
-                    <div class="tech-stack">
+            <article class="project-showcase {% if forloop.counter|divisibleby:2 %}reverse{% endif %}">
+                <div class="project-info">
+                    <div class="project-index">
+                        0{{forloop.counter}} — {{p.category|upper}}
+                    </div>
+                    <h3 class="project-title" style="font-size: 2.5rem; margin-bottom: 20px;">{{p.title}}</h3>
+                    <p class="project-description">{{p.description}}</p>
+                    
+                    <div class="project-technologies">
                         {% for tech in p.technologies|split_csv|slice:":5" %}
-                        <span>{{tech}}</span>
+                        <span class="technology-tag" style="display: inline-flex; align-items: center; padding: 8px 14px; border-radius: 6px; background: var(--bg-hover); color: var(--text); border: 1px solid var(--border);">{{ tech }}</span>
                         {% endfor %}
                     </div>
-                    <div class="project-links">
-                        {% if p.live_url %}<a href="{{p.live_url}}" target="_blank">Live Demo ↗</a>{% endif %}
-                        {% if p.github_url %}<a href="{{p.github_url}}" target="_blank">GitHub ↗</a>{% endif %}
+                    
+                    <div class="project-actions">
+                        <a href="{% url 'project_detail' p.id %}" class="btn-primary">View Project ↗</a>
+                        {% if p.live_url %}
+                        <a href="{{ p.live_url }}" target="_blank" rel="noopener noreferrer" class="btn-primary">Live Demo ↗</a>
+                        {% endif %}
+                        {% if p.github_url %}
+                        <a href="{{ p.github_url }}" target="_blank" rel="noopener noreferrer" class="btn-secondary">GitHub ↗</a>
+                        {% endif %}
+                        <a href="{% url 'project_compare' %}?projects={{ p.id }}" class="btn-secondary">Compare ↗</a>
                     </div>
                 </div>
-                {% if p.project_image %}
-                <div class="project-visual" style="background-image: url('{{ p.project_image.url }}'); border-left: 1px solid var(--border);"></div>
-                {% else %}
-                <div class="project-visual bg-gradient-{% if forloop.counter|divisibleby:4 %}4{% elif forloop.counter|divisibleby:3 %}3{% elif forloop.counter|divisibleby:2 %}2{% else %}1{% endif %} fallback">
-                    <div class="fallback-shape"></div>
+                
+                <div class="project-visual">
+                    {% if p.project_image %}
+                    <img src="{{ p.project_image.url }}" alt="{{ p.title }} project preview" class="project-image">
+                    {% else %}
+                    <div style="width: 100%; height: 100%; min-height: 420px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #adb5bd; font-weight: 600; letter-spacing: 2px;">
+                        <span style="font-size: 1.5rem; margin-bottom: 8px;">PROJECT</span>
+                        <span style="font-size: 1.5rem;">PREVIEW</span>
+                    </div>
+                    {% endif %}
                 </div>
-                {% endif %}
             </article>
             {% endfor %}
         </div>
-            </div>
+        </div>
     </section>
 
     <section id="skills" class="skills-section">
@@ -157,148 +191,98 @@
         <div class="container">
         <div class="skills-bg-decoration"></div>
         <div class="skills-header">
-            <span class="section-label"><span class="accent-line"></span>03 / CAPABILITIES</span>
+            <span class="section-label"><span class="accent-line"></span>CAPABILITIES</span>
             <h2 class="skills-heading">What I work with.</h2>
         </div>
         
-        <div class="skills-grid">
+        <div class="capabilities-grid">
             {% for s in skills %}
-            <div class="skill-card {% if 'AI' in s.title or 'GenAI' in s.title %}theme-ai{% elif 'Programming' in s.title %}theme-prog{% elif 'Full Stack' in s.title %}theme-fs{% elif 'QA' in s.title or 'Automation' in s.title %}theme-qa{% elif 'Database' in s.title %}theme-db{% elif 'Tool' in s.title %}theme-tools{% endif %}">
-                <div class="skill-3d-visual">
-                    <div class="icon-glow"></div>
-                    {% if "AI" in s.title or "GenAI" in s.title %}
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/scikitlearn/scikitlearn-original.svg" class="main-icon" alt="Machine Learning">
-                    {% elif "Programming" in s.title %}
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" class="main-icon" alt="Python">
-                    {% elif "Full Stack" in s.title %}
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" class="main-icon" alt="HTML5">
-                    {% elif "QA" in s.title or "Automation" in s.title %}
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/playwright/playwright-original.svg" class="main-icon" alt="Playwright">
-                    {% elif "Database" in s.title %}
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg" class="main-icon" alt="MySQL">
-                    {% elif "Tool" in s.title %}
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg" class="main-icon" alt="Git">
-                    {% else %}
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/devicon/devicon-original.svg" class="main-icon" alt="Tech">
-                    {% endif %}
+            <div class="capability-card {% if 'AI' in s.title or 'GenAI' in s.title %}theme-ai{% elif 'Programming' in s.title %}theme-prog{% elif 'Full Stack' in s.title %}theme-fs{% elif 'QA' in s.title or 'Automation' in s.title %}theme-qa{% elif 'Database' in s.title %}theme-db{% elif 'Tool' in s.title %}theme-tools{% endif %}">
+                <div class="capability-header">
+                    <div class="capability-logo">
+                        {% if "AI" in s.title or "GenAI" in s.title %}
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/scikitlearn/scikitlearn-original.svg" alt="Machine Learning">
+                        {% elif "Programming" in s.title %}
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" alt="Python">
+                        {% elif "Full Stack" in s.title %}
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" alt="HTML5">
+                        {% elif "QA" in s.title or "Automation" in s.title %}
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/playwright/playwright-original.svg" alt="Playwright">
+                        {% elif "Database" in s.title %}
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg" alt="MySQL">
+                        {% elif "Tool" in s.title %}
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg" alt="Git">
+                        {% else %}
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/devicon/devicon-original.svg" alt="Tech">
+                        {% endif %}
+                    </div>
+                    <div class="capability-accent"></div>
+                    <h3 class="capability-title">{{s.title}}</h3>
                 </div>
-                <h3 class="skill-title">{{s.title}}</h3>
-                <div class="skill-tags" data-skills="{{s.skills}}"></div>
+                <div class="skill-list skill-tags" data-skills="{{s.skills}}"></div>
             </div>
             {% endfor %}
         </div>
             </div>
     </section>
 
-    <section id="experience" class="exp-section">
-        <div class="bg-layer"><div class="bg-timeline-graphic"></div></div>
-        <div class="container">
-        <div class="exp-header">
-            <span class="section-label"><span class="accent-line"></span>04 / EXPERIENCE</span>
-            <h2>Professional history.</h2>
-        </div>
-        
-        <div class="exp-journey">
-            {% for e in experiences %}
-            <div class="exp-entry {% if 'Publicis' in e.company %}theme-sapient{% elif 'MANAC' in e.company %}theme-manac{% else %}theme-exp-default{% endif %}">
-                <div class="exp-timeline-col">
-                    <div class="exp-node">0{{forloop.counter}}</div>
-                    <div class="exp-duration-left">
-                        {% if e.start_date %}{{ e.start_date|date:"m/Y" }}{% endif %} &mdash; {% if e.is_current %}Present{% elif e.end_date %}{{ e.end_date|date:"m/Y" }}{% endif %}
-                    </div>
-                    {% if not forloop.last %}<div class="exp-path-line"></div>{% endif %}
-                </div>
-                <div class="exp-card">
-                    <div class="exp-card-header">
-                        <div class="exp-role-info">
-                            <h3 class="exp-role">{{e.role}}</h3>
-                            <div class="exp-company">{{e.company}}</div>
-                            {% if e.team %}<div class="exp-team">{{e.team}}</div>{% endif %}
-                        </div>
-                        <div class="exp-logo-wrapper">
-                            {% if 'Publicis' in e.company or 'PUBLICIS' in e.company %}
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/b/bc/PS_Logo_RGB.svg" alt="Publicis Sapient" style="width: 100%; height: 100%; object-fit: contain; padding: 4px;">
-                            {% elif 'MANAC' in e.company %}
-                                <img src="https://www.manacinfotech.com/manaclogo.png" alt="MANAC Infotech" style="width: 100%; height: 100%; object-fit: contain; padding: 4px;">
-                            {% else %}
-                                <div class="exp-text-logo">{{e.company|slice:":1"}}</div>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="exp-meta">
-                        <span class="exp-date">
-                            {% if e.start_date %}{{ e.start_date|date:"m/Y" }}{% endif %} &mdash; {% if e.is_current %}Present{% elif e.end_date %}{{ e.end_date|date:"m/Y" }}{% endif %}
-                        </span>
-                        {% if e.location %}<span class="exp-location">{{e.location}}</span>{% endif %}
-                    </div>
-                    <div class="exp-bullets">
-                        <ul>
-                        {% for point in e.bullets|split_lines %}
-                            <li>{{ point }}</li>
-                        {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-            </div>
-    </section>
-
-    <section id="education" class="edu-section">
-        <div class="bg-layer"><div class="bg-orbital-paths"></div></div>
-        <div class="container">
-            <div class="edu-section-header">
-                <span class="section-label"><span class="accent-line"></span>05 / EDUCATION</span>
-                <h2>Academic foundation.</h2>
-                <p class="edu-subtitle">Building a strong foundation in artificial intelligence, machine learning, computer science, and software engineering.</p>
-            </div>
+    
+    <section id="career-timeline" class="timeline-section" style="padding: 100px 0; background: var(--bg-alt);">
+        <div class="container timeline-container">
+            <span class="section-label" style="text-align: center; display: block; margin: 0 auto 20px;"><span class="accent-line"></span>CAREER TIMELINE</span>
+            <p style="text-align: center; color: var(--text-secondary); max-width: 600px; margin: 0 auto 60px; font-size: 1.2rem; line-height: 1.6;">A visual journey through my education, experience, and career milestones.</p>
             
-            <div class="edu-journey">
-                {% for e in education %}
-                <div class="edu-timeline-item">
-                    <div class="edu-number-top">0{{forloop.counter}}</div>
-                    
-                    <div class="edu-card {% if forloop.first %}theme-edu-first{% else %}theme-edu-other{% endif %}">
-                        <div class="edu-card-top">
-                            <div class="edu-icon-badge">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            <div class="true-timeline">
+                {% for t in career_timeline %}
+                <div class="true-timeline-item {% cycle 'left' 'right' %}">
+                    <div class="true-timeline-dot"></div>
+                    <div class="true-timeline-card">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; margin-bottom: 15px;">
+                            <div>
+                                <span class="timeline-date">{{ t.date_display }}</span>
+                                <h3 class="timeline-title">{{ t.title }}</h3>
+                                {% if t.organization %}<h4 class="timeline-organization">{{ t.organization }}</h4>{% endif %}
                             </div>
-                        </div>
-                        
-                        <div class="edu-body">
-                            <h3 class="edu-degree">{{e.degree}}</h3>
-                            <div class="edu-inst">{{e.institution}}</div>
-                            
-                            <div class="edu-pills">
-                                <span class="edu-pill duration">{{e.duration}}</span>
-                                {% if e.location %}<span class="edu-pill location">{{e.location}}</span>{% endif %}
+                            {% if t.category %}
+                            <div class="timeline-category">
+                                {{ t.category }}
                             </div>
-                        </div>
-                        
-                        <div class="edu-footer">
-                            {% if 'Present' in e.duration or '2027' in e.duration or '2028' in e.duration %}
-                            <span class="edu-status in-progress">IN PROGRESS</span>
-                            {% else %}
-                            <span class="edu-status completed">COMPLETED <span class="check">✓</span></span>
                             {% endif %}
                         </div>
+                        
+                        {% with lines=t.description|split_lines %}
+                        {% if lines %}
+                        <ul class="timeline-points">
+                            {% for line in lines %}
+                            <li>{{ line }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                        {% endwith %}
+                        
+                        {% if t.technologies %}
+                        <div class="tech-stack" style="margin-bottom: 10px;">
+                            {% for tech in t.technologies.split %}
+                            <span class="float-tag" style="position:static; margin-right: 5px; font-size: 0.85rem; padding: 4px 10px; background: var(--bg-hover);">{{ tech }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        
+                        {% if t.image %}
+                        <img src="{{ t.image.url }}" alt="{{ t.title }}" style="max-width: 100%; border-radius: 8px; margin-top: 15px; border: 1px solid var(--border);">
+                        {% endif %}
                     </div>
-                    
-                    {% if not forloop.last %}
-                    <div class="edu-timeline-connector"></div>
-                    {% endif %}
                 </div>
                 {% endfor %}
             </div>
         </div>
     </section>
-    
+
     <section id="certifications">
         <div class="bg-layer"><div class="bg-pattern-dots"></div></div>
         <div class="container">
             <div class="cert-section-header">
-                <span class="section-label"><span class="accent-line"></span>06 / CERTIFICATIONS</span>
+                <span class="section-label"><span class="accent-line"></span>CERTIFICATIONS</span>
                 <h2>Continuous learning.</h2>
                 <p class="cert-subtitle">{{ certifications|length }} credentials across software engineering, AI, databases, and full-stack development.</p>
             </div>
@@ -313,55 +297,45 @@
             
             <div class="cert-grid">
                 {% for c in certifications %}
-                <div class="cert-card cert-item" data-category="{% if 'software' in c.name|lower or 'software' in c.category|default:''|lower or 'python' in c.name|lower %}software{% elif 'sql' in c.name|lower or 'database' in c.category|default:''|lower %}databases{% elif 'prompt' in c.name|lower or 'ai' in c.category|default:''|lower %}ai{% elif 'web' in c.name|lower or 'full stack' in c.category|default:''|lower %}full-stack{% else %}software{% endif %}">
+                <div class="certification-card cert-item" data-category="{% if 'software' in c.name|lower or 'software' in c.category|default:''|lower or 'python' in c.name|lower %}software{% elif 'sql' in c.name|lower or 'database' in c.category|default:''|lower %}databases{% elif 'prompt' in c.name|lower or 'ai' in c.category|default:''|lower %}ai{% elif 'web' in c.name|lower or 'full stack' in c.category|default:''|lower %}full-stack{% else %}software{% endif %}">
+                    <div class="cert-top-accent"></div>
                     <div class="cert-header">
-                        <div class="cert-logo-wrapper">
+                        <div class="certificate-logo">
                             {% if c.cert_image %}
-                                <img src="{{ c.cert_image.url }}" alt="{{c.organization}} Logo" class="cert-logo">
+                                <img src="{{ c.cert_image.url }}" alt="{{c.organization}} Logo">
                             {% elif 'HackerRank' in c.organization %}
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/4/40/HackerRank_Icon-1000px.png" alt="HackerRank" class="cert-logo">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/4/40/HackerRank_Icon-1000px.png" alt="HackerRank">
                             {% elif 'Udemy' in c.organization %}
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e3/Udemy_logo.svg" alt="Udemy" class="cert-logo">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e3/Udemy_logo.svg" alt="Udemy">
                             {% elif 'Adobe' in c.organization %}
-                                <img src="https://www.vectorlogo.zone/logos/adobe/adobe-icon.svg" alt="Adobe" class="cert-logo">
+                                <img src="https://www.vectorlogo.zone/logos/adobe/adobe-icon.svg" alt="Adobe">
                             {% elif 'Aajhub' in c.organization %}
-                                <div class="cert-logo text-logo">A</div>
+                                AJ HUB
                             {% else %}
-                                <div class="cert-logo text-logo">{{c.organization|slice:":1"}}</div>
+                                {{c.organization|slice:":2"|upper}}
                             {% endif %}
                         </div>
-                        <div class="cert-badges">
-                            {% if forloop.first %}<span class="cert-latest">LATEST</span>{% endif %}
-                            <span class="cert-year cert-year-{% if 'software' in c.name|lower or 'software' in c.category|default:''|lower or 'python' in c.name|lower %}green{% elif 'sql' in c.name|lower or 'database' in c.category|default:''|lower %}green{% elif 'prompt' in c.name|lower or 'ai' in c.category|default:''|lower %}red{% elif 'web' in c.name|lower or 'full stack' in c.category|default:''|lower %}blue{% else %}default{% endif %}">{{c.year}}</span>
-                        </div>
+                        <div class="cert-year">{{c.year}}</div>
                     </div>
                     
-                    <h3 class="cert-title">{{c.name}}</h3>
+                    <h3 class="certificate-title">{{c.name}}</h3>
                     <div class="cert-org">{{c.organization}}</div>
                     
-                    {% if c.description %}
-                    <div class="cert-desc">{{c.description}}</div>
-                    {% endif %}
+                    <div class="certificate-category">
+                        [ {% if c.category %}{{c.category|upper}}{% elif 'Software' in c.name or 'Python' in c.name %}SOFTWARE / PROGRAMMING{% elif 'SQL' in c.name %}DATABASES{% elif 'Prompt' in c.name %}AI / PROMPT ENGINEERING{% elif 'Web' in c.name %}FULL STACK DEVELOPMENT{% else %}GENERAL{% endif %} ]
+                    </div>
                     
-                    {% if c.category %}
-                    <div class="cert-category">{{c.category|upper}}</div>
-                    {% elif 'Software' in c.name or 'Python' in c.name %}
-                    <div class="cert-category">SOFTWARE / PROGRAMMING</div>
-                    {% elif 'SQL' in c.name %}
-                    <div class="cert-category">DATABASES</div>
-                    {% elif 'Prompt' in c.name %}
-                    <div class="cert-category">AI / PROMPT ENGINEERING</div>
-                    {% elif 'Web' in c.name %}
-                    <div class="cert-category">FULL STACK DEVELOPMENT</div>
-                    {% endif %}
+                    <div style="flex-grow: 1;"></div>
+                    
+                    <hr class="cert-divider">
                     
                     <div class="cert-footer">
-                        <span class="cert-indicator">CERTIFIED <span class="check">✓</span></span>
+                        <div class="cert-verified">✓ VERIFIED</div>
                         
                         {% if c.cert_url %}
-                        <a href="{{c.cert_url}}" target="_blank" rel="noopener" class="cert-action">View certificate ↗</a>
+                        <a href="{{c.cert_url}}" target="_blank" rel="noopener noreferrer" class="cert-action">View Certificate ↗</a>
                         {% elif c.cert_file %}
-                        <a href="{{c.cert_file.url}}" target="_blank" rel="noopener" class="cert-action">View certificate ↗</a>
+                        <a href="{{c.cert_file.url}}" target="_blank" rel="noopener noreferrer" class="cert-action">View Certificate ↗</a>
                         {% endif %}
                     </div>
                 </div>
@@ -398,74 +372,81 @@
     });
     </script>
 
-    <section id="contact" class="contact contact-premium">
-        <div class="container contact-container">
-            <span class="section-label"><span class="accent-line"></span>07 / CONTACT</span>
-            <div class="contact-header">
-                <h2 class="contact-headline">Let's build<br>something meaningful.</h2>
-                <p class="contact-subtitle">Have a project, idea, or opportunity in mind?<br>Let's talk and turn it into something real.</p>
-                
-                <a href="mailto:{{profile.email}}" class="contact-cta-btn">
-                    <span class="cta-text-normal">Start a conversation</span>
-                    <span class="cta-text-hover">Let's talk</span>
-                    <span class="cta-arrow">→</span>
-                </a>
+    <section id="contact" class="contact-section" style="padding: 100px 0;">
+        <div class="container" style="max-width: 900px;">
+            <div style="text-align: center; margin-bottom: 60px;">
+                <span class="section-label" style="justify-content: center; margin: 0 auto 20px;"><span class="accent-line"></span>GET IN TOUCH</span>
+                <h2 style="font-size: 3rem; margin-bottom: 15px; letter-spacing: -1px;">Let's connect.</h2>
+                <p style="color: var(--text-secondary); margin: 0 auto 35px; font-size: 1.15rem; max-width: 500px; line-height: 1.6;">Have something worth building?<br>Choose how you'd like to connect.</p>
+                <a href="mailto:{{profile.email}}" class="btn-primary" style="display: inline-flex; align-items: center; justify-content: center;">Start a conversation &nbsp;→</a>
             </div>
-            
-            <div class="contact-cards-grid">
-                <!-- Email -->
-                <a href="mailto:{{profile.email}}" class="contact-card">
-                    <div class="cc-icon">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg" alt="Email" style="width: 100%; height: 100%; object-fit: contain;">
-                    </div>
-                    <div class="cc-content">
-                        <h4 class="cc-label">EMAIL</h4>
-                        <p class="cc-value">{{profile.email}}</p>
-                        <span class="cc-action">Send me a message ↗</span>
-                    </div>
-                </a>
+
+            <div class="network-container">
+                <div class="network-line">
+                    <div class="network-center-dot"></div>
+                </div>
                 
-                {% if profile.github %}
-                <!-- GitHub -->
-                <a href="{{profile.github}}" target="_blank" rel="noopener" class="contact-card">
-                    <div class="cc-icon">
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg" alt="GitHub" style="width: 100%; height: 100%; object-fit: contain;">
-                    </div>
-                    <div class="cc-content">
-                        <h4 class="cc-label">GITHUB</h4>
-                        <p class="cc-value">{{profile.github|slice:"19:"}}</p>
-                        <span class="cc-action">View my work ↗</span>
-                    </div>
-                </a>
-                {% endif %}
-                
-                {% if profile.linkedin %}
-                <!-- LinkedIn -->
-                <a href="{{profile.linkedin}}" target="_blank" rel="noopener" class="contact-card">
-                    <div class="cc-icon">
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linkedin/linkedin-original.svg" alt="LinkedIn" style="width: 100%; height: 100%; object-fit: contain;">
-                    </div>
-                    <div class="cc-content">
-                        <h4 class="cc-label">LINKEDIN</h4>
-                        <p class="cc-value">Connect with me</p>
-                        <span class="cc-action">Open profile ↗</span>
-                    </div>
-                </a>
-                {% endif %}
-                
-                {% if profile.phone %}
-                <!-- Phone -->
-                <a href="tel:{{profile.phone|cut:' '}}" class="contact-card">
-                    <div class="cc-icon">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="Phone" style="width: 100%; height: 100%; object-fit: contain;">
-                    </div>
-                    <div class="cc-content">
-                        <h4 class="cc-label">PHONE</h4>
-                        <p class="cc-value">{{profile.phone}}</p>
-                        <span class="cc-action">Call me ↗</span>
-                    </div>
-                </a>
-                {% endif %}
+                <div class="network-channels">
+                    <!-- Email -->
+                    <a href="mailto:{{profile.email}}" class="network-channel">
+                        <div class="channel-dot"></div>
+                        <h4 class="channel-label">EMAIL</h4>
+                        <div class="channel-info">
+                            <span class="channel-hover-text">Let's start a conversation.</span>
+                            <span class="channel-value">{{profile.email}} <span class="arrow">↗</span></span>
+                        </div>
+                        <div class="channel-default">Start a conversation ↗</div>
+                    </a>
+
+                    {% if profile.linkedin %}
+                    <!-- LinkedIn -->
+                    <a href="{{profile.linkedin}}" target="_blank" rel="noopener noreferrer" class="network-channel">
+                        <div class="channel-dot"></div>
+                        <h4 class="channel-label">LINKEDIN</h4>
+                        <div class="channel-info">
+                            <span class="channel-hover-text">Connect professionally.</span>
+                            <span class="channel-value">Profile <span class="arrow">↗</span></span>
+                        </div>
+                        <div class="channel-default">Connect professionally ↗</div>
+                    </a>
+                    {% endif %}
+
+                    {% if profile.github %}
+                    <!-- GitHub -->
+                    <a href="{{profile.github}}" target="_blank" rel="noopener noreferrer" class="network-channel">
+                        <div class="channel-dot"></div>
+                        <h4 class="channel-label">GITHUB</h4>
+                        <div class="channel-info">
+                            <span class="channel-hover-text">Explore my work.</span>
+                            <span class="channel-value">{{profile.github|slice:"19:"}} <span class="arrow">↗</span></span>
+                        </div>
+                        <div class="channel-default">Explore my work ↗</div>
+                    </a>
+                    {% endif %}
+
+                    {% if profile.phone %}
+                    <!-- Phone -->
+                    <a href="tel:{{profile.phone|cut:' '}}" class="network-channel">
+                        <div class="channel-dot"></div>
+                        <h4 class="channel-label">PHONE</h4>
+                        <div class="channel-info">
+                            <span class="channel-hover-text">Give me a call.</span>
+                            <span class="channel-value">{{profile.phone}} <span class="arrow">↗</span></span>
+                        </div>
+                        <div class="channel-default">Call me ↗</div>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if profile.status %}
+            <div class="availability-status">
+                <span class="status-dot"></span> Open to interesting opportunities
+            </div>
+            {% endif %}
+
+            <div class="contact-footer-signature">
+                Built by Ganesh · Powered by curiosity · Open to interesting problems.
             </div>
         </div>
     </section>

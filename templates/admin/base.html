@@ -7,29 +7,50 @@
     <title>Portfolio Admin</title>
     <link rel="stylesheet" href="{% static 'css/admin.css' %}">
 </head>
-<body class="{% if not request.user.is_authenticated %}no-sidebar{% endif %}">
+<body class="{% if not request.user.is_authenticated %}no-sidebar{% else %}cms-shell{% endif %}">
     {% if request.user.is_authenticated %}
-    <aside>
-        <a href="{% url 'admin_dashboard' code %}" class="brand">Ganesh<span>.</span></a>
-        <small>CONTENT</small>
+    
+    <div class="cms-mobile-toggle" onclick="document.querySelector('.cms-sidebar').classList.toggle('open')">☰</div>
+    
+    <aside class="cms-sidebar">
+        <a href="{% url 'admin_dashboard' code %}" class="cms-brand">Ganesh<span>PORTFOLIO CMS</span></a>
+        
+        <div class="cms-sidebar-group">OVERVIEW</div>
         <nav>
-            <a href="{% url 'admin_dashboard' code %}" class="{% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">Dashboard</a>
-            <a href="{% url 'projects' code %}" class="{% if 'project' in request.resolver_match.url_name %}active{% endif %}">Projects</a>
-            <a href="{% url 'skills' code %}" class="{% if 'skill' in request.resolver_match.url_name %}active{% endif %}">Skills</a>
-            <a href="{% url 'experiences' code %}" class="{% if 'experience' in request.resolver_match.url_name %}active{% endif %}">Experience</a>
-            <a href="{% url 'education' code %}" class="{% if 'education' in request.resolver_match.url_name %}active{% endif %}">Education</a>
-            <a href="{% url 'certifications' code %}" class="{% if 'cert' in request.resolver_match.url_name %}active{% endif %}">Certifications</a>
+            <a href="{% url 'admin_dashboard' code %}" class="cms-nav-item {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">Dashboard</a>
         </nav>
-        <small>SETTINGS</small>
+        
+        <div class="cms-sidebar-group">CONTENT</div>
         <nav>
-            <a href="{% url 'profile_edit' code %}" class="{% if request.resolver_match.url_name == 'profile_edit' %}active{% endif %}">Profile Info</a>
-            <a href="{% url 'resume_edit' code %}" class="{% if request.resolver_match.url_name == 'resume_edit' %}active{% endif %}">Resume</a>
-            <a href="{% url 'admin_logout' code %}">Logout</a>
+            <a href="{% url 'projects' code %}" class="cms-nav-item {% if 'project' in request.resolver_match.url_name %}active{% endif %}">Projects</a>
+            <a href="{% url 'skills' code %}" class="cms-nav-item {% if 'skill' in request.resolver_match.url_name %}active{% endif %}">Skills</a>
+            <a href="{% url 'experiences' code %}" class="cms-nav-item {% if 'experience' in request.resolver_match.url_name %}active{% endif %}">Experience</a>
+            <a href="{% url 'education' code %}" class="cms-nav-item {% if 'education' in request.resolver_match.url_name %}active{% endif %}">Education</a>
+            <a href="{% url 'certifications' code %}" class="cms-nav-item {% if 'cert' in request.resolver_match.url_name %}active{% endif %}">Certifications</a>
+            <a href="{% url 'timeline_list' code %}" class="cms-nav-item {% if 'timeline' in request.resolver_match.url_name %}active{% endif %}">Career Timeline</a>
+            <a href="{% url 'concept_list' code %}" class="cms-nav-item {% if 'concept' in request.resolver_match.url_name %}active{% endif %}">Learning Concepts</a>
         </nav>
-        <a href="{% url 'home' %}" target="_blank" class="view">View Portfolio ↗</a>
+
+        <div class="cms-sidebar-group">PUBLISHING</div>
+        <nav>
+            <a href="{% url 'admin_resume_center' code %}" class="cms-nav-item {% if 'resume' in request.resolver_match.url_name %}active{% endif %}">Resume Center</a>
+        </nav>
+
+        <div class="cms-sidebar-group">SYSTEM</div>
+        <nav>
+            <a href="{% url 'status_list' code %}" class="cms-nav-item {% if 'status' in request.resolver_match.url_name %}active{% endif %}">System Health</a>
+        </nav>
+
+        <div class="cms-sidebar-group">ACCOUNT</div>
+        <nav>
+            <a href="{% url 'profile_edit' code %}" class="cms-nav-item {% if request.resolver_match.url_name == 'profile_edit' %}active{% endif %}">Profile</a>
+            <a href="{% url 'home' %}" class="cms-nav-item" target="_blank">View Portfolio ↗</a>
+            <a href="{% url 'admin_logout' code %}" class="cms-nav-item" style="color: var(--cms-danger)">Logout</a>
+        </nav>
     </aside>
     {% endif %}
-    <main>
+    
+    <main class="cms-main">
         {% block content %}{% endblock %}
     </main>
 </body>

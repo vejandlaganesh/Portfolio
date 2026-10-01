@@ -6,31 +6,239 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Ganesh Sharma | AI/ML & Generative AI{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/portfolio.css' %}">
+    <link rel="stylesheet" href="{% static 'css/portfolio.css' %}?v=7">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+
+    <script>
+        window.portfolioRoutes = {
+            home: "{% url 'home' %}",
+            projects: "{% url 'home' %}#projects",
+            resume: "{% url 'resume_public_center' %}",
+            learn: "{% url 'learn' %}",
+            status: "{% url 'status_page' %}"
+        };
+    </script>
 </head>
 
 <body>
-    <header class="nav">
-        <a class="logo" href="#home">Ganesh<span>.</span></a>
-        <button class="menu-btn" aria-label="Toggle menu">☰</button>
-        <nav class="navlinks">
-            <a href="#home">Home</a>
-            <a href="#about">About</a>
-            <a href="#projects">Projects</a>
-            <a href="#skills">Skills</a>
-            <a href="#experience">Experience</a>
-            <a href="#education">Education</a>
-            <a href="#certifications">Certifications</a>
-            <a href="#contact">Contact</a>
+    <div class="site-background"></div>
+
+    {% block intro %}{% endblock %}
+
+    <div class="site-content">
+        <nav class="portfolio-navbar" id="mainNavbar">
+            <div class="navbar-inner">
+                <a class="navbar-logo" href="#home">GANESH</a>
+                <button class="menu-btn mobile-menu-button" aria-label="Toggle menu">☰</button>
+                <div class="navbar-links navlinks">
+                    <a href="#home" data-nav="home">Home</a>
+                    <a href="#about">About</a>
+                    <a href="#projects" data-nav="projects">Projects</a>
+                    <a href="#skills">Skills</a>
+                    <a href="#career-timeline">Career Journey</a>
+                    <a href="#certifications">Certifications</a>
+                    <a href="#contact">Contact</a>
+                </div>
+            </div>
         </nav>
-    </header>
 
-    {% block content %}{% endblock %}
+        {% block content %}{% endblock %}
 
-    <footer class="footer">
-        <p>© 2026 {{ profile.name|default:"Vejandla Ganesh Sharma" }}. Built with passion for AI, software, and automation.</p>
-    </footer>
+        <footer class="footer">
+            <p>© 2026 {{ profile.name|default:"Vejandla Ganesh Sharma" }}. Built with passion for AI, software, and automation.</p>
+        </footer>
+    </div>
+    
     <script src="{% static 'js/portfolio.js' %}"></script>
+
+    <!-- Floating AI Button -->
+    <button id="ai-chat-btn" class="ai-chat-toggle" onclick="openAIChat()" title="Ask Ganesh AI" aria-label="Ask Ganesh AI">
+        🤖
+    </button>
+
+    <!-- AI Chat Panel -->
+    <div id="ai-chat-panel" class="ai-chat-widget" style="display: none;">
+        <!-- Header -->
+        <div class="ai-chat-header">
+            <div style="font-weight: bold; display: flex; align-items: center; gap: 8px;">🤖 Ganesh AI</div>
+            <div style="display: flex; gap: 10px;">
+                <button type="button" onclick="clearAIChat()" style="background:none;border:none;color:#777777;cursor:pointer;font-size:0.85rem;" title="Clear Chat" aria-label="Clear Chat">Clear</button>
+                <button type="button" onclick="closeAIChat()" style="background:none;border:none;color:#1c1c1c;cursor:pointer;font-weight:bold;font-size:1.2rem;" title="Minimize" aria-label="Minimize Ganesh AI">−</button>
+            </div>
+        </div>
+        
+        <!-- Messages -->
+        <div id="ai-messages" class="ai-chat-body">
+            <div class="ai-message system">
+                Hi! 👋<br><br>
+                I'm Ganesh's AI assistant.<br><br>
+                Ask me about his:
+                <ul>
+                    <li>Projects</li>
+                    <li>AI / ML work</li>
+                    <li>Generative AI</li>
+                    <li>Skills</li>
+                    <li>Experience</li>
+                    <li>Education</li>
+                </ul>
+                What would you like to explore?
+
+                <div class="ai-suggestions" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;">
+                    <button type="button" class="ai-suggestion" onclick="document.getElementById('ai-input').value='What projects has Ganesh built?'; sendAIMessage();">💼 Projects</button>
+                    <button type="button" class="ai-suggestion" onclick="document.getElementById('ai-input').value='What are Ganesh\'s AI/ML skills?'; sendAIMessage();">🤖 AI / ML Skills</button>
+                    <button type="button" class="ai-suggestion" onclick="document.getElementById('ai-input').value='Tell me about Ganesh\'s Generative AI work.'; sendAIMessage();">⚡ Generative AI</button>
+                    <button type="button" class="ai-suggestion" onclick="document.getElementById('ai-input').value='What QA automation experience does Ganesh have?'; sendAIMessage();">🧪 QA Automation</button>
+                    <button type="button" class="ai-suggestion" onclick="document.getElementById('ai-input').value='What is Ganesh\'s educational background?'; sendAIMessage();">🎓 Education</button>
+                    <button type="button" class="ai-suggestion" onclick="document.getElementById('ai-input').value='Where has Ganesh worked?'; sendAIMessage();">💼 Experience</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Input -->
+        <div class="ai-chat-footer">
+            {% csrf_token %}
+            <textarea id="ai-input" class="ai-chat-input" placeholder="Ask something..." onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault(); sendAIMessage();}" aria-label="Ask something..."></textarea>
+            <button id="ai-send-btn" class="ai-chat-send" onclick="sendAIMessage()" aria-label="Send">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const chatBtn = document.getElementById('ai-chat-btn');
+        const chatPanel = document.getElementById('ai-chat-panel');
+        const messagesDiv = document.getElementById('ai-messages');
+        const inputField = document.getElementById('ai-input');
+        const sendBtn = document.getElementById('ai-send-btn');
+        
+        chatPanel.style.display = 'none';
+
+        function openAIChat() {
+            chatPanel.style.display = 'flex';
+            chatBtn.style.display = 'none';
+            inputField.focus();
+        }
+
+        function closeAIChat() {
+            chatPanel.style.display = 'none';
+            chatBtn.style.display = 'flex';
+        }
+
+        function appendMessage(role, text) {
+            const div = document.createElement('div');
+            div.className = 'ai-message ' + (role === 'system' ? 'system-msg' : role);
+            
+            if (role === 'user') {
+                div.innerHTML = `<div class="ai-message-label">You</div><div class="ai-message-content">${text.replace(/\n/g, '<br>')}</div>`;
+            } else if (role === 'ai') {
+                // Remove repetitive Ganesh AI header as requested
+                // Parse markdown, sanitize, and insert
+                DOMPurify.addHook('afterSanitizeAttributes', function(node) {
+                    if (node.tagName && node.tagName.toLowerCase() === 'a') {
+                        node.setAttribute('target', '_blank');
+                        node.setAttribute('rel', 'noopener noreferrer');
+                    }
+                });
+                const rawHtml = marked.parse(text);
+                const safeHtml = DOMPurify.sanitize(rawHtml, { USE_PROFILES: { html: true } });
+                DOMPurify.removeAllHooks();
+                div.innerHTML = `<div class="ai-message-content">${safeHtml}</div>`;
+            } else if (role === 'system') {
+                div.innerText = text;
+            }
+            
+            messagesDiv.appendChild(div);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            return div;
+        }
+
+        async function sendAIMessage() {
+            const msg = inputField.value.trim();
+            if (!msg) return;
+            
+            inputField.value = '';
+            inputField.disabled = true;
+            sendBtn.disabled = true;
+            
+            appendMessage('user', msg);
+            const loadingDiv = appendMessage('system', 'Ganesh AI is thinking... ● ● ●');
+            
+            const csrf = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            
+            try {
+                const res = await fetch('/ai/chat/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrf
+                    },
+                    body: JSON.stringify({ message: msg })
+                });
+                const data = await res.json();
+                loadingDiv.remove();
+                
+                if (res.ok && data.success) {
+                    appendMessage('ai', data.response);
+                } else {
+                    appendMessage('system', data.error || 'Error communicating with AI.');
+                }
+            } catch (err) {
+                loadingDiv.remove();
+                appendMessage('system', 'Connection error. Please try again.');
+            }
+            
+            inputField.disabled = false;
+            sendBtn.disabled = false;
+            inputField.focus();
+        }
+
+        async function clearAIChat() {
+            messagesDiv.innerHTML = `<div style="background: rgba(111,66,193,0.1); border: 1px solid var(--accent); padding: 12px; border-radius: 8px; font-size: 0.9rem;">
+                Chat cleared.<br>How can I help you?
+            </div>`;
+            const csrf = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            await fetch('/ai/chat/reset/', {
+                method: 'POST',
+                headers: { 'X-CSRFToken': csrf }
+            });
+        }
+        
+        // Prevent shortcuts while typing
+        inputField.addEventListener('keydown', function(e) {
+            e.stopPropagation();
+        });
+    </script>
+
+
+    <!-- Keyboard Shortcuts Modal -->
+    <div id="shortcuts-modal" role="dialog" aria-modal="true" aria-labelledby="shortcuts-title" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 2000; justify-content: center; align-items: center;">
+        <div id="shortcuts-dialog" style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 30px; max-width: 400px; width: 90%; box-shadow: 0 10px 30px rgba(0,0,0,0.5);" onclick="event.stopPropagation()">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 15px;">
+                <h2 id="shortcuts-title" style="margin: 0; font-size: 1.5rem;">Keyboard Shortcuts</h2>
+                <button id="close-shortcuts-btn" aria-label="Close keyboard shortcuts" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-light);">&times;</button>
+            </div>
+            
+            <ul style="list-style: none; padding: 0; margin: 0 0 20px 0;">
+                <li style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--border);"><span>Home</span><kbd style="background: var(--bg-hover); padding: 2px 8px; border-radius: 4px; font-family: monospace; border: 1px solid var(--border);">H</kbd></li>
+                <li style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--border);"><span>Projects</span><kbd style="background: var(--bg-hover); padding: 2px 8px; border-radius: 4px; font-family: monospace; border: 1px solid var(--border);">P</kbd></li>
+                <li style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--border);"><span>Resume</span><kbd style="background: var(--bg-hover); padding: 2px 8px; border-radius: 4px; font-family: monospace; border: 1px solid var(--border);">R</kbd></li>
+                <li style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--border);"><span>Learn</span><kbd style="background: var(--bg-hover); padding: 2px 8px; border-radius: 4px; font-family: monospace; border: 1px solid var(--border);">L</kbd></li>
+                <li style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--border);"><span>Ask Ganesh AI</span><kbd style="background: var(--bg-hover); padding: 2px 8px; border-radius: 4px; font-family: monospace; border: 1px solid var(--border);">A</kbd></li>
+                <li style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--border);"><span>System Status</span><kbd style="background: var(--bg-hover); padding: 2px 8px; border-radius: 4px; font-family: monospace; border: 1px solid var(--border);">S</kbd></li>
+                <li style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--border);"><span>Show Shortcuts</span><kbd style="background: var(--bg-hover); padding: 2px 8px; border-radius: 4px; font-family: monospace; border: 1px solid var(--border);">?</kbd></li>
+            </ul>
+            
+            <div style="background: var(--bg-hover); padding: 15px; border-radius: 8px;">
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                    <input type="checkbox" id="keyboard-shortcuts-toggle" checked style="width: 18px; height: 18px;">
+                    Enable keyboard shortcuts
+                </label>
+            </div>
+            <div style="text-align: center; margin-top: 15px; color: var(--text-light); font-size: 0.85rem;">
+                Press <kbd style="font-family: monospace; font-size: 0.8rem;">Esc</kbd> to close
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>

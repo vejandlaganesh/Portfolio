@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% if preview_mode %}
+<div style="position: fixed; top: 0; left: 0; right: 0; background: #ffc107; color: #000; padding: 15px; text-align: center; font-weight: bold; z-index: 9999; display: flex; justify-content: center; align-items: center; gap: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+    <span>⚠ PREVIEW MODE: This content is a draft and is not published yet.</span>
+    <a href="{% url 'admin_dashboard' code %}" style="background: rgba(0,0,0,0.1); padding: 5px 15px; border-radius: 5px; color: #000; text-decoration: none;">Back to Admin</a>
+    <a href="{% url 'project_edit' code project.id %}" style="background: rgba(0,0,0,0.1); padding: 5px 15px; border-radius: 5px; color: #000; text-decoration: none;">Edit Project</a>
+</div>
+{% endif %}
+
+<main id="project-detail" style="padding-top: 100px;">
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <a href="{% url 'home' %}#projects" class="btn-secondary" style="display: inline-flex; align-items: center; justify-content: center;">← Back to Projects</a>
+        </div>
+        
+                <div class="project-showcase">
+            <div class="project-info">
+                <div class="project-index">
+                    {{ project.category|upper }}
+                </div>
+                <h1 class="project-title">{{ project.title }}</h1>
+                <p class="project-description">{{ project.description }}</p>
+                
+                <div class="project-technologies">
+                    {% for tech in project.technologies.split %}
+                    <span class="float-tag" style="position:static;">{{ tech }}</span>
+                    {% endfor %}
+                </div>
+                
+                <div class="project-actions" style="display: flex; flex-wrap: wrap; gap: 14px; align-items: center;">
+                    <a href="{% url 'project_detail' project.id %}" class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">View Project ↗</a>
+                    {% if project.live_url %}
+                    <a href="{{ project.live_url }}" target="_blank" rel="noopener noreferrer" class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">Live Demo ↗</a>
+                    {% endif %}
+                    {% if project.github_url %}
+                    <a href="{{ project.github_url }}" target="_blank" rel="noopener noreferrer" class="btn-secondary" style="display: inline-flex; align-items: center; gap: 8px;">GitHub ↗</a>
+                    {% endif %}
+                    <a href="{% url 'project_compare' %}?projects={{ project.id }}" class="btn-secondary" style="display: inline-flex; align-items: center; gap: 8px;">Compare ↗</a>
+                </div>
+            </div>
+            
+            <div class="project-visual">
+                {% if project.project_image %}
+                <img src="{{ project.project_image.url }}" alt="{{ project.title }} project preview" class="project-image">
+                {% else %}
+                <div style="width: 100%; height: 100%; background: var(--bg-hover); display: flex; align-items: center; justify-content: center; color: var(--text-light);">No Image Provided</div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+</main>
+{% endblock %}

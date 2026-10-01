@@ -24,7 +24,18 @@ def split_csv(value):
     """
     return [part.strip() for part in str(value or "").split(",") if part.strip()]
 
+import re
+
 @register.filter
 def split_lines(value):
-    """Splits a multiline string into a list of non-empty lines for bullet points."""
-    return [line.strip() for line in str(value or "").splitlines() if line.strip()]
+    """Splits a multiline string into non-empty lines, stripping existing bullets."""
+    if not value: return []
+    lines = []
+    for line in str(value).splitlines():
+        line = line.strip()
+        if not line: continue
+        # Strip leading bullets: •, -, *, or digits followed by dot/parenthesis
+        line = re.sub(r'^[\u2022\-\*]\s*', '', line)
+        line = re.sub(r'^\d+[\.\)]\s*', '', line)
+        lines.append(line.strip())
+    return lines

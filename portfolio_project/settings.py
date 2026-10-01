@@ -2,6 +2,15 @@ import os
 from pathlib import Path
 import mimetypes
 
+try:
+    from dotenv import load_dotenv
+    # Load .env relative to the project root, just in case
+    env_path = Path(__file__).resolve().parent.parent / '.env'
+    load_dotenv(dotenv_path=env_path)
+except ImportError:
+    pass
+
+
 mimetypes.add_type("text/css", ".css", True)
 
 BASE_DIR=Path(__file__).resolve().parent.parent
@@ -40,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'portfolio.middleware.AnalyticsMiddleware',
 ]
 ROOT_URLCONF = 'portfolio_project.urls'
 TEMPLATES = [

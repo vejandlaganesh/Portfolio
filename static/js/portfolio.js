@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     initHeroAnimation();
-    initPosterTransition();
     initSkillTags();
     initTiltCards();
-    initBackgroundDepth();
     initMobileMenu();
     initScrollReveal();
+    initPosterTransition();
+    initBackgroundDepth();
 });
 
 function initHeroAnimation() {
@@ -111,9 +111,14 @@ function initSkillTags() {
 }
 
 function initPosterTransition() {
-    const poster = document.getElementById('introPoster');
-    const indicator = document.getElementById('scrollIndicator');
-    const nav = document.querySelector('.nav');
+    const introScreen = document.querySelector('.intro-screen');
+    const indicator = document.querySelector('.intro-scroll-line');
+    const nav = document.querySelector('.portfolio-navbar');
+    
+    // If no intro screen, nav should be visible immediately
+    if (nav && !introScreen) {
+        nav.classList.add('visible');
+    }
     
     window.addEventListener('scroll', () => {
         const scrolled = window.scrollY;
@@ -123,18 +128,18 @@ function initPosterTransition() {
             else indicator.style.opacity = '1';
         }
         
-        if (poster && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        if (introScreen && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             if (scrolled > 0 && scrolled < window.innerHeight) {
                 const progress = Math.min(scrolled / (window.innerHeight * 0.5), 1);
-                poster.style.opacity = 1 - (progress * 0.25); // 1 to 0.75
-                poster.style.transform = `translateY(${-20 * progress}px) scale(${1 - (0.02 * progress)})`;
+                introScreen.style.opacity = 1 - (progress * 0.25);
+                introScreen.style.transform = `translateY(${-20 * progress}px) scale(${1 - (0.02 * progress)})`;
             } else if (scrolled === 0) {
-                poster.style.opacity = '1';
-                poster.style.transform = 'translateY(0) scale(1)';
+                introScreen.style.opacity = '1';
+                introScreen.style.transform = 'translateY(0) scale(1)';
             }
         }
         
-        if (nav) {
+        if (nav && introScreen) {
             if (scrolled > window.innerHeight * 0.9) nav.classList.add('visible');
             else nav.classList.remove('visible');
         }
@@ -160,7 +165,7 @@ function initBackgroundDepth() {
         });
         
         // Navbar shadow on scroll
-        const nav = document.querySelector('.nav');
+        const nav = document.querySelector('.portfolio-navbar');
         if (nav) {
             if (scrolled > 50) nav.classList.add('scrolled');
             else nav.classList.remove('scrolled');
@@ -190,3 +195,143 @@ function initScrollReveal() {
     
     elements.forEach(el => observer.observe(el));
 }
+
+
+// Keyboard Shortcuts System
+const PortfolioShortcuts = (function() {
+    let shortcutsEnabled = true;
+    const storageKey = 'portfolioKeyboardShortcuts';
+    
+    const modal = document.getElementById('shortcuts-modal');
+    const toggle = document.getElementById('keyboard-shortcuts-toggle');
+    const closeBtn = document.getElementById('close-shortcuts-btn');
+    const footerBtn = document.getElementById('open-shortcuts-footer');
+    
+    // Init state
+    const saved = localStorage.getItem(storageKey);
+    if (saved === 'disabled') {
+        shortcutsEnabled = false;
+        if(toggle) toggle.checked = false;
+    }
+
+    function isTypingTarget(el) {
+        if (!el) return false;
+        const tag = el.tagName.toUpperCase();
+        if (['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON'].includes(tag)) return true;
+        if (el.isContentEditable) return true;
+        return false;
+    }
+
+    function openHelp() {
+        if (!modal) return;
+        modal.style.display = 'flex';
+        if (closeBtn) closeBtn.focus();
+    }
+
+    function closeHelp() {
+        if (!modal) return;
+        modal.style.display = 'none';
+        if (footerBtn) footerBtn.focus();
+    }
+
+    function handleKeydown(e) {
+        // Protect inputs
+        if (isTypingTarget(e.target)) return;
+        
+        // Protect modifiers
+        if (e.ctrlKey || e.metaKey || e.altKey) return;
+        
+        const key = e.key;
+        
+        // Always allow Escape to close modal
+        if (key === 'Escape') {
+            closeHelp();
+            return;
+        }
+
+        // Always allow ? to open modal regardless of disabled state
+        if (key === '?') {
+            openHelp();
+            return;
+        }
+
+        if (!shortcutsEnabled) return;
+
+        // Navigation
+        const routes = window.portfolioRoutes;
+        if (!routes) return;
+        
+        const lowerKey = key.toLowerCase();
+        
+        switch (lowerKey) {
+            case 'h':
+                window.location.href = routes.home;
+                break;
+            case 'p':
+                window.location.href = routes.projects;
+                break;
+            case 'r':
+                window.location.href = routes.resume;
+                break;
+            case 'l':
+                window.location.href = routes.learn;
+                break;
+            case 's':
+                window.location.href = routes.status;
+                break;
+            case 'a':
+                if (typeof window.openAIChat === 'function') {
+                    e.preventDefault();
+                    window.openAIChat();
+                } else {
+                    const aiBtn = document.getElementById('ai-chat-btn');
+                    if (aiBtn) aiBtn.click();
+                }
+                break;
+        }
+    }
+
+    function setup() {
+        document.addEventListener('keydown', handleKeydown);
+        
+        if (modal) {
+            modal.addEventListener('click', closeHelp);
+        }
+        
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closeHelp);
+        }
+        
+        if (footerBtn) {
+            footerBtn.addEventListener('click', openHelp);
+        }
+        
+        if (toggle) {
+            toggle.addEventListener('change', function(e) {
+                shortcutsEnabled = e.target.checked;
+                localStorage.setItem(storageKey, shortcutsEnabled ? 'enabled' : 'disabled');
+            });
+        }
+    }
+
+    return {
+        init: setup
+    };
+})();
+
+document.addEventListener('DOMContentLoaded', function() {
+    PortfolioShortcuts.init();
+});
+
+
+// Scroll Progress Bar & Navbar background
+window.addEventListener('scroll', () => {
+    const scrollProgress = document.getElementById('scroll-progress');
+    if (scrollProgress) {
+        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrollPercent = (scrollTop / scrollHeight) * 100;
+        scrollProgress.style.width = scrollPercent + '%';
+    }
+});
+

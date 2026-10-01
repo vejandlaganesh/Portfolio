@@ -1,0 +1,49 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<div class="cms-page-header">
+    <div>
+        <div class="cms-eyebrow">MONITORING</div>
+        <h1 class="cms-page-title">System Health</h1>
+        <p class="cms-body">Monitor the services powering your portfolio.</p>
+    </div>
+</div>
+
+{% if items %}
+<div class="cms-grid cms-grid-3">
+    {% for item in items %}
+    <div class="cms-card" style="display: flex; flex-direction: column;">
+        <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: {% if item.status == 'operational' %}var(--cms-success){% elif item.status == 'degraded' %}var(--cms-warning){% elif item.status == 'partial_outage' %}#fd7e14{% else %}var(--cms-danger){% endif %}; margin-bottom: 16px; display: flex; align-items: center;">
+            <span class="status-dot {% if item.status == 'degraded' %}warning{% elif item.status == 'partial_outage' %}warning{% elif item.status != 'operational' %}danger{% endif %}" style="background-color: currentColor;"></span> 
+            {{ item.get_status_display }}
+        </div>
+        
+        <h3 style="font-size: 18px; font-weight: 700; color: var(--cms-text); margin-bottom: 8px;">{{ item.component }}</h3>
+        
+        <p style="font-size: 14px; color: var(--cms-text-secondary); line-height: 1.5; margin-bottom: 24px; flex: 1;">
+            {{ item.description|default:"No description available." }}
+        </p>
+        
+        <div style="border-top: 1px solid var(--cms-border-soft); padding-top: 16px; margin-bottom: 20px;">
+            <div class="health-row" style="padding: 6px 0;">
+                <span class="health-label" style="font-size: 13px; color: var(--cms-text-muted);">Uptime</span>
+                <span class="health-value" style="font-weight: 600; color: var(--cms-text);">{{ item.uptime_percentage }}%</span>
+            </div>
+            <div class="health-row" style="padding: 6px 0; border-bottom: none;">
+                <span class="health-label" style="font-size: 13px; color: var(--cms-text-muted);">Last checked</span>
+                <span class="health-value" style="font-size: 13px;">{{ item.last_checked|date:"d M Y" }}</span>
+            </div>
+        </div>
+        
+        <div style="text-align: right;">
+            <a href="{% url 'status_edit' code item.pk %}" class="btn-secondary" style="font-size: 12px; padding: 6px 14px;">Update Status</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="cms-empty">
+    <div class="cms-empty-title">No components found</div>
+    <div class="cms-empty-desc">System health components are initialized automatically.</div>
+</div>
+{% endif %}
+{% endblock %}

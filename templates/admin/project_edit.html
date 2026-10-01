@@ -8,7 +8,7 @@
     </div>
 </div>
 
-<div class="cms-card cms-form" style="max-width: 800px;">
+<div class="cms-card cms-form" style="max-width: 800px; margin-bottom: 40px;">
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         
@@ -18,28 +18,14 @@
         </div>
         {% endif %}
         
-        {% if errors %}
-        <div class="cms-alert error">
-            <h4 style="margin: 0 0 8px 0;">Please correct the errors below:</h4>
-            <ul style="margin: 0; padding-left: 20px;">
-                {% for field, error_list in errors.items %}
-                    <li><strong>{{ field|title }}:</strong> {{ error_list.0 }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
-
         {% for field_name, model in fields %}
         <div class="cms-form-group">
             <label style="text-transform: capitalize;">{{ field_name|replace_underscore }}</label>
             
             {% if field_name == 'summary' or field_name == 'about' or field_name == 'description' or field_name == 'technologies' or field_name == 'bullets' or field_name == 'skills' %}
-                {% if field_name == 'description' or field_name == 'bullets' %}
-                <div style="font-size: 13px; color: var(--cms-text-muted); margin-bottom: 8px;">Enter each point on a new line. Each line will appear as a bullet point on the portfolio.</div>
-                {% endif %}
                 <textarea name="{{ field_name }}" rows="6">{{ object|get_attr:field_name }}</textarea>
             
-            {% elif 'image' in field_name or field_name == 'resume' or field_name == 'cert_file' or field_name == 'profile_photo' or field_name == 'file' %}
+            {% elif 'image' in field_name or field_name == 'resume' or field_name == 'cert_file' or field_name == 'profile_photo' %}
                 <input type="file" name="{{ field_name }}" style="padding: 10px; border: 1px dashed var(--cms-border); background: var(--cms-surface-soft);">
                 {% if object and object|get_attr:field_name %}
                     <div style="font-size: 13px; margin-top: 8px; color: var(--cms-text-secondary);">Current file: {{ object|get_attr:field_name }}</div>
@@ -48,14 +34,11 @@
                     </label>
                 {% endif %}
                 
-            {% elif field_name == 'featured' or field_name == 'is_current' or field_name == 'is_active' or field_name == 'is_verified' %}
+            {% elif field_name == 'featured' or field_name == 'is_current' %}
                 <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; cursor: pointer; border: 1px solid var(--cms-border); padding: 12px 14px; border-radius: 10px;">
                     <input type="checkbox" name="{{ field_name }}" {% if object and object|get_attr:field_name %}checked{% endif %}>
-                    <span>{% if field_name == 'is_active' %}Active{% elif field_name == 'is_current' %}Current{% elif field_name == 'is_verified' %}Verified{% else %}Featured{% endif %}</span>
+                    <span>{% if field_name == 'featured' %}Featured{% else %}Current{% endif %}</span>
                 </label>
-                
-            {% elif field_name == 'start_date' or field_name == 'end_date' %}
-                <input type="month" name="{{ field_name }}" value="{{ object|get_attr:field_name|date:'Y-m' }}">
                 
             {% else %}
                 {% if field_name == 'live_url' %}
@@ -65,7 +48,7 @@
                 <div style="font-size: 13px; color: var(--cms-text-muted); margin-bottom: 8px;">Public GitHub repository for this project.</div>
                 <input type="url" name="{{ field_name }}" value="{{ object|get_attr:field_name }}">
                 {% else %}
-                <input type="text" name="{{ field_name }}" value="{{ object|get_attr:field_name }}" {% if field_name == 'name' or field_name == 'title' or field_name == 'organization' or field_name == 'year' or field_name == 'company' or field_name == 'role' or field_name == 'institution' or field_name == 'degree' %}required{% endif %}>
+                <input type="text" name="{{ field_name }}" value="{{ object|get_attr:field_name }}">
                 {% endif %}
             {% endif %}
         </div>

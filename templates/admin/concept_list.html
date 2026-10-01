@@ -1,0 +1,53 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<div class="cms-page-header">
+    <div>
+        <div class="cms-eyebrow">COLLECTION</div>
+        <h1 class="cms-page-title">Learning Concepts</h1>
+        <p class="cms-body">Manage the concepts displayed throughout your portfolio.</p>
+    </div>
+    <a href="{% url 'concept_add' code %}" class="btn-primary">+ Add Concept</a>
+</div>
+
+{% if items %}
+<div class="cms-grid concept-grid">
+    {% for item in items %}
+    <div class="cms-card concept-card">
+        <div class="concept-header">
+            <span class="cms-eyebrow" style="margin: 0; color: var(--cms-text-muted);">{{ item.category }}</span>
+            {% if item.is_active %}
+            <span class="cms-badge badge-active"><span class="status-dot"></span> ACTIVE</span>
+            {% else %}
+            <span class="cms-badge badge-inactive">INACTIVE</span>
+            {% endif %}
+        </div>
+        
+        <h3 class="concept-title">{{ item.title }}</h3>
+        
+        <div class="concept-desc">
+            {{ item.description|truncatewords:20 }}
+        </div>
+        
+        <div class="concept-footer">
+            <div class="concept-meta">
+                {{ item.projects.count }} PROJECTS &nbsp;&nbsp;&nbsp; ORDER {{ item.order|stringformat:"02d" }}
+            </div>
+            <div class="concept-actions">
+                <a href="{% url 'concept_edit' code item.pk %}" class="btn-secondary" style="padding: 6px 14px;">Edit</a>
+                <form action="{% url 'concept_delete' code item.pk %}" method="post" style="display:inline;" onsubmit="return confirm('Delete Concept?\n\n{{ item.title }}\n\nThis action cannot be undone.');">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-danger" style="padding: 6px 14px;">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="cms-empty">
+    <div class="cms-empty-title">No concepts yet</div>
+    <div class="cms-empty-desc">Add your first learning concept to display it on your portfolio.</div>
+    <a href="{% url 'concept_add' code %}" class="btn-primary">+ Add Concept</a>
+</div>
+{% endif %}
+{% endblock %}

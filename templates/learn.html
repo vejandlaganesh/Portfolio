@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block content %}
+<main id="learn-page" style="padding-top: 100px; padding-bottom: 80px; background: var(--bg);">
+    <div class="container">
+        <div class="cert-section-header" style="text-align: center; margin-bottom: 60px;">
+            <span class="section-label"><span class="accent-line"></span>KNOWLEDGE IN ACTION</span>
+            <h1 style="font-size: 3rem; margin-bottom: 1rem;">Learn From My Projects.</h1>
+            <p style="font-size: 1.1rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto;">Explore the concepts I use and see how they are applied in real projects.</p>
+        </div>
+
+        {% if categories %}
+        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px;">
+            <button class="btn-secondary" style="border-radius: 50px; padding: 8px 20px; font-size: 0.9rem;" onclick="filterConcepts('all')">All</button>
+            {% for cat in categories %}
+            <button class="btn-secondary" style="border-radius: 50px; padding: 8px 20px; font-size: 0.9rem; background: var(--bg-card); border-color: var(--border);" onclick="filterConcepts('{{ cat|slugify }}')">{{ cat }}</button>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if concepts %}
+        <div class="learn-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px;">
+            {% for concept in concepts %}
+            <div class="concept-card" data-category="{{ concept.category|slugify }}" id="concept-{{ concept.id }}" style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 25px; display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='none'; this.style.boxShadow='none';">
+                <small style="color: var(--accent); font-weight: bold; letter-spacing: 1px; display: block; margin-bottom: 10px;">{{ concept.category|upper }}</small>
+                <h3 style="margin: 0 0 15px 0; font-size: 1.4rem;">{{ concept.title }}</h3>
+                <p style="margin: 0 0 20px 0; color: var(--text-light); font-size: 0.95rem; line-height: 1.6; flex: 1;">{{ concept.description }}</p>
+                
+                {% if concept.projects.exists %}
+                <div style="border-top: 1px solid var(--border); padding-top: 15px;">
+                    <span style="font-size: 0.8rem; color: var(--text-light); text-transform: uppercase; font-weight: bold; display: block; margin-bottom: 10px;">Applied In:</span>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                        {% for project in concept.projects.all %}
+                        <a href="{% url 'project_detail' project.id %}" style="display: inline-block; font-size: 0.85rem; background: var(--bg-hover); padding: 5px 12px; border-radius: 6px; color: var(--text); text-decoration: none; border: 1px solid var(--border); transition: background 0.2s;" onmouseover="this.style.background='rgba(74, 71, 163, 0.1)'; this.style.color='var(--accent)';" onmouseout="this.style.background='var(--bg-hover)'; this.style.color='var(--text)';">{{ project.title }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div style="text-align: center; padding: 60px 20px; background: var(--bg-card); border-radius: 16px; border: 1px dashed var(--border);">
+            <h3 style="margin-bottom: 10px;">Learning concepts are being added.</h3>
+            <p style="color: var(--text-light);">Check back soon to explore the technologies and concepts behind my projects.</p>
+        </div>
+        {% endif %}
+    </div>
+</main>
+
+<script>
+function filterConcepts(category) {
+    const cards = document.querySelectorAll('.concept-card');
+    cards.forEach(card => {
+        if (category === 'all' || card.getAttribute('data-category') === category) {
+            card.style.display = 'flex';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+</script>
+{% endblock %}

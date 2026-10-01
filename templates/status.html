@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block content %}
+<main id="status-page" style="padding-top: 100px; padding-bottom: 80px; background: var(--bg);">
+    <div class="container" style="max-width: 800px;">
+        <div class="cert-section-header" style="margin-bottom: 40px;">
+            <span class="section-label"><span class="accent-line"></span>SYSTEM STATUS</span>
+            <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Operational Status</h1>
+            <p style="color: var(--text-secondary);">Current operational status of Ganesh Sharma's portfolio services.</p>
+        </div>
+
+        <div style="background: {{ overall_status.color|default:'var(--bg-card)' }}; color: white; padding: 20px 30px; border-radius: 12px; margin-bottom: 40px; display: flex; align-items: center; gap: 15px; box-shadow: var(--shadow-sm);">
+            <div style="width: 16px; height: 16px; border-radius: 50%; background: white; box-shadow: 0 0 10px rgba(255,255,255,0.5);"></div>
+            <h2 style="margin: 0; font-size: 1.4rem;">{{ overall_status.text|default:'System status information is currently unavailable.' }}</h2>
+        </div>
+
+        {% if components %}
+        <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 50px; box-shadow: var(--shadow-sm);">
+            {% for comp in components %}
+            <div style="padding: 25px; border-bottom: {% if not forloop.last %}1px solid var(--border){% else %}none{% endif %}; display: flex; flex-direction: column; gap: 15px;">
+                
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 15px;">
+                    <div>
+                        <h3 style="margin: 0 0 5px 0; font-size: 1.2rem; display: flex; align-items: center; gap: 10px;">
+                            {{ comp.component }}
+                        </h3>
+                        <div style="font-size: 0.9rem; color: var(--text-light);">
+                            Uptime: <strong>{{ comp.uptime_percentage }}%</strong>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px; font-weight: bold; font-size: 0.95rem; color: {% if comp.status == 'operational' %}var(--success){% elif comp.status == 'degraded' %}#ffc107{% elif comp.status == 'partial_outage' %}#fd7e14{% else %}#dc3545{% endif %};">
+                        <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: currentColor;"></span>
+                        {{ comp.get_status_display }}
+                    </div>
+                </div>
+
+                {% if comp.description %}
+                <div style="background: var(--bg-hover); border-left: 3px solid var(--accent); padding: 15px; border-radius: 0 8px 8px 0;">
+                    <strong style="display: block; font-size: 0.85rem; color: var(--text-light); text-transform: uppercase; margin-bottom: 5px;">Latest Status Update ({{ comp.last_checked|date:"d M Y, h:i A" }})</strong>
+                    <p style="margin: 0; font-size: 0.95rem; line-height: 1.5; color: var(--text-secondary);">{{ comp.description }}</p>
+                </div>
+                {% else %}
+                <div style="font-size: 0.85rem; color: var(--text-light);">Last checked: {{ comp.last_checked|date:"d M Y, h:i A" }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div style="font-size: 0.9rem; color: var(--text-light); display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; background: var(--bg-card); padding: 15px; border-radius: 8px; border: 1px dashed var(--border);">
+            <div style="display: flex; align-items: center; gap: 6px;"><span style="color: var(--success);">●</span> Operational</div>
+            <div style="display: flex; align-items: center; gap: 6px;"><span style="color: #ffc107;">●</span> Degraded Performance</div>
+            <div style="display: flex; align-items: center; gap: 6px;"><span style="color: #fd7e14;">●</span> Partial Outage</div>
+            <div style="display: flex; align-items: center; gap: 6px;"><span style="color: #dc3545;">●</span> Major Outage</div>
+        </div>
+
+        {% else %}
+        <div style="text-align: center; padding: 60px 20px; background: var(--bg-card); border-radius: 12px; border: 1px dashed var(--border);">
+            <p style="color: var(--text-light); margin: 0;">No components are currently being monitored.</p>
+        </div>
+        {% endif %}
+    </div>
+</main>
+{% endblock %}

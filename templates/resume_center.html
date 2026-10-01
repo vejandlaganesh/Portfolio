@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block content %}
+<main id="resume-center" class="resume-page">
+    <div class="resume-content">
+        <div class="cert-section-header">
+            <span class="section-label" style="justify-content: center; margin: 0 auto 20px;"><span class="accent-line"></span>RESUME CENTER</span>
+            <h2 style="margin-bottom: 50px;">Choose a resume based on your role.</h2>
+        </div>
+
+        {% if not has_resumes and legacy_resume %}
+            <div class="resume-category-group">
+                <h3 class="resume-category-title">GENERAL</h3>
+                <div class="resume-card">
+                    <div class="resume-info" style="text-align: left;">
+                        <div class="resume-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        </div>
+                        <div class="resume-text">
+                            <h4 class="resume-title">General Resume</h4>
+                            <div class="resume-meta">General</div>
+                        </div>
+                    </div>
+                    <div class="resume-actions">
+                        <a href="{{ legacy_resume.url }}" target="_blank" rel="noopener noreferrer" class="btn-secondary outline-btn">View</a>
+                        <a href="{{ legacy_resume.url }}" download class="btn-primary">Download PDF ↓</a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if has_resumes %}
+            {% for category, items in categories.items %}
+            <div class="resume-category-group">
+                <h3 class="resume-category-title">{{ category|upper }}</h3>
+                <div class="resume-list">
+                    {% for r in items %}
+                    <div class="resume-card">
+                        <div class="resume-info" style="text-align: left;">
+                            <div class="resume-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                            </div>
+                            <div class="resume-text">
+                                <h4 class="resume-title">{{ r.title }}</h4>
+                                <div class="resume-meta">{% if r.version %}{{ r.version }} • {% endif %}Updated {{ r.upload_date|date:"F Y" }}</div>
+                            </div>
+                        </div>
+                        <div class="resume-actions">
+                            <a href="{{ r.file.url }}" target="_blank" rel="noopener noreferrer" class="btn-secondary outline-btn">View</a>
+                            <a href="{% url 'resume_download' r.id %}" target="_blank" rel="noopener noreferrer" class="btn-primary">Download PDF ↓</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if not has_resumes and not legacy_resume %}
+            <div style="margin: 40px 0;">
+                <div style="font-size: 3rem; margin-bottom: 20px;">📄</div>
+                <h3 style="font-size: 1.5rem; margin-bottom: 10px;">Resume currently unavailable.</h3>
+                <p style="color: var(--text-secondary);">Please check back later for an updated resume.</p>
+            </div>
+        {% endif %}
+
+        <div style="margin-top: 40px;">
+            <a href="{% url 'home' %}" class="resume-back-button">← Back to Portfolio</a>
+        </div>
+    </div>
+</main>
+{% endblock %}
