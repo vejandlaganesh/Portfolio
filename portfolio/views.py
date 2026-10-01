@@ -406,7 +406,7 @@ def ai_chat_api(request):
     if not api_key:
         return JsonResponse({'success': False, 'error': 'The AI assistant is temporarily unavailable. Please try again later.'}, status=503)
         
-    model = os.environ.get('GROQ_MODEL', 'openai/gpt-oss-20b')
+    model = os.environ.get('GROQ_MODEL', 'llama3-8b-8192')
     
     system_prompt = """You are Ganesh Sharma's personal portfolio AI assistant.
 Your job is to answer questions about Ganesh Sharma using ONLY the portfolio information supplied in the context.
