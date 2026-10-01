@@ -3611,17 +3611,48 @@ body {
 .intro-content {
     text-align: center;
     z-index: 10;
+    opacity: 0;
+    transform: scale(0.92);
+    filter: blur(12px);
+    animation: glassCardReveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    padding: 60px 40px;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    max-width: 92vw;
+    width: fit-content;
+}
+
+.intro-content::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+    transform: skewX(-20deg);
+    animation: lightSweep 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards;
+    pointer-events: none;
 }
 
 .intro-name {
-    font-size: clamp(42px, 8vw, 120px);
-    line-height: .95;
-    letter-spacing: -0.055em;
-    font-weight: 500;
+    font-size: clamp(32px, 4.5vw, 90px);
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    font-weight: 600;
     text-align: center;
-    white-space: nowrap;
+    white-space: normal;
+    word-break: keep-all;
     color: var(--text-primary);
     font-family: 'Space Grotesk', sans-serif;
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+    animation: nameReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
 }
 
 .intro-specialties {
@@ -3631,6 +3662,9 @@ body {
     text-transform: uppercase;
     color: #4f51c9;
     text-align: center;
+    opacity: 0;
+    filter: blur(8px);
+    animation: subtitleReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) 1.05s forwards;
 }
 
 .intro-tagline {
@@ -3638,6 +3672,9 @@ body {
     font-size: clamp(16px, 1.5vw, 21px);
     color: #777;
     text-align: center;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: taglineReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) 1.25s forwards;
 }
 
 .intro-scroll {
@@ -3652,6 +3689,8 @@ body {
     letter-spacing: .35em;
     text-transform: uppercase;
     color: #333;
+    opacity: 0;
+    animation: scrollEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) 1.5s forwards, subtlePulse 2.5s ease-in-out infinite 2.1s;
 }
 
 .intro-scroll-line {
@@ -3671,6 +3710,41 @@ body {
     height: 22px;
     background: #5555d9;
     animation: scrollIndicator 1.8s ease-in-out infinite;
+}
+
+@keyframes glassCardReveal {
+    0% { opacity: 0; transform: scale(0.92); filter: blur(12px); }
+    100% { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+
+@keyframes lightSweep {
+    0% { left: -100%; }
+    100% { left: 200%; }
+}
+
+@keyframes nameReveal {
+    0% { opacity: 0; clip-path: inset(0 100% 0 0); }
+    100% { opacity: 1; clip-path: inset(0 0 0 0); }
+}
+
+@keyframes subtitleReveal {
+    0% { opacity: 0; filter: blur(8px); }
+    100% { opacity: 1; filter: blur(0); }
+}
+
+@keyframes taglineReveal {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scrollEnter {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes subtlePulse {
+    0%, 100% { opacity: 1; filter: brightness(1); }
+    50% { opacity: 0.8; filter: brightness(1.2); }
 }
 
 @keyframes scrollIndicator {
@@ -3696,5 +3770,21 @@ body {
     .intro-scroll {
         right: 22px;
         bottom: 24px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .intro-content,
+    .intro-name,
+    .intro-specialties,
+    .intro-tagline,
+    .intro-scroll,
+    .intro-scroll-line::before,
+    .intro-content *,
+    .intro-scroll * {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+        opacity: 1 !important;
     }
 }
