@@ -147,7 +147,7 @@ def home(request):
                 except Exception as e:
                     import logging
                     logging.getLogger(__name__).error("Error sending email: %s", str(e))
-                    messages.error(request, f"We couldn't send your message right now. Error: {str(e)}")
+                    messages.error(request, "We couldn't send your message right now. Please try again using the email option below.")
             else:
                 messages.error(request, "Please fill out all required fields.")
                 
