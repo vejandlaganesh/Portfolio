@@ -125,33 +125,38 @@ from django.contrib import messages
 def home(request):
     seed()
     if request.method == 'POST' and 'contact_form' in request.POST:
-        name = request.POST.get('name', '').strip()
-        email = request.POST.get('email', '').strip()
-        subject = request.POST.get('subject', '').strip()
-        message = request.POST.get('message', '').strip()
-        
-        # Simple honeypot
-        if request.POST.get('website'):
-            messages.success(request, "Message sent successfully.")
-        elif name and email and subject and message:
-            try:
-                send_mail(
-                    f"Portfolio Contact: {subject}",
-                    f"From: {name} <{email}>\n\nMessage:\n{message}",
-                    settings.DEFAULT_FROM_EMAIL,
-                    [settings.CONTACT_EMAIL],
-                    fail_silently=False,
-                )
-                messages.success(request, "Message sent successfully. Thank you for reaching out. I'll get back to you soon.")
-            except Exception as e:
-                import logging
-                logging.getLogger(__name__).error("Error sending email: %s", str(e))
-                messages.error(request, "We couldn't send your message right now. Please try again using the email option below.")
-        else:
-            messages.error(request, "Please fill out all required fields.")
+        try:
+            name = request.POST.get('name', '').strip()
+            email = request.POST.get('email', '').strip()
+            subject = request.POST.get('subject', '').strip()
+            message = request.POST.get('message', '').strip()
             
-        return redirect('home')
-        
+            # Simple honeypot
+            if request.POST.get('website'):
+                messages.success(request, "Message sent successfully.")
+            elif name and email and subject and message:
+                try:
+                    send_mail(
+                        f"Portfolio Contact: {subject}",
+                        f"From: {name} <{email}>\n\nMessage:\n{message}",
+                        settings.DEFAULT_FROM_EMAIL,
+                        [settings.CONTACT_EMAIL],
+                        fail_silently=False,
+                    )
+                    messages.success(request, "Message sent successfully. Thank you for reaching out. I'll get back to you soon.")
+                except Exception as e:
+                    import logging
+                    logging.getLogger(__name__).error("Error sending email: %s", str(e))
+                    messages.error(request, f"We couldn't send your message right now. Error: {str(e)}")
+            else:
+                messages.error(request, "Please fill out all required fields.")
+                
+            return redirect('home')
+        except BaseException as e:
+            import traceback
+            from django.http import HttpResponse
+            return HttpResponse(f"<h1>Debug 500</h1><pre>{traceback.format_exc()}</pre>", status=200)
+            
     return render(request,'home.html',{'overall_status': get_overall_status(), 'profile':Portfolio.objects.first(),'skills':Skill.objects.all(),'experiences':Experience.objects.filter(status='published'),'projects':Project.objects.filter(status='published'),'total_projects_count':Project.objects.count(),'education':Education.objects.all(),'certifications':Certification.objects.all(), 'career_timeline':CareerTimeline.objects.filter(is_active=True).order_by('-date_sort'), 'has_resumes': ResumeVersion.objects.filter(is_active=True).exists()})
 
 def admin_dashboard(request,code):
