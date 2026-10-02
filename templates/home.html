@@ -87,19 +87,23 @@
                     <div class="focus-panel-title">CURRENT FOCUS</div>
                     <ul class="focus-list">
                         <li class="focus-item">
-                            <div><span class="focus-num">01</span>Generative AI</div>
+                            <span class="focus-num">01</span>
+                            <span class="focus-name">Generative AI</span>
                             <span class="arrow">→</span>
                         </li>
                         <li class="focus-item">
-                            <div><span class="focus-num">02</span>AI / Machine Learning</div>
+                            <span class="focus-num">02</span>
+                            <span class="focus-name">AI / Machine Learning</span>
                             <span class="arrow">→</span>
                         </li>
                         <li class="focus-item">
-                            <div><span class="focus-num">03</span>Full-Stack Development</div>
+                            <span class="focus-num">03</span>
+                            <span class="focus-name">Full-Stack Development</span>
                             <span class="arrow">→</span>
                         </li>
                         <li class="focus-item">
-                            <div><span class="focus-num">04</span>QA Automation</div>
+                            <span class="focus-num">04</span>
+                            <span class="focus-name">QA Automation</span>
                             <span class="arrow">→</span>
                         </li>
                     </ul>
@@ -159,9 +163,9 @@
                     </div>
                     
                     <div class="project-actions">
-                        <a href="{% url 'project_detail' p.id %}" class="btn-primary">View Project ↗</a>
+                        <a href="{% url 'project_detail' p.id %}" class="btn-primary project-view-btn">View Project ↗</a>
                         {% if p.live_url %}
-                        <a href="{{ p.live_url }}" target="_blank" rel="noopener noreferrer" class="btn-primary">Live Demo ↗</a>
+                        <a href="{{ p.live_url }}" target="_blank" rel="noopener noreferrer" class="btn-primary project-view-btn">Live Demo ↗</a>
                         {% endif %}
                         {% if p.github_url %}
                         <a href="{{ p.github_url }}" target="_blank" rel="noopener noreferrer" class="btn-secondary">GitHub ↗</a>
@@ -199,7 +203,7 @@
             {% for s in skills %}
             <div class="capability-card {% if 'AI' in s.title or 'GenAI' in s.title %}theme-ai{% elif 'Programming' in s.title %}theme-prog{% elif 'Full Stack' in s.title %}theme-fs{% elif 'QA' in s.title or 'Automation' in s.title %}theme-qa{% elif 'Database' in s.title %}theme-db{% elif 'Tool' in s.title %}theme-tools{% endif %}">
                 <div class="capability-header">
-                    <div class="capability-logo">
+                    <div class="capability-logo skill-category-icon">
                         {% if "AI" in s.title or "GenAI" in s.title %}
                             <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/scikitlearn/scikitlearn-original.svg" alt="Machine Learning">
                         {% elif "Programming" in s.title %}
