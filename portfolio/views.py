@@ -144,7 +144,8 @@ def home(request):
                 )
                 messages.success(request, "Message sent successfully. Thank you for reaching out. I'll get back to you soon.")
             except Exception as e:
-                print(f"Error sending email: {e}")
+                import logging
+                logging.getLogger(__name__).error("Error sending email: %s", str(e))
                 messages.error(request, "We couldn't send your message right now. Please try again using the email option below.")
         else:
             messages.error(request, "Please fill out all required fields.")
