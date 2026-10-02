@@ -26,7 +26,7 @@ def robots_txt(request):
 
 def sitemap_xml(request):
     projects = Project.objects.filter(status='published')
-    resumes = ResumeVersion.objects.filter(is_active=True)
+    resumes = ResumeDocument.objects.filter(is_active=True)
     
     xml = ['<?xml version="1.0" encoding="UTF-8"?>']
     xml.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
@@ -70,8 +70,8 @@ def seed():
  if not Certification.objects.exists():
   for i,p in enumerate([('Software Engineer Intern','HackerRank','2026'),('SDLC – Software Development Life Cycle','Udemy','2026'),('Advanced Prompting in GPT-4','Adobe Learning Manager','2026'),('SQL (Intermediate)','HackerRank','2026'),('Python Programming','Aajhub','2025'),('Full Stack Web Development','Aajhub','2025')]): Certification.objects.create(name=p[0],organization=p[1],year=p[2],order=i)
  p_obj = Portfolio.objects.first()
- if p_obj and p_obj.resume and not ResumeVersion.objects.exists():
-  ResumeVersion.objects.create(title='General Resume', category='General', version='v1.0', file=p_obj.resume, is_active=True)
+ if p_obj and p_obj.resume and not ResumeDocument.objects.exists():
+  ResumeDocument.objects.create(title='General Resume', document_type='one_page', file=p_obj.resume, is_active=True)
 
  if not Concept.objects.exists() and Project.objects.exists():
   # Create Generative AI concept
@@ -174,7 +174,7 @@ def home(request):
             from django.http import HttpResponse
             return HttpResponse(f"<h1>Debug 500</h1><pre>{traceback.format_exc()}</pre>", status=200)
             
-    return render(request,'home.html',{'overall_status': get_overall_status(), 'profile':Portfolio.objects.first(),'skills':Skill.objects.all(),'experiences':Experience.objects.filter(status='published'),'projects':Project.objects.filter(status='published'),'total_projects_count':Project.objects.count(),'education':Education.objects.all(),'certifications':Certification.objects.all(), 'career_timeline':CareerTimeline.objects.filter(is_active=True).order_by('-date_sort'), 'has_resumes': ResumeVersion.objects.filter(is_active=True).exists()})
+    return render(request,'home.html',{'overall_status': get_overall_status(), 'profile':Portfolio.objects.first(),'skills':Skill.objects.all(),'experiences':Experience.objects.filter(status='published'),'projects':Project.objects.filter(status='published'),'total_projects_count':Project.objects.count(),'education':Education.objects.all(),'certifications':Certification.objects.all(), 'career_timeline':CareerTimeline.objects.filter(is_active=True).order_by('-date_sort'), 'has_resumes': ResumeDocument.objects.filter(is_active=True).exists(), 'active_resume': ResumeDocument.objects.filter(document_type="one_page", is_active=True).first()})
 
 def admin_dashboard(request,code):
  e=guard(request, code)
@@ -189,7 +189,7 @@ def admin_dashboard(request,code):
  system_status = SystemStatus.objects.filter(is_active=True)
  
  drafts = list(Project.objects.filter(status='draft')) + list(Experience.objects.filter(status='draft'))
- active_resume = ResumeVersion.objects.filter(is_active=True).first()
+ active_resume = ResumeDocument.objects.filter(document_type="one_page", is_active=True).first()
  featured_project = Project.objects.filter(featured=True).first() or Project.objects.first()
  
  today_views = PageVisit.objects.filter(timestamp__date=today).count()
@@ -207,7 +207,7 @@ def admin_dashboard(request,code):
      'experience_count': Experience.objects.count(),
      'education_count': Education.objects.count(),
      'certifications_count': Certification.objects.count(),
-     'resume_count': ResumeVersion.objects.filter(is_active=True).count(),
+     'resume_count': ResumeDocument.objects.filter(is_active=True).count(),
      'concepts_count': Concept.objects.filter(is_active=True).count(),
      'recent_activity': recent_activity,
      'system_status': system_status,
@@ -362,25 +362,21 @@ def project_compare(request):
 
 def resume_public_center(request):
     seed()
-    resumes = ResumeVersion.objects.filter(is_active=True).order_by('category', '-upload_date')
-    profile = Portfolio.objects.first()
+    one_page = ResumeDocument.objects.filter(document_type="one_page", is_active=True).first()
+    two_page = ResumeDocument.objects.filter(document_type="two_page", is_active=True).first()
+    cover_letter = ResumeDocument.objects.filter(document_type="cover_letter", is_active=True).first()
     
-    categories = {}
-    for r in resumes:
-        if r.category not in categories:
-            categories[r.category] = []
-        categories[r.category].append(r)
-        
-    return render(request, 'resume_center.html', {'overall_status': get_overall_status(), 'overall_status': get_overall_status(), 
-        'profile': profile,
-        'categories': categories,
-        'has_resumes': resumes.exists(),
-        'legacy_resume': profile.resume if profile and profile.resume else None
+    return render(request, 'resume_center.html', {
+        'overall_status': get_overall_status(),
+        'profile': Portfolio.objects.first(),
+        'one_page': one_page,
+        'two_page': two_page,
+        'cover_letter': cover_letter,
     })
 
 def resume_download(request, pk):
-    resume = get_object_or_404(ResumeVersion, pk=pk, is_active=True)
-    ResumeVersion.objects.filter(pk=pk).update(download_count=F('download_count') + 1)
+    resume = get_object_or_404(ResumeDocument, pk=pk, is_active=True)
+    ResumeDocument.objects.filter(pk=pk).update(download_count=F('download_count') + 1)
     ResumeDownload.objects.create(resume=resume)
     return redirect(resume.file.url)
 
@@ -390,21 +386,28 @@ def admin_resume_center(request, code):
     latest_download = ResumeDownload.objects.order_by('-downloaded_at').first()
     return render(request, 'admin/resume_list.html', {
         'code': code,
-        'resumes': ResumeVersion.objects.all(),
-        'total_resumes': ResumeVersion.objects.count(),
-        'active_resumes': ResumeVersion.objects.filter(is_active=True).count(),
-        'total_downloads': sum([r.download_count for r in ResumeVersion.objects.all()]),
+        'resumes': ResumeDocument.objects.all(),
+        'total_resumes': ResumeDocument.objects.count(),
+        'active_resumes': ResumeDocument.objects.filter(is_active=True).count(),
+        'total_downloads': sum([r.download_count for r in ResumeDocument.objects.all()]),
         'latest_download': latest_download
     })
 
 def admin_resume_add(request, code):
-    return add_obj(request, code, 'Add Resume', ResumeVersion, ['title', 'category', 'version', 'file', 'is_active'], 'admin_resume_center')
+    e = guard(request, code)
+    if e: return e
+    if request.method == 'POST':
+        dtype = request.POST.get('document_type')
+        existing = ResumeDocument.objects.filter(document_type=dtype).first()
+        if existing:
+            return form(request, code, 'Edit Document', [(f, ResumeDocument) for f in ['document_type', 'title', 'file', 'is_active']], existing, 'admin_resume_center')
+    return add_obj(request, code, 'Add Document', ResumeDocument, ['document_type', 'title', 'file', 'is_active'], 'admin_resume_center')
 
 def admin_resume_edit(request, code, pk):
-    return edit_obj(request, code, pk, 'Edit Resume', ResumeVersion, ['title', 'category', 'version', 'file', 'is_active'], 'admin_resume_center')
+    return edit_obj(request, code, pk, 'Edit Document', ResumeDocument, ['document_type', 'title', 'file', 'is_active'], 'admin_resume_center')
 
 def admin_resume_delete(request, code, pk):
-    return del_obj(request, code, pk, ResumeVersion, 'admin_resume_center')
+    return del_obj(request, code, pk, ResumeDocument, 'admin_resume_center')
 
 
 def timeline_list(request, code):

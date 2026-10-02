@@ -1,18 +1,19 @@
 {% extends 'admin/base.html' %}
 {% block content %}
-<div class="cms-page-header">
+<div class="cms-page-header" style="display: flex; justify-content: space-between; align-items: flex-end;">
     <div>
         <div class="cms-eyebrow">PUBLISHING</div>
-        <h1 class="cms-page-title">Resume Center</h1>
-        <p class="cms-body">Manage the resumes available to portfolio visitors.</p>
+        <h1 class="cms-page-title">Resume & Documents</h1>
+        <p class="cms-body">Manage the 3 primary documents available to portfolio visitors.</p>
     </div>
+    <a href="{% url 'admin_resume_add' code %}" class="btn-primary">+ Add Document</a>
 </div>
 
 <div class="cms-grid cms-grid-4" style="margin-bottom: 32px;">
     <div class="cms-stat-card">
         <div class="cms-stat-value">{{ total_resumes }}</div>
-        <div class="cms-stat-label">TOTAL RESUMES</div>
-        <div class="cms-stat-desc">Uploaded versions</div>
+        <div class="cms-stat-label">TOTAL DOCUMENTS</div>
+        <div class="cms-stat-desc">Target: 3</div>
     </div>
     <div class="cms-stat-card">
         <div class="cms-stat-value">{{ active_resumes }}</div>
@@ -36,8 +37,8 @@
     <table class="cms-table">
         <thead>
             <tr>
-                <th>Resume</th>
-                <th>Category</th>
+                <th>Document</th>
+                <th>Type</th>
                 <th>Status</th>
                 <th style="text-align: right;">Actions</th>
             </tr>
@@ -47,10 +48,10 @@
             <tr>
                 <td>
                     <strong style="display: block; margin-bottom: 4px; font-size: 14px;">{{ r.title }}</strong>
-                    <span style="color: var(--cms-text-secondary); font-size: 13px;">{{ r.version }} • {{ r.download_count }} downloads</span>
+                    <span style="color: var(--cms-text-secondary); font-size: 13px;">{{ r.download_count }} downloads</span>
                 </td>
                 <td>
-                    {{ r.category }}
+                    {{ r.get_document_type_display }}
                 </td>
                 <td>
                     {% if r.is_active %}
@@ -58,13 +59,13 @@
                     {% else %}
                     <span class="cms-badge badge-inactive">Inactive</span><br>
                     {% endif %}
-                    <span style="font-size: 12px; color: var(--cms-text-muted); display: inline-block; margin-top: 6px;">Updated {{ r.upload_date|date:"M Y" }}</span>
+                    <span style="font-size: 12px; color: var(--cms-text-muted); display: inline-block; margin-top: 6px;">Updated {{ r.uploaded_at|date:"M Y" }}</span>
                 </td>
                 <td style="text-align: right;">
                     <div style="display: flex; gap: 8px; justify-content: flex-end;">
                         <a href="{{ r.file.url }}" target="_blank" class="btn-secondary" style="padding: 6px 12px; font-size: 12px;">View</a>
                         <a href="{% url 'admin_resume_edit' code r.pk %}" class="btn-secondary" style="padding: 6px 12px; font-size: 12px;">Edit</a>
-                        <form action="{% url 'admin_resume_delete' code r.pk %}" method="post" style="display:inline;" onsubmit="return confirm('Delete Resume?\n\n{{ r.title }}\nDownloads: {{ r.download_count }}\n\nThis action cannot be undone.');">
+                        <form action="{% url 'admin_resume_delete' code r.pk %}" method="post" style="display:inline;" onsubmit="return confirm('Delete Document?\n\n{{ r.title }}\nDownloads: {{ r.download_count }}\n\nThis action cannot be undone.');">
                             {% csrf_token %}
                             <button type="submit" class="btn-danger" style="padding: 6px 12px; font-size: 12px;">Delete</button>
                         </form>
@@ -77,9 +78,9 @@
 </div>
 {% else %}
 <div class="cms-empty">
-    <div class="cms-empty-title">No resumes uploaded yet</div>
-    <div class="cms-empty-desc">Upload your first resume to make it available in the Resume Center.</div>
-    <a href="{% url 'admin_resume_add' code %}" class="btn-primary">+ Add Resume</a>
+    <div class="cms-empty-title">No documents uploaded yet</div>
+    <div class="cms-empty-desc">Upload your 1-Page Resume, 2-Page Resume, or Cover Letter.</div>
+    <a href="{% url 'admin_resume_add' code %}" class="btn-primary">+ Add Document</a>
 </div>
 {% endif %}
 {% endblock %}

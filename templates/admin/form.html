@@ -57,6 +57,14 @@
             {% elif field_name == 'start_date' or field_name == 'end_date' %}
                 <input type="month" name="{{ field_name }}" value="{{ object|get_attr:field_name|date:'Y-m' }}">
                 
+            {% elif field_name == 'document_type' %}
+                <select name="{{ field_name }}" required style="width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--cms-border); background: var(--cms-surface-soft); color: var(--cms-text-primary);">
+                    <option value="" disabled {% if not object or not object.document_type %}selected{% endif %}>Select Document Type</option>
+                    <option value="one_page" {% if object.document_type == 'one_page' %}selected{% endif %}>1-Page Resume</option>
+                    <option value="two_page" {% if object.document_type == 'two_page' %}selected{% endif %}>2-Page Resume</option>
+                    <option value="cover_letter" {% if object.document_type == 'cover_letter' %}selected{% endif %}>Cover Letter</option>
+                </select>
+                
             {% else %}
                 {% if field_name == 'live_url' %}
                 <div style="font-size: 13px; color: var(--cms-text-muted); margin-bottom: 8px;">URL where visitors can access the deployed project.</div>

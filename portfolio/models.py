@@ -18,31 +18,25 @@ class Certification(models.Model):
  class Meta: ordering=['order','id']
 
 
-RESUME_CATEGORIES = (
-    ('AI/ML', 'AI/ML'),
-    ('Generative AI', 'Generative AI'),
-    ('Full Stack', 'Full Stack'),
-    ('QA Automation', 'QA Automation'),
-    ('General', 'General'),
-    ('Other', 'Other')
+DOCUMENT_TYPES = (
+    ('one_page', '1-Page Resume'),
+    ('two_page', '2-Page Resume'),
+    ('cover_letter', 'Cover Letter')
 )
 
-class ResumeVersion(models.Model):
-    title = models.CharField(max_length=150)
-    category = models.CharField(max_length=50, choices=RESUME_CATEGORIES, default='General')
-    version = models.CharField(max_length=20, blank=True)
+class ResumeDocument(models.Model):
+    document_type = models.CharField(max_length=30, choices=DOCUMENT_TYPES, unique=True)
+    title = models.CharField(max_length=200)
     file = models.FileField(upload_to='resumes/')
     is_active = models.BooleanField(default=True)
-    upload_date = models.DateTimeField(auto_now_add=True)
-    download_count = models.IntegerField(default=0)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    download_count = models.PositiveIntegerField(default=0)
+    uploaded_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['-upload_date']
+        ordering = ['-uploaded_at']
 
 class ResumeDownload(models.Model):
-    resume = models.ForeignKey(ResumeVersion, on_delete=models.CASCADE, related_name='downloads')
+    resume = models.ForeignKey(ResumeDocument, on_delete=models.CASCADE, related_name='downloads')
     downloaded_at = models.DateTimeField(auto_now_add=True)
 
 class CareerTimeline(models.Model):

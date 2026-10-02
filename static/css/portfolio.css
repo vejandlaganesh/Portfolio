@@ -178,7 +178,7 @@ section {
 
 .btn-primary {
     background: var(--text-dark);
-    color: var(--surface);
+    color: var(--surface) !important;
     padding: 0 26px;
     border: 1px solid var(--text-dark);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
@@ -189,6 +189,22 @@ section {
     background: #2a2a2a;
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
     border-color: #2a2a2a;
+}
+
+.btn-accent {
+    background: var(--accent-primary) !important;
+    color: #FFFFFF !important;
+    padding: 0 26px;
+    border: 1px solid var(--accent-primary) !important;
+    box-shadow: 0 2px 5px rgba(59, 75, 232, 0.2) !important;
+}
+
+.btn-accent:hover {
+    transform: translateY(-2px);
+    background: #2f3ec0 !important;
+    box-shadow: 0 6px 15px rgba(59, 75, 232, 0.3) !important;
+    border-color: #2f3ec0 !important;
+    color: #FFFFFF !important;
 }
 
 .btn-secondary {

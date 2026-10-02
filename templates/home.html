@@ -19,35 +19,60 @@
 {% endblock %}
 
 {% block content %}
+<style>
+    .hero-cta .btn-primary.btn-accent {
+        background: var(--accent-primary) !important;
+        background-color: var(--accent-primary) !important;
+        color: #FFFFFF !important;
+        border: 1px solid var(--accent-primary) !important;
+    }
+
+    .hero-cta .btn-primary.btn-accent:hover {
+        background: #2f3ec0 !important;
+        background-color: #2f3ec0 !important;
+        color: #FFFFFF !important;
+        border-color: #2f3ec0 !important;
+    }
+</style>
 <main id="home">
 
 
     <section class="hero">
-        <div class="bg-layer"><div class="bg-orb orb-1"></div></div>
+        <div class="bg-layer">
+            <div class="bg-orb orb-1"></div>
+        </div>
         <div class="container">
             <div class="hero-inner">
                 <div class="hero-content">
-                    <span class="section-label"><span class="accent-line"></span>AI/ML | Generative AI | Full Stack | QA</span>
+                    <span class="section-label"><span class="accent-line"></span>AI/ML | Generative AI | Full Stack |
+                        QA</span>
                     <h1>Building digital things that think.</h1>
-            <p>{{profile.summary}}</p>
-            <div class="hero-actions hero-cta">
-                <a href="#projects" class="btn-primary project-view-btn">View Selected Work</a>
-                <a href="{% url 'resume_public_center' %}" class="resume-button">View Resume ↗</a>
-            </div>
-            <div class="social-links">
-                {% if profile.github %}<a href="{{profile.github}}" target="_blank" rel="noopener">GitHub</a>{% endif %}
-                {% if profile.linkedin %}<a href="{{profile.linkedin}}" target="_blank" rel="noopener">LinkedIn</a>{% endif %}
-                <a href="mailto:{{profile.email}}">Email</a>
-            </div>
+                    <p>{{profile.summary}}</p>
+                    <div class="hero-actions hero-cta">
+                        {% if active_resume %}
+                        <a href="{% url 'resume_download' active_resume.id %}" target="_blank" rel="noopener noreferrer"
+                            class="btn-primary btn-accent">Download Resume ↓</a>
+                        <a href="{% url 'resume_public_center' %}" class="resume-button">View Resume Options ↗</a>
+                        {% else %}
+                        <a href="#projects" class="btn-primary project-view-btn">View Selected Work</a>
+                        <a href="{% url 'resume_public_center' %}" class="resume-button">View Resume ↗</a>
+                        {% endif %}
+                    </div>
+                    <div class="social-links">
+                        {% if profile.github %}<a href="{{profile.github}}" target="_blank" rel="noopener">GitHub</a>{%                         endif %}
+                        {% if profile.linkedin %}<a href="{{profile.linkedin}}" target="_blank"
+                            rel="noopener">LinkedIn</a>{% endif %}
+                        <a href="mailto:{{profile.email}}">Email</a>
+                    </div>
                 </div>
                 <div class="hero-visual">
                     <div class="hero-photo-wrapper">
                         {% if profile.profile_photo %}
-                            <img src="{{ profile.profile_photo.url }}" alt="Profile Photo" class="hero-photo">
+                        <img src="{{ profile.profile_photo.url }}" alt="Profile Photo" class="hero-photo">
                         {% else %}
-                            <div class="profile-placeholder">
-                                <div class="placeholder-shape"></div>
-                            </div>
+                        <div class="profile-placeholder">
+                            <div class="placeholder-shape"></div>
+                        </div>
                         {% endif %}
                     </div>
                     <div class="float-tag tech-python">Python</div>
@@ -59,32 +84,25 @@
         </div>
     </section>
 
-    <section id="about" class="about-section">
-        <div class="tech-decoration">
-       AI
-        │
-        ●
-       / \
-      ●   ●
-     /     \
-    ML     WEB
-        </div>
+    <section id="about" class="about-section" style="position: relative;">
+
         <div class="container">
             <span class="about-eyebrow reveal-on-scroll">01 — ABOUT</span>
-            
+
             <div class="about-top-grid reveal-on-scroll">
                 <h2 class="about-heading">Engineering with curiosity<br>& purpose.</h2>
                 <div class="about-supporting">
                     Focused on Generative AI, full-stack development, and QA automation.
                 </div>
             </div>
-            
-            <hr class="about-divider reveal-on-scroll">
-            
-            <div class="about-description reveal-on-scroll">
-                I build practical software at the intersection of AI, automation, and modern web development. My work spans Generative AI applications, AI/ML projects, full-stack platforms, and reliable test automation. I enjoy turning complex ideas into usable products while continuously learning new technologies.
+
+            <div class="about-description reveal-on-scroll"
+                style="margin-top: 50px; margin-bottom: 60px; font-size: 1.15rem; line-height: 1.7; max-width: 800px;">
+                I build practical software at the intersection of AI, automation, and modern web development. My work
+                spans Generative AI applications, AI/ML projects, full-stack platforms, and reliable test automation. I
+                enjoy turning complex ideas into usable products while continuously learning new technologies.
             </div>
-            
+
             <div class="about-panels-grid">
                 <div class="focus-panel reveal-on-scroll">
                     <div class="focus-panel-title">CURRENT FOCUS</div>
@@ -111,17 +129,18 @@
                         </li>
                     </ul>
                 </div>
-                
+
                 <div class="verified-panel reveal-on-scroll reveal-delay-1">
                     {% if profile.is_verified %}
-                    <div class="verified-card" title="Profile verification indicates that this information is maintained through the authenticated Portfolio CMS.">
+                    <div class="verified-card"
+                        title="Profile verification indicates that this information is maintained through the authenticated Portfolio CMS.">
                         <div class="verified-card-header">
                             <div class="verified-dot"></div>
                             <div class="verified-label">VERIFIED PROFILE</div>
                         </div>
                         <div class="verified-name">{{ profile.name }}</div>
                         <div class="verified-headline">{{ profile.headline }}</div>
-                        
+
                         <div style="margin-top: 30px;">
                             <div class="verified-cms">PROFILE CMS</div>
                             <div class="verified-desc">Maintained through authenticated portfolio management.</div>
@@ -130,9 +149,10 @@
                     {% endif %}
                 </div>
             </div>
-            
+
             <div class="domain-strip desktop-specialties reveal-on-scroll">
-                AI / ML &nbsp;&nbsp;·&nbsp;&nbsp; GENAI &nbsp;&nbsp;·&nbsp;&nbsp; AUTOMATION &nbsp;&nbsp;·&nbsp;&nbsp; FULL STACK
+                AI / ML &nbsp;&nbsp;·&nbsp;&nbsp; GENAI &nbsp;&nbsp;·&nbsp;&nbsp; AUTOMATION &nbsp;&nbsp;·&nbsp;&nbsp;
+                FULL STACK
             </div>
             <div class="domain-strip mobile-specialties reveal-on-scroll">
                 <div>AI / ML <span>·</span> GENAI <span>·</span> AUTOMATION</div>
@@ -142,113 +162,132 @@
     </section>
 
     <section id="projects">
-        <div class="bg-layer"><div class="bg-grid"></div><div class="bg-orb orb-3"></div></div>
+        <div class="bg-layer">
+            <div class="bg-grid"></div>
+            <div class="bg-orb orb-3"></div>
+        </div>
         <div class="container">
-        <span class="section-label"><span class="accent-line"></span>SELECTED WORK</span>
-        <div style="margin-bottom: 2rem;">
-            <a href="{% url 'project_compare' %}" class="btn-secondary">Compare Projects ↗</a>
-        </div>
-        
-                <div class="projects-grid" style="display: flex; flex-direction: column; gap: 4rem;">
-            {% for p in projects %}
-            <article class="project-showcase {% if forloop.counter|divisibleby:2 %}reverse{% endif %}">
-                <div class="project-info">
-                    <div class="project-index">
-                        0{{forloop.counter}} — {{p.category|upper}}
+            <span class="section-label"><span class="accent-line"></span>SELECTED WORK</span>
+            <div style="margin-bottom: 2rem;">
+                <a href="{% url 'project_compare' %}" class="btn-secondary">Compare Projects ↗</a>
+            </div>
+
+            <div class="projects-grid" style="display: flex; flex-direction: column; gap: 4rem;">
+                {% for p in projects %}
+                <article class="project-showcase {% if forloop.counter|divisibleby:2 %}reverse{% endif %}">
+                    <div class="project-info">
+                        <div class="project-index">
+                            0{{forloop.counter}} — {{p.category|upper}}
+                        </div>
+                        <h3 class="project-title" style="font-size: 2.5rem; margin-bottom: 20px;">{{p.title}}</h3>
+                        <p class="project-description">{{p.description}}</p>
+
+                        <div class="project-technologies">
+                            {% for tech in p.technologies|split_csv|slice:":5" %}
+                            <span class="technology-tag"
+                                style="display: inline-flex; align-items: center; padding: 8px 14px; border-radius: 6px; background: var(--bg-hover); color: var(--text); border: 1px solid var(--border);">{{                                 tech }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="project-actions">
+                            <a href="{% url 'project_detail' p.id %}" class="btn-primary project-view-btn">View Project
+                                ↗</a>
+                            {% if p.live_url %}
+                            <a href="{{ p.live_url }}" target="_blank" rel="noopener noreferrer"
+                                class="btn-primary project-view-btn">Live Demo ↗</a>
+                            {% endif %}
+                            {% if p.github_url %}
+                            <a href="{{ p.github_url }}" target="_blank" rel="noopener noreferrer"
+                                class="btn-secondary">GitHub ↗</a>
+                            {% endif %}
+                            <a href="{% url 'project_compare' %}?projects={{ p.id }}" class="btn-secondary">Compare
+                                ↗</a>
+                        </div>
                     </div>
-                    <h3 class="project-title" style="font-size: 2.5rem; margin-bottom: 20px;">{{p.title}}</h3>
-                    <p class="project-description">{{p.description}}</p>
-                    
-                    <div class="project-technologies">
-                        {% for tech in p.technologies|split_csv|slice:":5" %}
-                        <span class="technology-tag" style="display: inline-flex; align-items: center; padding: 8px 14px; border-radius: 6px; background: var(--bg-hover); color: var(--text); border: 1px solid var(--border);">{{ tech }}</span>
-                        {% endfor %}
-                    </div>
-                    
-                    <div class="project-actions">
-                        <a href="{% url 'project_detail' p.id %}" class="btn-primary project-view-btn">View Project ↗</a>
-                        {% if p.live_url %}
-                        <a href="{{ p.live_url }}" target="_blank" rel="noopener noreferrer" class="btn-primary project-view-btn">Live Demo ↗</a>
+
+                    <div class="project-visual">
+                        {% if p.project_image %}
+                        <img src="{{ p.project_image.url }}" alt="{{ p.title }} project preview" class="project-image"
+                            loading="lazy" decoding="async">
+                        {% else %}
+                        <div
+                            style="width: 100%; height: 100%; min-height: 420px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #adb5bd; font-weight: 600; letter-spacing: 2px;">
+                            <span style="font-size: 1.5rem; margin-bottom: 8px;">PROJECT</span>
+                            <span style="font-size: 1.5rem;">PREVIEW</span>
+                        </div>
                         {% endif %}
-                        {% if p.github_url %}
-                        <a href="{{ p.github_url }}" target="_blank" rel="noopener noreferrer" class="btn-secondary">GitHub ↗</a>
-                        {% endif %}
-                        <a href="{% url 'project_compare' %}?projects={{ p.id }}" class="btn-secondary">Compare ↗</a>
                     </div>
-                </div>
-                
-                <div class="project-visual">
-                    {% if p.project_image %}
-                    <img src="{{ p.project_image.url }}" alt="{{ p.title }} project preview" class="project-image" loading="lazy" decoding="async">
-                    {% else %}
-                    <div style="width: 100%; height: 100%; min-height: 420px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #adb5bd; font-weight: 600; letter-spacing: 2px;">
-                        <span style="font-size: 1.5rem; margin-bottom: 8px;">PROJECT</span>
-                        <span style="font-size: 1.5rem;">PREVIEW</span>
-                    </div>
-                    {% endif %}
-                </div>
-            </article>
-            {% endfor %}
-        </div>
+                </article>
+                {% endfor %}
+            </div>
         </div>
     </section>
 
     <section id="skills" class="skills-section">
-        <div class="bg-layer"><div class="bg-ring ring-2"></div><div class="bg-orb orb-4"></div></div>
+        <div class="bg-layer">
+            <div class="bg-ring ring-2"></div>
+            <div class="bg-orb orb-4"></div>
+        </div>
         <div class="container">
-        <div class="skills-bg-decoration"></div>
-        <div class="skills-header">
-            <span class="section-label"><span class="accent-line"></span>CAPABILITIES</span>
-            <h2 class="skills-heading">What I work with.</h2>
-        </div>
-        
-        <div class="capabilities-grid">
-            {% for s in skills %}
-            <div class="capability-card {% if 'AI' in s.title or 'GenAI' in s.title %}theme-ai{% elif 'Programming' in s.title %}theme-prog{% elif 'Full Stack' in s.title %}theme-fs{% elif 'QA' in s.title or 'Automation' in s.title %}theme-qa{% elif 'Database' in s.title %}theme-db{% elif 'Tool' in s.title %}theme-tools{% endif %}">
-                <div class="capability-header">
-                    <div class="capability-logo skill-category-icon">
-                        {% if "AI" in s.title or "GenAI" in s.title %}
-                            <img src="{% static 'images/skills/scikitlearn-original.svg' %}" alt="AI and Machine Learning">
-                        {% elif "Programming" in s.title %}
+            <div class="skills-bg-decoration"></div>
+            <div class="skills-header">
+                <span class="section-label"><span class="accent-line"></span>CAPABILITIES</span>
+                <h2 class="skills-heading">What I work with.</h2>
+            </div>
+
+            <div class="capabilities-grid">
+                {% for s in skills %}
+                <div
+                    class="capability-card {% if 'AI' in s.title or 'GenAI' in s.title %}theme-ai{% elif 'Programming' in s.title %}theme-prog{% elif 'Full Stack' in s.title %}theme-fs{% elif 'QA' in s.title or 'Automation' in s.title %}theme-qa{% elif 'Database' in s.title %}theme-db{% elif 'Tool' in s.title %}theme-tools{% endif %}">
+                    <div class="capability-header">
+                        <div class="capability-logo skill-category-icon">
+                            {% if "AI" in s.title or "GenAI" in s.title %}
+                            <img src="{% static 'images/skills/scikitlearn-original.svg' %}"
+                                alt="AI and Machine Learning">
+                            {% elif "Programming" in s.title %}
                             <img src="{% static 'images/skills/python-original.svg' %}" alt="Programming">
-                        {% elif "Full Stack" in s.title %}
+                            {% elif "Full Stack" in s.title %}
                             <img src="{% static 'images/skills/html5-original.svg' %}" alt="Full Stack Development">
-                        {% elif "QA" in s.title or "Automation" in s.title %}
+                            {% elif "QA" in s.title or "Automation" in s.title %}
                             <img src="{% static 'images/skills/playwright-original.svg' %}" alt="QA Automation">
-                        {% elif "Database" in s.title %}
+                            {% elif "Database" in s.title %}
                             <img src="{% static 'images/skills/mysql-original.svg' %}" alt="Databases">
-                        {% elif "Tool" in s.title %}
+                            {% elif "Tool" in s.title %}
                             <img src="{% static 'images/skills/git-original.svg' %}" alt="Development Tools">
-                        {% else %}
+                            {% else %}
                             <img src="{% static 'images/skills/devicon-original.svg' %}" alt="Technology">
-                        {% endif %}
+                            {% endif %}
+                        </div>
+                        <div class="capability-accent"></div>
+                        <h3 class="capability-title">{{s.title}}</h3>
                     </div>
-                    <div class="capability-accent"></div>
-                    <h3 class="capability-title">{{s.title}}</h3>
+                    <div class="skill-list skill-tags" data-skills="{{s.skills}}"></div>
                 </div>
-                <div class="skill-list skill-tags" data-skills="{{s.skills}}"></div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
-            </div>
     </section>
 
-    
+
     <section id="career-timeline" class="timeline-section" style="padding: 100px 0; background: var(--bg-alt);">
         <div class="container timeline-container">
-            <span class="section-label" style="text-align: center; display: block; margin: 0 auto 20px;"><span class="accent-line"></span>CAREER TIMELINE</span>
-            <p style="text-align: center; color: var(--text-secondary); max-width: 600px; margin: 0 auto 60px; font-size: 1.2rem; line-height: 1.6;">A visual journey through my education, experience, and career milestones.</p>
-            
+            <span class="section-label" style="text-align: center; display: block; margin: 0 auto 20px;"><span
+                    class="accent-line"></span>CAREER TIMELINE</span>
+            <p
+                style="text-align: center; color: var(--text-secondary); max-width: 600px; margin: 0 auto 60px; font-size: 1.2rem; line-height: 1.6;">
+                A visual journey through my education, experience, and career milestones.</p>
+
             <div class="true-timeline">
                 {% for t in career_timeline %}
                 <div class="true-timeline-item {% cycle 'left' 'right' %}">
                     <div class="true-timeline-dot"></div>
                     <div class="true-timeline-card">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; margin-bottom: 15px;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; margin-bottom: 15px;">
                             <div>
                                 <span class="timeline-date">{{ t.date_display }}</span>
                                 <h3 class="timeline-title">{{ t.title }}</h3>
-                                {% if t.organization %}<h4 class="timeline-organization">{{ t.organization }}</h4>{% endif %}
+                                {% if t.organization %}<h4 class="timeline-organization">{{ t.organization }}</h4>{%                                 endif %}
                             </div>
                             {% if t.category %}
                             <div class="timeline-category">
@@ -256,7 +295,7 @@
                             </div>
                             {% endif %}
                         </div>
-                        
+
                         {% with lines=t.description|split_lines %}
                         {% if lines %}
                         <ul class="timeline-points">
@@ -266,17 +305,20 @@
                         </ul>
                         {% endif %}
                         {% endwith %}
-                        
+
                         {% if t.technologies %}
                         <div class="tech-stack" style="margin-bottom: 10px;">
                             {% for tech in t.technologies.split %}
-                            <span class="float-tag" style="position:static; margin-right: 5px; font-size: 0.85rem; padding: 4px 10px; background: var(--bg-hover);">{{ tech }}</span>
+                            <span class="float-tag"
+                                style="position:static; margin-right: 5px; font-size: 0.85rem; padding: 4px 10px; background: var(--bg-hover);">{{                                 tech }}</span>
                             {% endfor %}
                         </div>
                         {% endif %}
-                        
+
                         {% if t.image %}
-                        <img src="{{ t.image.url }}" alt="{{ t.title }}" style="max-width: 100%; border-radius: 8px; margin-top: 15px; border: 1px solid var(--border);" loading="lazy" decoding="async">
+                        <img src="{{ t.image.url }}" alt="{{ t.title }}"
+                            style="max-width: 100%; border-radius: 8px; margin-top: 15px; border: 1px solid var(--border);"
+                            loading="lazy" decoding="async">
                         {% endif %}
                     </div>
                 </div>
@@ -286,14 +328,17 @@
     </section>
 
     <section id="certifications">
-        <div class="bg-layer"><div class="bg-pattern-dots"></div></div>
+        <div class="bg-layer">
+            <div class="bg-pattern-dots"></div>
+        </div>
         <div class="container">
             <div class="cert-section-header">
                 <span class="section-label"><span class="accent-line"></span>CERTIFICATIONS</span>
                 <h2>Continuous learning.</h2>
-                <p class="cert-subtitle">{{ certifications|length }} credentials across software engineering, AI, databases, and full-stack development.</p>
+                <p class="cert-subtitle">{{ certifications|length }} credentials across software engineering, AI,
+                    databases, and full-stack development.</p>
             </div>
-            
+
             <div class="cert-filters">
                 <button class="cert-filter-btn active" data-filter="all">ALL</button>
                 <button class="cert-filter-btn" data-filter="software">SOFTWARE</button>
@@ -301,48 +346,56 @@
                 <button class="cert-filter-btn" data-filter="databases">DATABASES</button>
                 <button class="cert-filter-btn" data-filter="full-stack">FULL STACK</button>
             </div>
-            
+
             <div class="cert-grid">
                 {% for c in certifications %}
-                <div class="certification-card cert-item" data-category="{% if 'software' in c.name|lower or 'software' in c.category|default:''|lower or 'python' in c.name|lower %}software{% elif 'sql' in c.name|lower or 'database' in c.category|default:''|lower %}databases{% elif 'prompt' in c.name|lower or 'ai' in c.category|default:''|lower %}ai{% elif 'web' in c.name|lower or 'full stack' in c.category|default:''|lower %}full-stack{% else %}software{% endif %}">
+                <div class="certification-card cert-item"
+                    data-category="{% if 'software' in c.name|lower or 'software' in c.category|default:''|lower or 'python' in c.name|lower %}software{% elif 'sql' in c.name|lower or 'database' in c.category|default:''|lower %}databases{% elif 'prompt' in c.name|lower or 'ai' in c.category|default:''|lower %}ai{% elif 'web' in c.name|lower or 'full stack' in c.category|default:''|lower %}full-stack{% else %}software{% endif %}">
                     <div class="cert-top-accent"></div>
                     <div class="cert-header">
                         <div class="certificate-logo">
                             {% if c.cert_image %}
-                                <img src="{{ c.cert_image.url }}" alt="{{c.organization}} Logo" loading="lazy" decoding="async">
+                            <img src="{{ c.cert_image.url }}" alt="{{c.organization}} Logo" loading="lazy"
+                                decoding="async">
                             {% elif 'HackerRank' in c.organization %}
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/4/40/HackerRank_Icon-1000px.png" alt="HackerRank" loading="lazy" decoding="async">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/4/40/HackerRank_Icon-1000px.png"
+                                alt="HackerRank" loading="lazy" decoding="async">
                             {% elif 'Udemy' in c.organization %}
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e3/Udemy_logo.svg" alt="Udemy" loading="lazy" decoding="async">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e3/Udemy_logo.svg" alt="Udemy"
+                                loading="lazy" decoding="async">
                             {% elif 'Adobe' in c.organization %}
-                                <img src="https://www.vectorlogo.zone/logos/adobe/adobe-icon.svg" alt="Adobe" loading="lazy" decoding="async">
+                            <img src="https://www.vectorlogo.zone/logos/adobe/adobe-icon.svg" alt="Adobe" loading="lazy"
+                                decoding="async">
                             {% elif 'Aajhub' in c.organization %}
-                                AJ HUB
+                            AJ HUB
                             {% else %}
-                                {{c.organization|slice:":2"|upper}}
+                            {{c.organization|slice:":2"|upper}}
                             {% endif %}
                         </div>
                         <div class="cert-year">{{c.year}}</div>
                     </div>
-                    
+
                     <h3 class="certificate-title">{{c.name}}</h3>
                     <div class="cert-org">{{c.organization}}</div>
-                    
+
                     <div class="certificate-category">
-                        [ {% if c.category %}{{c.category|upper}}{% elif 'Software' in c.name or 'Python' in c.name %}SOFTWARE / PROGRAMMING{% elif 'SQL' in c.name %}DATABASES{% elif 'Prompt' in c.name %}AI / PROMPT ENGINEERING{% elif 'Web' in c.name %}FULL STACK DEVELOPMENT{% else %}GENERAL{% endif %} ]
+                        [ {% if c.category %}{{c.category|upper}}{% elif 'Software' in c.name or 'Python' in c.name                         %}SOFTWARE / PROGRAMMING{% elif 'SQL' in c.name %}DATABASES{% elif 'Prompt' in c.name %}AI /
+                        PROMPT ENGINEERING{% elif 'Web' in c.name %}FULL STACK DEVELOPMENT{% else %}GENERAL{% endif %} ]
                     </div>
-                    
+
                     <div style="flex-grow: 1;"></div>
-                    
+
                     <hr class="cert-divider">
-                    
+
                     <div class="cert-footer">
                         <div class="cert-verified">✓ VERIFIED</div>
-                        
+
                         {% if c.cert_url %}
-                        <a href="{{c.cert_url}}" target="_blank" rel="noopener noreferrer" class="cert-action">View Certificate ↗</a>
+                        <a href="{{c.cert_url}}" target="_blank" rel="noopener noreferrer" class="cert-action">View
+                            Certificate ↗</a>
                         {% elif c.cert_file %}
-                        <a href="{{c.cert_file.url}}" target="_blank" rel="noopener noreferrer" class="cert-action">View Certificate ↗</a>
+                        <a href="{{c.cert_file.url}}" target="_blank" rel="noopener noreferrer" class="cert-action">View
+                            Certificate ↗</a>
                         {% endif %}
                     </div>
                 </div>
@@ -350,93 +403,116 @@
             </div>
         </div>
     </section>
-    
+
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const filterBtns = document.querySelectorAll('.cert-filter-btn');
-        const certItems = document.querySelectorAll('.cert-item');
-        
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                const filterValue = btn.getAttribute('data-filter');
-                
-                certItems.forEach(item => {
-                    item.style.transition = 'all 0.3s ease';
-                    if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
-                        item.style.display = 'flex';
-                        setTimeout(() => { item.style.opacity = '1'; item.style.transform = 'translateY(0) scale(1)'; }, 50);
-                    } else {
-                        item.style.opacity = '0';
-                        item.style.transform = 'translateY(10px) scale(0.98)';
-                        setTimeout(() => { item.style.display = 'none'; }, 300);
-                    }
+        document.addEventListener('DOMContentLoaded', function () {
+            const filterBtns = document.querySelectorAll('.cert-filter-btn');
+            const certItems = document.querySelectorAll('.cert-item');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    const filterValue = btn.getAttribute('data-filter');
+
+                    certItems.forEach(item => {
+                        item.style.transition = 'all 0.3s ease';
+                        if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
+                            item.style.display = 'flex';
+                            setTimeout(() => { item.style.opacity = '1'; item.style.transform = 'translateY(0) scale(1)'; }, 50);
+                        } else {
+                            item.style.opacity = '0';
+                            item.style.transform = 'translateY(10px) scale(0.98)';
+                            setTimeout(() => { item.style.display = 'none'; }, 300);
+                        }
+                    });
                 });
             });
         });
-    });
     </script>
 
     <section id="contact" class="contact-section" style="padding: 100px 0;">
         <div class="container" style="max-width: 900px;">
             <div style="text-align: center; margin-bottom: 60px;">
-                <span class="section-label" style="justify-content: center; margin: 0 auto 20px;"><span class="accent-line"></span>GET IN TOUCH</span>
+                <span class="section-label" style="justify-content: center; margin: 0 auto 20px;"><span
+                        class="accent-line"></span>GET IN TOUCH</span>
                 <h2 style="font-size: 3rem; margin-bottom: 15px; letter-spacing: -1px;">Let's connect.</h2>
-                <p style="color: var(--text-secondary); margin: 0 auto 35px; font-size: 1.15rem; max-width: 500px; line-height: 1.6;">Have something worth building?<br>Choose how you'd like to connect.</p>
-                
+                <p
+                    style="color: var(--text-secondary); margin: 0 auto 35px; font-size: 1.15rem; max-width: 500px; line-height: 1.6;">
+                    Have something worth building?<br>Choose how you'd like to connect.</p>
+
                 {% if messages %}
-                <div class="messages" style="margin-bottom: 20px; max-width: 600px; margin-left: auto; margin-right: auto;">
+                <div class="messages"
+                    style="margin-bottom: 20px; max-width: 600px; margin-left: auto; margin-right: auto;">
                     {% for message in messages %}
-                    <div style="padding: 15px; border-radius: 8px; margin-bottom: 10px; {% if message.tags == 'success' %}background: #28a74520; color: #28a745; border: 1px solid #28a74540;{% else %}background: #dc354520; color: #dc3545; border: 1px solid #dc354540;{% endif %}">
+                    <div
+                        style="padding: 15px; border-radius: 8px; margin-bottom: 10px; {% if message.tags == 'success' %}background: #28a74520; color: #28a745; border: 1px solid #28a74540;{% else %}background: #dc354520; color: #dc3545; border: 1px solid #dc354540;{% endif %}">
                         {{ message }}
                     </div>
                     {% endfor %}
                 </div>
                 {% endif %}
 
-                <form method="post" action="{% url 'home' %}#contact" style="max-width: 600px; margin: 0 auto 40px; text-align: left; background: var(--bg-hover); padding: 40px; border-radius: 16px; border: 1px solid var(--border);">
+                <form method="post" action="{% url 'home' %}#contact"
+                    style="max-width: 600px; margin: 0 auto 40px; text-align: left; background: var(--bg-hover); padding: 40px; border-radius: 16px; border: 1px solid var(--border);">
                     {% csrf_token %}
                     <input type="hidden" name="contact_form" value="1">
-                    
+
                     <!-- Honeypot -->
                     <div style="display: none;">
                         <input type="text" name="website" tabindex="-1" autocomplete="off">
                     </div>
-                    
+
                     <div style="margin-bottom: 20px;">
-                        <label for="id_name" style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.95rem;">Name *</label>
-                        <input type="text" id="id_name" name="name" required style="width: 100%; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: inherit; font-size: 1rem;">
+                        <label for="id_name"
+                            style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.95rem;">Name
+                            *</label>
+                        <input type="text" id="id_name" name="name" required
+                            style="width: 100%; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: inherit; font-size: 1rem;">
                     </div>
-                    
+
                     <div style="margin-bottom: 20px;">
-                        <label for="id_email" style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.95rem;">Email *</label>
-                        <input type="email" id="id_email" name="email" required style="width: 100%; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: inherit; font-size: 1rem;">
+                        <label for="id_email"
+                            style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.95rem;">Email
+                            *</label>
+                        <input type="email" id="id_email" name="email" required
+                            style="width: 100%; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: inherit; font-size: 1rem;">
                     </div>
-                    
+
                     <div style="margin-bottom: 20px;">
-                        <label for="id_subject" style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.95rem;">Subject *</label>
-                        <input type="text" id="id_subject" name="subject" required style="width: 100%; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: inherit; font-size: 1rem;">
+                        <label for="id_subject"
+                            style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.95rem;">Subject
+                            *</label>
+                        <input type="text" id="id_subject" name="subject" required
+                            style="width: 100%; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: inherit; font-size: 1rem;">
                     </div>
-                    
+
                     <div style="margin-bottom: 30px;">
-                        <label for="id_message" style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.95rem;">Message *</label>
-                        <textarea id="id_message" name="message" required rows="5" style="width: 100%; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: inherit; font-size: 1rem; resize: vertical;"></textarea>
+                        <label for="id_message"
+                            style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.95rem;">Message
+                            *</label>
+                        <textarea id="id_message" name="message" required rows="5"
+                            style="width: 100%; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: inherit; font-size: 1rem; resize: vertical;"></textarea>
                     </div>
-                    
-                    <button type="submit" class="btn-primary project-view-btn" style="width: 100%; display: flex; justify-content: center; align-items: center; padding: 16px; font-size: 1.05rem;">Send Message</button>
+
+                    <button type="submit" class="btn-primary project-view-btn"
+                        style="width: 100%; display: flex; justify-content: center; align-items: center; padding: 16px; font-size: 1.05rem;">Send
+                        Message</button>
                 </form>
-                
-                <p style="color: var(--text-secondary); margin-bottom: 15px; font-size: 0.95rem;">Or reach out directly via email:</p>
-                <a href="mailto:{{profile.email}}" class="btn-secondary" style="display: inline-flex; align-items: center; justify-content: center;">Start a conversation &nbsp;→</a>
+
+                <p style="color: var(--text-secondary); margin-bottom: 15px; font-size: 0.95rem;">Or reach out directly
+                    via email:</p>
+                <a href="mailto:{{profile.email}}" class="btn-secondary"
+                    style="display: inline-flex; align-items: center; justify-content: center;">Start a conversation
+                    &nbsp;→</a>
             </div>
 
             <div class="network-container">
                 <div class="network-line">
                     <div class="network-center-dot"></div>
                 </div>
-                
+
                 <div class="network-channels">
                     <!-- Email -->
                     <a href="mailto:{{profile.email}}" class="network-channel">
@@ -469,7 +545,8 @@
                         <h4 class="channel-label">GITHUB</h4>
                         <div class="channel-info">
                             <span class="channel-hover-text">Explore my work.</span>
-                            <span class="channel-value">{{profile.github|slice:"19:"}} <span class="arrow">↗</span></span>
+                            <span class="channel-value">{{profile.github|slice:"19:"}} <span
+                                    class="arrow">↗</span></span>
                         </div>
                         <div class="channel-default">Explore my work ↗</div>
                     </a>
