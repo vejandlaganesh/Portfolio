@@ -136,13 +136,30 @@ def home(request):
                 messages.success(request, "Message sent successfully.")
             elif name and email and subject and message:
                 try:
-                    send_mail(
-                        f"Portfolio Contact: {subject}",
-                        f"From: {name} <{email}>\n\nMessage:\n{message}",
-                        settings.DEFAULT_FROM_EMAIL,
-                        [settings.CONTACT_EMAIL],
-                        fail_silently=False,
-                    )
+                    if getattr(settings, 'RESEND_API_KEY', None):
+                        # Use Resend HTTP API to bypass Render SMTP blocks
+                        headers = {
+                            'Authorization': f"Bearer {settings.RESEND_API_KEY}",
+                            'Content-Type': 'application/json',
+                        }
+                        payload = {
+                            'from': settings.DEFAULT_FROM_EMAIL or 'onboarding@resend.dev',
+                            'to': [settings.CONTACT_EMAIL or 'onboarding@resend.dev'],
+                            'subject': f"Portfolio Contact: {subject}",
+                            'text': f"From: {name} <{email}>\n\nMessage:\n{message}",
+                            'reply_to': email,
+                        }
+                        r = requests.post('https://api.resend.com/emails', headers=headers, json=payload, timeout=10)
+                        r.raise_for_status()
+                    else:
+                        # Fallback to standard Django SMTP
+                        send_mail(
+                            f"Portfolio Contact: {subject}",
+                            f"From: {name} <{email}>\n\nMessage:\n{message}",
+                            settings.DEFAULT_FROM_EMAIL,
+                            [settings.CONTACT_EMAIL],
+                            fail_silently=False,
+                        )
                     messages.success(request, "Message sent successfully. Thank you for reaching out. I'll get back to you soon.")
                 except Exception as e:
                     import logging

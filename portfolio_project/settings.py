@@ -131,6 +131,8 @@ if SECURE_SSL_REDIRECT or not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Email Configuration
+RESEND_API_KEY = os.environ.get('RESEND_API_KEY')
+
 if os.environ.get('EMAIL_HOST'):
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = os.environ.get('EMAIL_HOST')
@@ -143,5 +145,5 @@ if os.environ.get('EMAIL_HOST'):
     CONTACT_EMAIL = os.environ.get('CONTACT_EMAIL', DEFAULT_FROM_EMAIL)
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-    DEFAULT_FROM_EMAIL = 'webmaster@localhost'
-    CONTACT_EMAIL = 'contact@localhost'
+    DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'webmaster@localhost')
+    CONTACT_EMAIL = os.environ.get('CONTACT_EMAIL', 'contact@localhost')
