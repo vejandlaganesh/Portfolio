@@ -15,38 +15,40 @@
             <a href="{% url 'home' %}#projects" class="btn-secondary" style="display: inline-flex; align-items: center; justify-content: center;">← Back to Projects</a>
         </div>
         
-                <div class="project-showcase">
-            <div class="project-info">
-                <div class="project-index">
-                    {{ project.category|upper }}
-                </div>
-                <h1 class="project-title">{{ project.title }}</h1>
-                <p class="project-description">{{ project.description }}</p>
+        <div class="project-showcase" style="display: flex; flex-direction: column; gap: 40px; padding: 40px; background: var(--bg); border: 1px solid var(--border); border-radius: 16px;">
+            <div class="project-header" style="text-align: center;">
+                <div class="project-index" style="margin-bottom: 10px;">{{ project.category|upper }}</div>
+                <h1 class="project-title" style="font-size: 3rem; margin-bottom: 20px;">{{ project.title }}</h1>
+            </div>
+            
+            <div class="project-visual" style="width: 100%; border-radius: 12px; overflow: hidden; background: var(--bg-alt);">
+                {% if project.project_image %}
+                <img src="{{ project.project_image.url }}" alt="{{ project.title }} project preview" style="width: 100%; height: auto; display: block;" loading="lazy" decoding="async">
+                {% else %}
+                <div style="width: 100%; padding: 100px 20px; text-align: center; color: var(--text-light);">No Image Provided</div>
+                {% endif %}
+            </div>
+
+            <div class="project-content" style="max-width: 800px; margin: 0 auto; width: 100%;">
+                <h3 style="font-size: 1.5rem; margin-bottom: 15px; color: var(--text-dark);">OVERVIEW</h3>
+                <p style="font-size: 1.1rem; line-height: 1.7; margin-bottom: 40px; color: var(--text-secondary); white-space: pre-line;">{{ project.description }}</p>
                 
-                <div class="project-technologies">
+                <h3 style="font-size: 1.5rem; margin-bottom: 15px; color: var(--text-dark);">TECHNOLOGY</h3>
+                <div class="project-technologies" style="margin-bottom: 40px;">
                     {% for tech in project.technologies.split %}
-                    <span class="float-tag" style="position:static;">{{ tech }}</span>
+                    <span class="float-tag" style="position:static; display: inline-block; margin-right: 10px; margin-bottom: 10px;">{{ tech }}</span>
                     {% endfor %}
                 </div>
                 
+                <h3 style="font-size: 1.5rem; margin-bottom: 15px; color: var(--text-dark);">PROJECT LINKS</h3>
                 <div class="project-actions" style="display: flex; flex-wrap: wrap; gap: 14px; align-items: center;">
-                    <a href="{% url 'project_detail' project.id %}" class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">View Project ↗</a>
                     {% if project.live_url %}
-                    <a href="{{ project.live_url }}" target="_blank" rel="noopener noreferrer" class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">Live Demo ↗</a>
+                    <a href="{{ project.live_url }}" target="_blank" rel="noopener noreferrer" class="btn-primary project-view-btn">Live Demo ↗</a>
                     {% endif %}
                     {% if project.github_url %}
-                    <a href="{{ project.github_url }}" target="_blank" rel="noopener noreferrer" class="btn-secondary" style="display: inline-flex; align-items: center; gap: 8px;">GitHub ↗</a>
+                    <a href="{{ project.github_url }}" target="_blank" rel="noopener noreferrer" class="btn-secondary">GitHub ↗</a>
                     {% endif %}
-                    <a href="{% url 'project_compare' %}?projects={{ project.id }}" class="btn-secondary" style="display: inline-flex; align-items: center; gap: 8px;">Compare ↗</a>
                 </div>
-            </div>
-            
-            <div class="project-visual">
-                {% if project.project_image %}
-                <img src="{{ project.project_image.url }}" alt="{{ project.title }} project preview" class="project-image">
-                {% else %}
-                <div style="width: 100%; height: 100%; background: var(--bg-hover); display: flex; align-items: center; justify-content: center; color: var(--text-light);">No Image Provided</div>
-                {% endif %}
             </div>
         </div>
 

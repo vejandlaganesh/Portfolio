@@ -6,12 +6,44 @@ from django.db.models import F
 import os
 from datetime import date
 from django.conf import settings
-from django.http import JsonResponse, HttpResponseForbidden
+from django.http import JsonResponse, HttpResponseForbidden, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from .models import *
 import requests
 import json
+
+def robots_txt(request):
+    lines = [
+        "User-agent: *",
+        "Allow: /",
+        "Disallow: /portfolio-admin/",
+        "Disallow: /admin/",
+        "Disallow: /ai/",
+        f"Sitemap: https://ganesh-vejandla.onrender.com/sitemap.xml"
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
+
+def sitemap_xml(request):
+    projects = Project.objects.filter(status='published')
+    resumes = ResumeVersion.objects.filter(is_active=True)
+    
+    xml = ['<?xml version="1.0" encoding="UTF-8"?>']
+    xml.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
+    
+    # Home
+    xml.append('<url><loc>https://ganesh-vejandla.onrender.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>')
+    
+    # Resume Center
+    xml.append('<url><loc>https://ganesh-vejandla.onrender.com/resume/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>')
+    
+    # Projects
+    for p in projects:
+        xml.append(f'<url><loc>https://ganesh-vejandla.onrender.com/projects/{p.id}/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>')
+        
+    xml.append('</urlset>')
+    
+    return HttpResponse("\n".join(xml), content_type="application/xml")
 
 def seed():
  # NOTE: the admin user is no longer created here. seed() runs on every public page
@@ -87,8 +119,39 @@ def admin_logout(request, code):
  auth_logout(request)
  return redirect('admin_login', code=code)
 
+from django.core.mail import send_mail
+from django.contrib import messages
+
 def home(request):
- seed(); return render(request,'home.html',{'overall_status': get_overall_status(), 'profile':Portfolio.objects.first(),'skills':Skill.objects.all(),'experiences':Experience.objects.filter(status='published'),'projects':Project.objects.filter(status='published'),'total_projects_count':Project.objects.count(),'education':Education.objects.all(),'certifications':Certification.objects.all(), 'career_timeline':CareerTimeline.objects.filter(is_active=True).order_by('-date_sort'), 'has_resumes': ResumeVersion.objects.filter(is_active=True).exists()})
+    seed()
+    if request.method == 'POST' and 'contact_form' in request.POST:
+        name = request.POST.get('name', '').strip()
+        email = request.POST.get('email', '').strip()
+        subject = request.POST.get('subject', '').strip()
+        message = request.POST.get('message', '').strip()
+        
+        # Simple honeypot
+        if request.POST.get('website'):
+            messages.success(request, "Message sent successfully.")
+        elif name and email and subject and message:
+            try:
+                send_mail(
+                    f"Portfolio Contact: {subject}",
+                    f"From: {name} <{email}>\n\nMessage:\n{message}",
+                    settings.DEFAULT_FROM_EMAIL,
+                    [settings.CONTACT_EMAIL],
+                    fail_silently=False,
+                )
+                messages.success(request, "Message sent successfully. Thank you for reaching out. I'll get back to you soon.")
+            except Exception as e:
+                print(f"Error sending email: {e}")
+                messages.error(request, "We couldn't send your message right now. Please try again using the email option below.")
+        else:
+            messages.error(request, "Please fill out all required fields.")
+            
+        return redirect('home')
+        
+    return render(request,'home.html',{'overall_status': get_overall_status(), 'profile':Portfolio.objects.first(),'skills':Skill.objects.all(),'experiences':Experience.objects.filter(status='published'),'projects':Project.objects.filter(status='published'),'total_projects_count':Project.objects.count(),'education':Education.objects.all(),'certifications':Certification.objects.all(), 'career_timeline':CareerTimeline.objects.filter(is_active=True).order_by('-date_sort'), 'has_resumes': ResumeVersion.objects.filter(is_active=True).exists()})
 
 def admin_dashboard(request,code):
  e=guard(request, code)
@@ -301,12 +364,14 @@ def resume_download(request, pk):
 def admin_resume_center(request, code):
     e = guard(request, code)
     if e: return e
+    latest_download = ResumeDownload.objects.order_by('-downloaded_at').first()
     return render(request, 'admin/resume_list.html', {
         'code': code,
         'resumes': ResumeVersion.objects.all(),
         'total_resumes': ResumeVersion.objects.count(),
         'active_resumes': ResumeVersion.objects.filter(is_active=True).count(),
-        'total_downloads': sum([r.download_count for r in ResumeVersion.objects.all()])
+        'total_downloads': sum([r.download_count for r in ResumeVersion.objects.all()]),
+        'latest_download': latest_download
     })
 
 def admin_resume_add(request, code):

@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 {% load admin_tags %}
+{% load static %}
+
+{% block title %}Ganesh Sharma — Portfolio{% endblock %}
 
 {% block intro %}
 <section class="intro-screen">
@@ -28,7 +31,7 @@
                     <h1>Building digital things that think.</h1>
             <p>{{profile.summary}}</p>
             <div class="hero-actions hero-cta">
-                <a href="#projects" class="btn-primary">View Selected Work</a>
+                <a href="#projects" class="btn-primary project-view-btn">View Selected Work</a>
                 <a href="{% url 'resume_public_center' %}" class="resume-button">View Resume ↗</a>
             </div>
             <div class="social-links">
@@ -176,7 +179,7 @@
                 
                 <div class="project-visual">
                     {% if p.project_image %}
-                    <img src="{{ p.project_image.url }}" alt="{{ p.title }} project preview" class="project-image">
+                    <img src="{{ p.project_image.url }}" alt="{{ p.title }} project preview" class="project-image" loading="lazy" decoding="async">
                     {% else %}
                     <div style="width: 100%; height: 100%; min-height: 420px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #adb5bd; font-weight: 600; letter-spacing: 2px;">
                         <span style="font-size: 1.5rem; margin-bottom: 8px;">PROJECT</span>
@@ -205,19 +208,19 @@
                 <div class="capability-header">
                     <div class="capability-logo skill-category-icon">
                         {% if "AI" in s.title or "GenAI" in s.title %}
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/scikitlearn/scikitlearn-original.svg" alt="Machine Learning">
+                            <img src="{% static 'images/skills/scikitlearn-original.svg' %}" alt="AI and Machine Learning">
                         {% elif "Programming" in s.title %}
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" alt="Python">
+                            <img src="{% static 'images/skills/python-original.svg' %}" alt="Programming">
                         {% elif "Full Stack" in s.title %}
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" alt="HTML5">
+                            <img src="{% static 'images/skills/html5-original.svg' %}" alt="Full Stack Development">
                         {% elif "QA" in s.title or "Automation" in s.title %}
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/playwright/playwright-original.svg" alt="Playwright">
+                            <img src="{% static 'images/skills/playwright-original.svg' %}" alt="QA Automation">
                         {% elif "Database" in s.title %}
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg" alt="MySQL">
+                            <img src="{% static 'images/skills/mysql-original.svg' %}" alt="Databases">
                         {% elif "Tool" in s.title %}
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg" alt="Git">
+                            <img src="{% static 'images/skills/git-original.svg' %}" alt="Development Tools">
                         {% else %}
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/devicon/devicon-original.svg" alt="Tech">
+                            <img src="{% static 'images/skills/devicon-original.svg' %}" alt="Technology">
                         {% endif %}
                     </div>
                     <div class="capability-accent"></div>
@@ -273,7 +276,7 @@
                         {% endif %}
                         
                         {% if t.image %}
-                        <img src="{{ t.image.url }}" alt="{{ t.title }}" style="max-width: 100%; border-radius: 8px; margin-top: 15px; border: 1px solid var(--border);">
+                        <img src="{{ t.image.url }}" alt="{{ t.title }}" style="max-width: 100%; border-radius: 8px; margin-top: 15px; border: 1px solid var(--border);" loading="lazy" decoding="async">
                         {% endif %}
                     </div>
                 </div>
@@ -306,13 +309,13 @@
                     <div class="cert-header">
                         <div class="certificate-logo">
                             {% if c.cert_image %}
-                                <img src="{{ c.cert_image.url }}" alt="{{c.organization}} Logo">
+                                <img src="{{ c.cert_image.url }}" alt="{{c.organization}} Logo" loading="lazy" decoding="async">
                             {% elif 'HackerRank' in c.organization %}
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/4/40/HackerRank_Icon-1000px.png" alt="HackerRank">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/4/40/HackerRank_Icon-1000px.png" alt="HackerRank" loading="lazy" decoding="async">
                             {% elif 'Udemy' in c.organization %}
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e3/Udemy_logo.svg" alt="Udemy">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e3/Udemy_logo.svg" alt="Udemy" loading="lazy" decoding="async">
                             {% elif 'Adobe' in c.organization %}
-                                <img src="https://www.vectorlogo.zone/logos/adobe/adobe-icon.svg" alt="Adobe">
+                                <img src="https://www.vectorlogo.zone/logos/adobe/adobe-icon.svg" alt="Adobe" loading="lazy" decoding="async">
                             {% elif 'Aajhub' in c.organization %}
                                 AJ HUB
                             {% else %}
@@ -382,7 +385,51 @@
                 <span class="section-label" style="justify-content: center; margin: 0 auto 20px;"><span class="accent-line"></span>GET IN TOUCH</span>
                 <h2 style="font-size: 3rem; margin-bottom: 15px; letter-spacing: -1px;">Let's connect.</h2>
                 <p style="color: var(--text-secondary); margin: 0 auto 35px; font-size: 1.15rem; max-width: 500px; line-height: 1.6;">Have something worth building?<br>Choose how you'd like to connect.</p>
-                <a href="mailto:{{profile.email}}" class="btn-primary" style="display: inline-flex; align-items: center; justify-content: center;">Start a conversation &nbsp;→</a>
+                
+                {% if messages %}
+                <div class="messages" style="margin-bottom: 20px; max-width: 600px; margin-left: auto; margin-right: auto;">
+                    {% for message in messages %}
+                    <div style="padding: 15px; border-radius: 8px; margin-bottom: 10px; {% if message.tags == 'success' %}background: #28a74520; color: #28a745; border: 1px solid #28a74540;{% else %}background: #dc354520; color: #dc3545; border: 1px solid #dc354540;{% endif %}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <form method="post" action="{% url 'home' %}#contact" style="max-width: 600px; margin: 0 auto 40px; text-align: left; background: var(--bg-hover); padding: 40px; border-radius: 16px; border: 1px solid var(--border);">
+                    {% csrf_token %}
+                    <input type="hidden" name="contact_form" value="1">
+                    
+                    <!-- Honeypot -->
+                    <div style="display: none;">
+                        <input type="text" name="website" tabindex="-1" autocomplete="off">
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label for="id_name" style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.95rem;">Name *</label>
+                        <input type="text" id="id_name" name="name" required style="width: 100%; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: inherit; font-size: 1rem;">
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label for="id_email" style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.95rem;">Email *</label>
+                        <input type="email" id="id_email" name="email" required style="width: 100%; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: inherit; font-size: 1rem;">
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label for="id_subject" style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.95rem;">Subject *</label>
+                        <input type="text" id="id_subject" name="subject" required style="width: 100%; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: inherit; font-size: 1rem;">
+                    </div>
+                    
+                    <div style="margin-bottom: 30px;">
+                        <label for="id_message" style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.95rem;">Message *</label>
+                        <textarea id="id_message" name="message" required rows="5" style="width: 100%; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: inherit; font-size: 1rem; resize: vertical;"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary project-view-btn" style="width: 100%; display: flex; justify-content: center; align-items: center; padding: 16px; font-size: 1.05rem;">Send Message</button>
+                </form>
+                
+                <p style="color: var(--text-secondary); margin-bottom: 15px; font-size: 0.95rem;">Or reach out directly via email:</p>
+                <a href="mailto:{{profile.email}}" class="btn-secondary" style="display: inline-flex; align-items: center; justify-content: center;">Start a conversation &nbsp;→</a>
             </div>
 
             <div class="network-container">

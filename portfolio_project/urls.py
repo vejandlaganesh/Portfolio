@@ -3,6 +3,8 @@ from django.views.static import serve
 from portfolio import views
 from django.conf import settings
 urlpatterns=[
+ path('robots.txt', views.robots_txt, name='robots_txt'),
+ path('sitemap.xml', views.sitemap_xml, name='sitemap_xml'),
  path('',views.home,name='home'),
  path('portfolio-admin/<str:code>/',views.admin_login,name='admin_login'),
  path('portfolio-admin/<str:code>/dashboard/',views.admin_dashboard,name='admin_dashboard'),

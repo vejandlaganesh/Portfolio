@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Page Not Found | Ganesh Sharma{% endblock %}
+
+{% block intro %}{% endblock %}
+
+{% block content %}
+<section class="section" style="min-height: 80vh; display: flex; align-items: center; justify-content: center; text-align: center;">
+    <div class="container">
+        <h1 style="font-size: 8rem; margin: 0; color: var(--text); font-family: var(--font-mono); letter-spacing: -4px;">404</h1>
+        <h2 style="font-size: 2rem; margin-bottom: 20px; color: var(--text-dark);">PAGE NOT FOUND</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 40px; font-size: 1.1rem; max-width: 500px; margin-left: auto; margin-right: auto;">The page you're looking for doesn't exist or has been moved.</p>
+        <a href="{% url 'home' %}" class="btn-primary project-view-btn">Back to Home</a>
+    </div>
+</section>
+{% endblock %}

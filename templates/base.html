@@ -5,7 +5,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Ganesh Sharma | AI/ML & Generative AI{% endblock %}</title>
+    <title>{% block title %}Ganesh Sharma — AI/ML | Generative AI | Full Stack{% endblock %}</title>
+    <meta name="description" content="Ganesh Sharma's portfolio showcasing AI/ML, Generative AI, full-stack development, QA automation, projects, experience, certifications, and career journey.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://ganesh-vejandla.onrender.com{{ request.path }}">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Ganesh Sharma — AI/ML Portfolio">
+    <meta property="og:description" content="AI/ML, Generative AI, Full Stack Development and QA Automation portfolio.">
+    <meta property="og:url" content="https://ganesh-vejandla.onrender.com{{ request.path }}">
+    <meta property="og:image" content="https://ganesh-vejandla.onrender.com{% static 'images/background.png' %}">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Ganesh Sharma — AI/ML Portfolio">
+    <meta name="twitter:description" content="Explore Ganesh Sharma's projects, skills, experience and AI-powered portfolio.">
+    <meta name="twitter:image" content="https://ganesh-vejandla.onrender.com{% static 'images/background.png' %}">
+
+    <link rel="icon" href="{% static 'images/favicon/favicon.ico' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon/favicon-16x16.png' %}">
+    <link rel="apple-touch-icon" href="{% static 'images/favicon/apple-touch-icon.png' %}">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Ganesh Sharma",
+      "url": "https://ganesh-vejandla.onrender.com/",
+      "jobTitle": "AI/ML & Full Stack Developer",
+      "sameAs": [
+        "https://github.com/vejandlaganesh",
+        "https://linkedin.com/in/vejandla-ganesh"
+      ]
+    }
+    </script>
     <link rel="stylesheet" href="{% static 'css/portfolio.css' %}?v=7">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>

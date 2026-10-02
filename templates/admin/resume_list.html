@@ -8,7 +8,7 @@
     </div>
 </div>
 
-<div class="cms-grid cms-grid-3" style="margin-bottom: 32px;">
+<div class="cms-grid cms-grid-4" style="margin-bottom: 32px;">
     <div class="cms-stat-card">
         <div class="cms-stat-value">{{ total_resumes }}</div>
         <div class="cms-stat-label">TOTAL RESUMES</div>
@@ -23,6 +23,11 @@
         <div class="cms-stat-value">{{ total_downloads }}</div>
         <div class="cms-stat-label">DOWNLOADS</div>
         <div class="cms-stat-desc">Total across all resumes</div>
+    </div>
+    <div class="cms-stat-card">
+        <div class="cms-stat-value">{% if latest_download %}{{ latest_download.downloaded_at|timesince }} ago{% else %}Never{% endif %}</div>
+        <div class="cms-stat-label">LATEST DOWNLOAD</div>
+        <div class="cms-stat-desc">Most recent access</div>
     </div>
 </div>
 
