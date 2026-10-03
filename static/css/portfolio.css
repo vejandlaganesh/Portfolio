@@ -2625,13 +2625,13 @@ section {
 .certification-card {
     background: #ffffff;
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 24px;
+    border-radius: 10px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     height: 100%;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
-    transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
     position: relative;
     overflow: hidden;
 }
@@ -2641,17 +2641,9 @@ section {
     }
 }
 .certification-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.06);
-}
-.cert-top-accent {
-    position: absolute;
-    top: 0;
-    left: 24px;
-    width: 40px;
-    height: 3px;
-    background: var(--accent);
-    border-radius: 0 0 3px 3px;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    border-color: rgba(0, 0, 0, 0.1);
 }
 .cert-header {
     display: flex;
@@ -2660,17 +2652,17 @@ section {
     margin-bottom: 20px;
 }
 .certificate-logo {
-    width: 52px;
-    height: 52px;
-    border-radius: 12px;
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    background: var(--bg-hover);
+    background: #fff;
     color: var(--text-primary);
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     border: 1px solid var(--border);
     text-align: center;
     line-height: 1.1;
@@ -2687,29 +2679,27 @@ section {
     font-weight: 500;
 }
 .certificate-title {
-    font-size: clamp(20px, 2vw, 25px);
-    line-height: 1.2;
+    font-size: 1.15rem;
+    line-height: 1.4;
     font-weight: 600;
-    margin: 0 0 6px 0;
+    margin: 0 0 4px 0;
     color: var(--text-primary);
     overflow-wrap: break-word;
 }
 .cert-org {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     color: var(--text-secondary);
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 }
 .certificate-category {
     display: inline-flex;
     width: fit-content;
-    padding: 6px 10px;
-    border-radius: 6px;
-    font-size: 11px;
-    letter-spacing: 0.04em;
-    background: var(--bg-hover);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    background: rgba(0,0,0,0.03);
     color: var(--text-secondary);
-    font-weight: 600;
-    text-transform: uppercase;
+    font-weight: 500;
 }
 .cert-divider {
     border: none;

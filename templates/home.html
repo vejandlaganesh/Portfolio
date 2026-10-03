@@ -361,11 +361,9 @@
             <div class="bg-pattern-dots"></div>
         </div>
         <div class="container">
-            <div class="cert-section-header">
-                <span class="section-label"><span class="accent-line"></span>CERTIFICATIONS</span>
-                <h2>Continuous learning.</h2>
-                <p class="cert-subtitle">{{ certifications|length }} credentials across software engineering, AI,
-                    databases, and full-stack development.</p>
+            <div class="cert-section-header" style="margin-bottom: 2rem;">
+                <h2 style="font-size: 2.5rem; margin-bottom: 12px; color: var(--text-dark); font-weight: 700;">Certifications</h2>
+                <p style="font-size: 1.1rem; color: var(--text-secondary); max-width: 600px;">Verified certifications and credentials across software development, AI, databases, and full-stack technologies.</p>
             </div>
 
             <div class="cert-filters">
@@ -380,7 +378,6 @@
                 {% for c in certifications %}
                 <div class="certification-card cert-item"
                     data-category="{% if 'software' in c.name|lower or 'software' in c.category|default:''|lower or 'python' in c.name|lower %}software{% elif 'sql' in c.name|lower or 'database' in c.category|default:''|lower %}databases{% elif 'prompt' in c.name|lower or 'ai' in c.category|default:''|lower %}ai{% elif 'web' in c.name|lower or 'full stack' in c.category|default:''|lower %}full-stack{% else %}software{% endif %}">
-                    <div class="cert-top-accent"></div>
                     <div class="cert-header">
                         <div class="certificate-logo">
                             {% if c.cert_image %}
@@ -408,8 +405,7 @@
                     <div class="cert-org">{{c.organization}}</div>
 
                     <div class="certificate-category">
-                        [ {% if c.category %}{{c.category|upper}}{% elif 'Software' in c.name or 'Python' in c.name                         %}SOFTWARE / PROGRAMMING{% elif 'SQL' in c.name %}DATABASES{% elif 'Prompt' in c.name %}AI /
-                        PROMPT ENGINEERING{% elif 'Web' in c.name %}FULL STACK DEVELOPMENT{% else %}GENERAL{% endif %} ]
+                        {% if c.category %}{{c.category}}{% elif 'Software' in c.name or 'Python' in c.name %}Software / Programming{% elif 'SQL' in c.name %}Databases{% elif 'Prompt' in c.name %}AI / Prompt Engineering{% elif 'Web' in c.name %}Full Stack Development{% else %}General{% endif %}
                     </div>
 
                     <div style="flex-grow: 1;"></div>
@@ -417,14 +413,12 @@
                     <hr class="cert-divider">
 
                     <div class="cert-footer">
-                        <div class="cert-verified">✓ VERIFIED</div>
+                        <div class="cert-verified">✓ Verified</div>
 
                         {% if c.cert_url %}
-                        <a href="{{c.cert_url}}" target="_blank" rel="noopener noreferrer" class="cert-action">View
-                            Certificate ↗</a>
+                        <a href="{{c.cert_url}}" target="_blank" rel="noopener noreferrer" class="cert-action">View Certificate →</a>
                         {% elif c.cert_file %}
-                        <a href="{{c.cert_file.url}}" target="_blank" rel="noopener noreferrer" class="cert-action">View
-                            Certificate ↗</a>
+                        <a href="{{c.cert_file.url}}" target="_blank" rel="noopener noreferrer" class="cert-action">View Certificate →</a>
                         {% endif %}
                     </div>
                 </div>
