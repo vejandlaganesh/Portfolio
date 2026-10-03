@@ -59,8 +59,6 @@ def seed():
   for i,p in enumerate(ps): Project.objects.create(title=p[0],category=p[1],description=p[2],technologies=p[3],github_url=p[4],live_url=p[5],featured=p[6],order=i)
  if not Education.objects.exists():
   for i,p in enumerate([('KITS Akshar Institute of Technology','B.Tech in Artificial Intelligence and Machine Learning','10/2022 — 04/2026','Yanamadala, India'),('NARAYANA Junior College','IPE','08/2020 — 08/2022',''),('Bhashyam IIT Foundation','SSC','05/2015 — 07/2020','')]): Education.objects.create(institution=p[0],degree=p[1],duration=p[2],location=p[3],order=i)
-
-
  if not CareerTimeline.objects.exists() and Education.objects.exists():
   import datetime
   for i, e in enumerate(Education.objects.all()):
@@ -204,8 +202,9 @@ def admin_dashboard(request,code):
      'profile': Portfolio.objects.first(),
      'projects_count': Project.objects.count(),
      'skills_count': Skill.objects.count(),
-     'experience_count': Experience.objects.count(),
-     'education_count': Education.objects.count(),
+     'experience_count': CareerTimeline.objects.filter(category__icontains='experience').count(),
+     'education_count': CareerTimeline.objects.filter(category__icontains='education').count(),
+     'timeline_count': CareerTimeline.objects.count(),
      'certifications_count': Certification.objects.count(),
      'resume_count': ResumeDocument.objects.filter(is_active=True).count(),
      'concepts_count': Concept.objects.filter(is_active=True).count(),
@@ -428,10 +427,10 @@ def timeline_list(request, code):
     })
 
 def timeline_add(request, code):
-    return add_obj(request, code, 'Add Timeline Entry', CareerTimeline, ['date_display', 'date_sort', 'title', 'organization', 'category', 'description', 'technologies', 'image', 'is_active'], 'timeline_list', template='admin/timeline_form.html')
+    return add_obj(request, code, 'Add Timeline Entry', CareerTimeline, ['date_display', 'date_sort', 'title', 'organization', 'category', 'description', 'technologies', 'is_active'], 'timeline_list', template='admin/timeline_form.html')
 
 def timeline_edit(request, code, pk):
-    return edit_obj(request, code, pk, 'Edit Timeline Entry', CareerTimeline, ['date_display', 'date_sort', 'title', 'organization', 'category', 'description', 'technologies', 'image', 'is_active'], 'timeline_list', template='admin/timeline_form.html')
+    return edit_obj(request, code, pk, 'Edit Timeline Entry', CareerTimeline, ['date_display', 'date_sort', 'title', 'organization', 'category', 'description', 'technologies', 'is_active'], 'timeline_list', template='admin/timeline_form.html')
 
 def timeline_delete(request, code, pk):
     return del_obj(request, code, pk, CareerTimeline, 'timeline_list')

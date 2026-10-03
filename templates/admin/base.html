@@ -24,8 +24,6 @@
         <nav>
             <a href="{% url 'projects' code %}" class="cms-nav-item {% if 'project' in request.resolver_match.url_name %}active{% endif %}">Projects</a>
             <a href="{% url 'skills' code %}" class="cms-nav-item {% if 'skill' in request.resolver_match.url_name %}active{% endif %}">Skills</a>
-            <a href="{% url 'experiences' code %}" class="cms-nav-item {% if 'experience' in request.resolver_match.url_name %}active{% endif %}">Experience</a>
-            <a href="{% url 'education' code %}" class="cms-nav-item {% if 'education' in request.resolver_match.url_name %}active{% endif %}">Education</a>
             <a href="{% url 'certifications' code %}" class="cms-nav-item {% if 'cert' in request.resolver_match.url_name %}active{% endif %}">Certifications</a>
             <a href="{% url 'timeline_list' code %}" class="cms-nav-item {% if 'timeline' in request.resolver_match.url_name %}active{% endif %}">Career Timeline</a>
             <a href="{% url 'concept_list' code %}" class="cms-nav-item {% if 'concept' in request.resolver_match.url_name %}active{% endif %}">Learning Concepts</a>

@@ -44,7 +44,7 @@ class CareerTimeline(models.Model):
     date_sort = models.DateField()
     title = models.CharField(max_length=200)
     organization = models.CharField(max_length=200, blank=True)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     category = models.CharField(max_length=100)
     technologies = models.CharField(max_length=500, blank=True)
     image = models.ImageField(upload_to='career_timeline/', blank=True, null=True)

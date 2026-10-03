@@ -36,25 +36,71 @@
             <input type="text" name="title" value="{{ object.title|default:'' }}" required>
         </div>
         <div class="cms-form-group">
-            <label>Organization</label>
+            <label>Institute / Organization</label>
             <input type="text" name="organization" value="{{ object.organization|default:'' }}">
         </div>
         <div class="cms-form-group">
             <label>Category <span style="color:var(--cms-danger);">*</span></label>
-            <input type="text" name="category" value="{{ object.category|default:'' }}" required placeholder="e.g. Education, Experience, Project, Certification">
+            <select name="category" required style="width: 100%; padding: 10px; border: 1px solid var(--cms-border); border-radius: 10px; font-size: 15px; background: white; cursor: pointer;">
+                <option value="" disabled {% if not object.category %}selected{% endif %}>Select Category...</option>
+                <option value="Experience" {% if object.category == 'Experience' %}selected{% endif %}>Experience</option>
+                <option value="Education" {% if object.category == 'Education' %}selected{% endif %}>Education</option>
+                <option value="Project" {% if object.category == 'Project' %}selected{% endif %}>Project</option>
+                <option value="Certification" {% if object.category == 'Certification' %}selected{% endif %}>Certification</option>
+                <option value="Achievement" {% if object.category == 'Achievement' %}selected{% endif %}>Achievement</option>
+            </select>
         </div>
 
         <!-- TIMELINE -->
         <h2 class="cms-section-title" style="margin-top: 32px; margin-bottom: 16px; text-transform: uppercase; font-size: 12px; color: var(--cms-text-secondary); border-bottom: 1px solid var(--cms-border-soft); padding-bottom: 8px;">TIMELINE</h2>
-        <div class="cms-form-group">
-            <label>Date Display <span style="color:var(--cms-danger);">*</span></label>
-            <input type="text" name="date_display" value="{{ object.date_display|default:'' }}" required placeholder="e.g. 10/2022 — 04/2026">
-            <div style="font-size: 13px; color: var(--cms-text-muted); margin-top: 8px;">The human-readable date range shown on the timeline.</div>
+        
+        <div style="display: flex; gap: 16px; margin-bottom: 16px;">
+            <div class="cms-form-group" style="flex: 1; margin-bottom: 0;">
+                <label>Start Date <span style="color:var(--cms-danger);">*</span></label>
+                <div style="display: flex; gap: 8px;">
+                    <select id="start_month" style="flex: 1; padding: 10px; border: 1px solid var(--cms-border); border-radius: 10px; font-size: 15px; background: white; cursor: pointer;">
+                        <option value="">Month</option>
+                        <option value="01">01 - Jan</option><option value="02">02 - Feb</option><option value="03">03 - Mar</option>
+                        <option value="04">04 - Apr</option><option value="05">05 - May</option><option value="06">06 - Jun</option>
+                        <option value="07">07 - Jul</option><option value="08">08 - Aug</option><option value="09">09 - Sep</option>
+                        <option value="10">10 - Oct</option><option value="11">11 - Nov</option><option value="12">12 - Dec</option>
+                    </select>
+                    <select id="start_year" style="flex: 1; padding: 10px; border: 1px solid var(--cms-border); border-radius: 10px; font-size: 15px; background: white; cursor: pointer;">
+                        <option value="">Year</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="cms-form-group" style="flex: 1; margin-bottom: 0;">
+                <label>End Date</label>
+                <div style="display: flex; gap: 8px;">
+                    <select id="end_month" style="flex: 1; padding: 10px; border: 1px solid var(--cms-border); border-radius: 10px; font-size: 15px; background: white; cursor: pointer;">
+                        <option value="">Month</option>
+                        <option value="01">01 - Jan</option><option value="02">02 - Feb</option><option value="03">03 - Mar</option>
+                        <option value="04">04 - Apr</option><option value="05">05 - May</option><option value="06">06 - Jun</option>
+                        <option value="07">07 - Jul</option><option value="08">08 - Aug</option><option value="09">09 - Sep</option>
+                        <option value="10">10 - Oct</option><option value="11">11 - Nov</option><option value="12">12 - Dec</option>
+                    </select>
+                    <select id="end_year" style="flex: 1; padding: 10px; border: 1px solid var(--cms-border); border-radius: 10px; font-size: 15px; background: white; cursor: pointer;">
+                        <option value="">Year</option>
+                    </select>
+                </div>
+            </div>
         </div>
-        <div class="cms-form-group">
-            <label>Date Sort <span style="color:var(--cms-danger);">*</span></label>
-            <input type="date" name="date_sort" value="{{ object.date_sort|date:'Y-m-d'|default:'' }}" required>
-            <div style="font-size: 13px; color: var(--cms-text-muted); margin-top: 8px;">Used to sort the timeline entries chronologically.</div>
+        
+        <div class="cms-form-group" style="margin-bottom: 16px;">
+            <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; cursor: pointer;">
+                <input type="checkbox" id="picker_present">
+                <span>Present / Ongoing</span>
+            </label>
+        </div>
+
+        <div class="cms-form-group" style="background: var(--cms-surface-soft); padding: 16px; border-radius: 8px; border: 1px dashed var(--cms-border);">
+            <label>Preview (Date Display) <span style="color:var(--cms-danger);">*</span></label>
+            <input type="text" name="date_display" id="id_date_display" value="{{ object.date_display|default:'' }}" required readonly style="width: 100%; padding: 10px 14px; border: 1px solid var(--cms-border); border-radius: 10px; font-size: 15px; background: var(--cms-surface); cursor: not-allowed; color: var(--cms-text-muted);">
+            <div style="font-size: 13px; color: var(--cms-text-muted); margin-top: 8px;">The human-readable date range automatically generated from your selection above.</div>
+            
+            <input type="hidden" name="date_sort" id="id_date_sort" value="{{ object.date_sort|date:'Y-m-d'|default:'' }}">
         </div>
 
         <!-- DETAILS -->
@@ -62,22 +108,12 @@
         <div class="cms-form-group">
             <label>Description</label>
             <textarea name="description" rows="5">{{ object.description|default:'' }}</textarea>
+            <div style="font-size: 13px; color: var(--cms-text-muted); margin-top: 8px;">Enter each point on a separate line. Each line will appear as a bullet point on the public timeline.</div>
         </div>
         <div class="cms-form-group">
             <label>Technologies</label>
             <input type="text" name="technologies" value="{{ object.technologies|default:'' }}">
         </div>
-        <div class="cms-form-group">
-            <label>Image</label>
-            <input type="file" name="image" style="padding: 10px; border: 1px dashed var(--cms-border); background: var(--cms-surface-soft);">
-            {% if object and object.image %}
-                <div style="font-size: 13px; margin-top: 8px; color: var(--cms-text-secondary);">Current file: {{ object.image.name }}</div>
-                <label style="display: flex; align-items: center; gap: 8px; margin-top: 8px; font-weight: normal; cursor: pointer;">
-                    <input type="checkbox" name="clear_image"> Clear current image
-                </label>
-            {% endif %}
-        </div>
-
         <!-- VISIBILITY -->
         <h2 class="cms-section-title" style="margin-top: 32px; margin-bottom: 16px; text-transform: uppercase; font-size: 12px; color: var(--cms-text-secondary); border-bottom: 1px solid var(--cms-border-soft); padding-bottom: 8px;">VISIBILITY</h2>
         <div class="cms-form-group" style="margin-bottom: 0;">
@@ -93,4 +129,91 @@
         </div>
     </form>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const startMonth = document.getElementById('start_month');
+    const startYear = document.getElementById('start_year');
+    const endMonth = document.getElementById('end_month');
+    const endYear = document.getElementById('end_year');
+    
+    const presentCheck = document.getElementById('picker_present');
+    const displayInput = document.getElementById('id_date_display');
+    const sortInput = document.getElementById('id_date_sort');
+
+    // Populate years (Current Year + 10 down to 1950)
+    const currentY = new Date().getFullYear();
+    for (let y = currentY + 10; y >= 1950; y--) {
+        const opt1 = document.createElement('option');
+        opt1.value = y; opt1.textContent = y;
+        startYear.appendChild(opt1);
+        
+        const opt2 = document.createElement('option');
+        opt2.value = y; opt2.textContent = y;
+        endYear.appendChild(opt2);
+    }
+
+    // Parse existing date_display and date_sort if editing
+    const currentDisplay = displayInput.value;
+    const currentSort = sortInput.value;
+
+    if (currentSort && currentSort.length >= 7) {
+        // e.g. "2022-10-01"
+        startYear.value = currentSort.substring(0, 4);
+        startMonth.value = currentSort.substring(5, 7);
+    }
+    
+    if (currentDisplay) {
+        if (currentDisplay.toLowerCase().includes('present') || currentDisplay.toLowerCase().includes('ongoing')) {
+            presentCheck.checked = true;
+            endMonth.disabled = true;
+            endYear.disabled = true;
+        } else {
+            const parts = currentDisplay.split('—').map(p => p.trim());
+            if (parts.length === 2 && parts[1].includes('/')) {
+                const endParts = parts[1].split('/');
+                if (endParts.length === 2) {
+                    endMonth.value = endParts[0].padStart(2, '0');
+                    endYear.value = endParts[1];
+                }
+            }
+        }
+    }
+
+    function updatePreview() {
+        const isPresent = presentCheck.checked;
+
+        let display = '';
+        if (startMonth.value && startYear.value) {
+            display = `${startMonth.value}/${startYear.value}`;
+            if (isPresent) {
+                display += ' — Present';
+            } else if (endMonth.value && endYear.value) {
+                display += ` — ${endMonth.value}/${endYear.value}`;
+            }
+            
+            sortInput.value = `${startYear.value}-${startMonth.value}-01`;
+        } else {
+            sortInput.value = '';
+        }
+        
+        displayInput.value = display;
+    }
+
+    startMonth.addEventListener('change', updatePreview);
+    startYear.addEventListener('change', updatePreview);
+    endMonth.addEventListener('change', updatePreview);
+    endYear.addEventListener('change', updatePreview);
+    
+    presentCheck.addEventListener('change', function() {
+        endMonth.disabled = this.checked;
+        endYear.disabled = this.checked;
+        if (this.checked) {
+            endMonth.value = '';
+            endYear.value = '';
+        }
+        updatePreview();
+    });
+});
+</script>
 {% endblock %}

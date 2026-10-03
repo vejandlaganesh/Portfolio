@@ -272,55 +272,62 @@
     <section id="career-timeline" class="timeline-section" style="padding: 100px 0; background: var(--bg-alt);">
         <div class="container timeline-container">
             <span class="section-label" style="text-align: center; display: block; margin: 0 auto 20px;"><span
-                    class="accent-line"></span>CAREER TIMELINE</span>
+                    class="accent-line"></span>CAREER JOURNEY</span>
             <p
                 style="text-align: center; color: var(--text-secondary); max-width: 600px; margin: 0 auto 60px; font-size: 1.2rem; line-height: 1.6;">
-                A visual journey through my education, experience, and career milestones.</p>
+                Building experience through learning, experimentation, and creation.</p>
 
             <div class="true-timeline">
                 {% for t in career_timeline %}
                 <div class="true-timeline-item {% cycle 'left' 'right' %}">
                     <div class="true-timeline-dot"></div>
                     <div class="true-timeline-card">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; margin-bottom: 15px;">
-                            <div>
-                                <span class="timeline-date">{{ t.date_display }}</span>
-                                <h3 class="timeline-title">{{ t.title }}</h3>
-                                {% if t.organization %}<h4 class="timeline-organization">{{ t.organization }}</h4>{%                                 endif %}
-                            </div>
-                            {% if t.category %}
-                            <div class="timeline-category">
-                                {{ t.category }}
-                            </div>
+                        {% if t.category %}
+                        <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent); margin-bottom: 20px;">
+                            {{ t.category }}
+                        </div>
+                        {% endif %}
+                        
+                        <h3 class="timeline-title" style="margin-bottom: 10px; font-size: 1.4rem; color: #111827; font-weight: 700;">{{ t.title }}</h3>
+                        
+                        {% if t.organization %}
+                        <div class="timeline-organization" style="font-size: 1.05rem; font-weight: 500; color: #374151; margin-bottom: 10px;">
+                            {{ t.organization }}
+                        </div>
+                        {% endif %}
+
+                        <div style="font-size: 0.95rem; font-weight: 500; color: #6B7280; margin-bottom: 22px;">
+                            {{ t.date_display }}
+                        </div>
+
+                        {% if t.description %}
+                        {% with lines=t.description|split_lines %}
+                        <div class="timeline-description" style="margin-bottom: 20px; color: #4B5563; font-size: 1rem;">
+                            {% if lines|length == 1 %}
+                                <p style="margin: 0; line-height: 1.6;">{{ lines.0 }}</p>
+                            {% else %}
+                                <ul class="timeline-points" style="margin: 0; padding-left: 20px;">
+                                    {% for line in lines %}
+                                    <li style="margin-bottom: 8px; line-height: 1.6;">{{ line }}</li>
+                                    {% endfor %}
+                                </ul>
                             {% endif %}
                         </div>
-
-                        {% with lines=t.description|split_lines %}
-                        {% if lines %}
-                        <ul class="timeline-points">
-                            {% for line in lines %}
-                            <li>{{ line }}</li>
-                            {% endfor %}
-                        </ul>
-                        {% endif %}
                         {% endwith %}
+                        {% endif %}
 
                         {% if t.technologies %}
-                        <div class="tech-stack" style="margin-bottom: 10px;">
-                            {% for tech in t.technologies.split %}
-                            <span class="float-tag"
-                                style="position:static; margin-right: 5px; font-size: 0.85rem; padding: 4px 10px; background: var(--bg-hover);">{{                                 tech }}</span>
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                            {% for tech in t.technologies|split_csv %}
+                            <span style="font-size: 0.8rem; font-weight: 500; padding: 4px 12px; background: #F3F4F6; color: #374151; border: 1px solid #E5E7EB; border-radius: 999px;">{{ tech }}</span>
                             {% endfor %}
                         </div>
                         {% endif %}
-
-                        {% if t.image %}
-                        <img src="{{ t.image.url }}" alt="{{ t.title }}"
-                            style="max-width: 100%; border-radius: 8px; margin-top: 15px; border: 1px solid var(--border);"
-                            loading="lazy" decoding="async">
-                        {% endif %}
                     </div>
+                </div>
+                {% empty %}
+                <div style="text-align: center; padding: 40px; color: #6B7280; font-size: 1.1rem; background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 16px; box-shadow: 0 4px 18px rgba(0,0,0,0.05);">
+                    No timeline entries available yet.
                 </div>
                 {% endfor %}
             </div>
