@@ -172,7 +172,20 @@ def home(request):
             from django.http import HttpResponse
             return HttpResponse(f"<h1>Debug 500</h1><pre>{traceback.format_exc()}</pre>", status=200)
             
-    return render(request,'home.html',{'overall_status': get_overall_status(), 'profile':Portfolio.objects.first(),'skills':Skill.objects.all(),'experiences':Experience.objects.filter(status='published'),'projects':Project.objects.filter(status='published'),'total_projects_count':Project.objects.count(),'education':Education.objects.all(),'certifications':Certification.objects.all(), 'career_timeline':CareerTimeline.objects.filter(is_active=True).order_by('-date_sort'), 'has_resumes': ResumeDocument.objects.filter(is_active=True).exists(), 'active_resume': ResumeDocument.objects.filter(document_type="one_page", is_active=True).first()})
+    return render(request,'home.html',{
+        'overall_status': get_overall_status(),
+        'profile':Portfolio.objects.first(),
+        'skills':Skill.objects.all(),
+        'experiences':Experience.objects.filter(status='published'),
+        'featured_projects':Project.objects.filter(status='published', project_category='featured'),
+        'more_projects':Project.objects.filter(status='published', project_category='more'),
+        'total_projects_count':Project.objects.count(),
+        'education':Education.objects.all(),
+        'certifications':Certification.objects.all(),
+        'career_timeline':CareerTimeline.objects.filter(is_active=True).order_by('-date_sort'),
+        'has_resumes': ResumeDocument.objects.filter(is_active=True).exists(),
+        'active_resume': ResumeDocument.objects.filter(document_type="one_page", is_active=True).first()
+    })
 
 def admin_dashboard(request,code):
  e=guard(request, code)
@@ -188,7 +201,7 @@ def admin_dashboard(request,code):
  
  drafts = list(Project.objects.filter(status='draft')) + list(Experience.objects.filter(status='draft'))
  active_resume = ResumeDocument.objects.filter(document_type="one_page", is_active=True).first()
- featured_project = Project.objects.filter(featured=True).first() or Project.objects.first()
+ featured_project = Project.objects.filter(project_category='featured').first() or Project.objects.first()
  
  today_views = PageVisit.objects.filter(timestamp__date=today).count()
  today_unique = PageVisit.objects.filter(timestamp__date=today).values('visitor_hash').distinct().count()
@@ -235,7 +248,6 @@ def _apply_post(obj, fields, request):
   elif name in ('start_date','end_date'): setattr(obj,name,_month_to_date(request.POST.get(name)))
   elif name in request.POST: setattr(obj,name,request.POST.get(name,''))
   if name in CLEARABLE_FILE_FIELDS and name not in request.FILES and request.POST.get('clear_'+name)=='on': setattr(obj,name,None)
- if 'featured' in names: obj.featured = request.POST.get('featured')=='on'
  if 'is_active' in names: obj.is_active = request.POST.get('is_active')=='on'
  if 'is_verified' in names: obj.is_verified = request.POST.get('is_verified')=='on'
  if 'is_current' in names:
@@ -297,7 +309,17 @@ def resume_edit(request,code):
 def collection(request,code,title,model,add,edit,delete):
  e=guard(request, code)
  if e:return e
- return render(request,'admin/list.html',{'code':code,'title':title,'items':model.objects.all(),'add':add,'edit':edit,'delete':delete})
+ items = model.objects.all()
+ filter_cat = request.GET.get('filter')
+ if filter_cat == 'featured' and hasattr(model, 'project_category'):
+  items = items.filter(project_category='featured')
+ elif filter_cat == 'more' and hasattr(model, 'project_category'):
+  items = items.filter(project_category='more')
+ elif filter_cat == 'published' and hasattr(model, 'status'):
+  items = items.filter(status='published')
+ elif filter_cat == 'draft' and hasattr(model, 'status'):
+  items = items.filter(status='draft')
+ return render(request,'admin/list.html',{'code':code,'title':title,'items':items,'add':add,'edit':edit,'delete':delete, 'current_filter': filter_cat, 'has_category': hasattr(model, 'project_category')})
 
 def add_obj(request,code,title,model,fields,back,template='admin/form.html'): return form(request,code,title,[(f,model) for f in fields],None,back,template)
 def edit_obj(request,code,pk,title,model,fields,back,template='admin/form.html'): return form(request,code,title,[(f,model) for f in fields],get_object_or_404(model,pk=pk),back,template)
@@ -308,12 +330,12 @@ def del_obj(request,code,pk,model,back):
  return redirect(back,code=code)
 
 def projects(request,code):return collection(request,code,'Projects',Project,'project_add','project_edit','project_delete')
-def project_add(request,code):return add_obj(request,code,'Add New Project',Project,['project_image','title','category','description','technologies','github_url','live_url','featured'],'projects')
+def project_add(request,code):return add_obj(request,code,'Add New Project',Project,['project_image','title','category','description','technologies','github_url','live_url','project_category','order'],'projects')
 def project_edit(request,code,pk):
  e = guard(request, code)
  if e: return e
  project = get_object_or_404(Project, pk=pk)
- fields = [('project_image',Project),('title',Project),('category',Project),('description',Project),('technologies',Project),('github_url',Project),('live_url',Project),('featured',Project)]
+ fields = [('project_image',Project),('title',Project),('category',Project),('description',Project),('technologies',Project),('github_url',Project),('live_url',Project),('project_category',Project),('order',Project)]
  error = None
  if request.method == 'POST':
   _apply_post(project, fields, request)

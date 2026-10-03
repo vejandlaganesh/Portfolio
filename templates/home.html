@@ -8,8 +8,8 @@
 <section class="intro-screen">
     <div class="intro-content">
         <h1 class="intro-name">VEJANDLA GANESH SHARMA</h1>
-        <div class="intro-specialties">AI/ML • GENERATIVE AI • FULL STACK • QA AUTOMATION</div>
-        <div class="intro-tagline">Building intelligent digital experiences.</div>
+        <div class="intro-specialties">AI/ML & GENERATIVE AI ENGINEER</div>
+        <div class="intro-tagline">Building intelligent applications with modern web technologies.</div>
     </div>
     <div class="intro-scroll">
         SCROLL TO ENTER
@@ -44,10 +44,14 @@
         <div class="container">
             <div class="hero-inner">
                 <div class="hero-content">
-                    <span class="section-label"><span class="accent-line"></span>AI/ML | Generative AI | Full Stack |
-                        QA</span>
-                    <h1>Building digital things that think.</h1>
-                    <p>{{profile.summary}}</p>
+                    <span class="section-label"><span class="accent-line"></span>AI/ML & Generative AI Engineer | Full-Stack Developer</span>
+                    <h1>Building intelligent applications with Machine Learning, Generative AI, Python, and modern web technologies.</h1>
+                    <div style="margin-bottom: 30px; font-size: 1.1rem; line-height: 1.8; color: var(--text-light);">
+                        <div style="display: flex; align-items: center; gap: 10px;"><span style="color: var(--accent);">•</span> B.Tech — Computer Science & Engineering (AI & ML)</div>
+                        <div style="display: flex; align-items: center; gap: 10px;"><span style="color: var(--accent);">•</span> AI/ML & Generative AI Projects</div>
+                        <div style="display: flex; align-items: center; gap: 10px;"><span style="color: var(--accent);">•</span> Full-Stack Development</div>
+                        <div style="display: flex; align-items: center; gap: 10px;"><span style="color: var(--accent);">•</span> QA Automation Experience</div>
+                    </div>
                     <div class="hero-actions hero-cta">
                         {% if active_resume %}
                         <a href="{% url 'resume_download' active_resume.id %}" target="_blank" rel="noopener noreferrer"
@@ -98,9 +102,7 @@
 
             <div class="about-description reveal-on-scroll"
                 style="margin-top: 50px; margin-bottom: 60px; font-size: 1.15rem; line-height: 1.7; max-width: 800px;">
-                I build practical software at the intersection of AI, automation, and modern web development. My work
-                spans Generative AI applications, AI/ML projects, full-stack platforms, and reliable test automation. I
-                enjoy turning complex ideas into usable products while continuously learning new technologies.
+                I am a Computer Science graduate specializing in Artificial Intelligence and Machine Learning, with hands-on experience building AI-powered applications, Generative AI systems, full-stack platforms, and automation solutions. I enjoy turning real-world problems into practical software using Python, Machine Learning, Generative AI, React, SQL, and modern development tools.
             </div>
 
             <div class="about-panels-grid">
@@ -167,13 +169,13 @@
             <div class="bg-orb orb-3"></div>
         </div>
         <div class="container">
-            <span class="section-label"><span class="accent-line"></span>SELECTED WORK</span>
+            <span class="section-label"><span class="accent-line"></span>FEATURED PROJECTS</span>
             <div style="margin-bottom: 2rem;">
                 <a href="{% url 'project_compare' %}" class="btn-secondary">Compare Projects ↗</a>
             </div>
 
             <div class="projects-grid" style="display: flex; flex-direction: column; gap: 4rem;">
-                {% for p in projects %}
+                {% for p in featured_projects %}
                 <article class="project-showcase {% if forloop.counter|divisibleby:2 %}reverse{% endif %}">
                     <div class="project-info">
                         <div class="project-index">
@@ -185,13 +187,12 @@
                         <div class="project-technologies">
                             {% for tech in p.technologies|split_csv|slice:":5" %}
                             <span class="technology-tag"
-                                style="display: inline-flex; align-items: center; padding: 8px 14px; border-radius: 6px; background: var(--bg-hover); color: var(--text); border: 1px solid var(--border);">{{                                 tech }}</span>
+                                style="display: inline-flex; align-items: center; padding: 8px 14px; border-radius: 6px; background: var(--bg-hover); color: var(--text); border: 1px solid var(--border);">{{ tech }}</span>
                             {% endfor %}
                         </div>
 
                         <div class="project-actions">
-                            <a href="{% url 'project_detail' p.id %}" class="btn-primary project-view-btn">View Project
-                                ↗</a>
+                            <a href="{% url 'project_detail' p.id %}" class="btn-primary project-view-btn">View Project ↗</a>
                             {% if p.live_url %}
                             <a href="{{ p.live_url }}" target="_blank" rel="noopener noreferrer"
                                 class="btn-primary project-view-btn">Live Demo ↗</a>
@@ -200,8 +201,6 @@
                             <a href="{{ p.github_url }}" target="_blank" rel="noopener noreferrer"
                                 class="btn-secondary">GitHub ↗</a>
                             {% endif %}
-                            <a href="{% url 'project_compare' %}?projects={{ p.id }}" class="btn-secondary">Compare
-                                ↗</a>
                         </div>
                     </div>
 
@@ -220,6 +219,29 @@
                 </article>
                 {% endfor %}
             </div>
+
+            {% if more_projects %}
+            <div style="margin-top: 6rem;">
+                <span class="section-label"><span class="accent-line"></span>MORE PROJECTS</span>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                    {% for p in more_projects %}
+                    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 24px; box-shadow: 0 4px 18px rgba(0,0,0,0.05); display: flex; flex-direction: column;">
+                        <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--accent); margin-bottom: 10px;">{{ p.category }}</div>
+                        <h4 style="font-size: 1.4rem; color: #111827; margin-bottom: 10px;">{{ p.title }}</h4>
+                        <p style="color: #4B5563; line-height: 1.6; font-size: 0.95rem; margin-bottom: 20px; flex-grow: 1;">{{ p.description|truncatewords:20 }}</p>
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;">
+                            {% for tech in p.technologies|split_csv|slice:":3" %}
+                            <span style="font-size: 0.75rem; padding: 4px 10px; background: #F3F4F6; color: #374151; border-radius: 999px;">{{ tech }}</span>
+                            {% endfor %}
+                        </div>
+                        <div>
+                            <a href="{% url 'project_detail' p.id %}" style="color: var(--accent); font-weight: 600; font-size: 0.9rem; text-decoration: none;">View Details →</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
         </div>
     </section>
 

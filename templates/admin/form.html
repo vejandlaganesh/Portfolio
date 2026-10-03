@@ -65,6 +65,12 @@
                     <option value="cover_letter" {% if object.document_type == 'cover_letter' %}selected{% endif %}>Cover Letter</option>
                 </select>
                 
+            {% elif field_name == 'project_category' %}
+                <select name="{{ field_name }}" required style="width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--cms-border); background: var(--cms-surface-soft); color: var(--cms-text-primary);">
+                    <option value="featured" {% if object.project_category == 'featured' %}selected{% endif %}>Featured Project</option>
+                    <option value="more" {% if object.project_category == 'more' or not object.project_category %}selected{% endif %}>More Project</option>
+                </select>
+                
             {% else %}
                 {% if field_name == 'live_url' %}
                 <div style="font-size: 13px; color: var(--cms-text-muted); margin-bottom: 8px;">URL where visitors can access the deployed project.</div>

@@ -33,9 +33,10 @@
                 <h3 style="font-size: 1.5rem; margin-bottom: 15px; color: var(--text-dark);">OVERVIEW</h3>
                 <p style="font-size: 1.1rem; line-height: 1.7; margin-bottom: 40px; color: var(--text-secondary); white-space: pre-line;">{{ project.description }}</p>
                 
+{% load admin_tags %}
                 <h3 style="font-size: 1.5rem; margin-bottom: 15px; color: var(--text-dark);">TECHNOLOGY</h3>
                 <div class="project-technologies" style="margin-bottom: 40px;">
-                    {% for tech in project.technologies.split %}
+                    {% for tech in project.technologies|split_csv %}
                     <span class="float-tag" style="position:static; display: inline-block; margin-right: 10px; margin-bottom: 10px;">{{ tech }}</span>
                     {% endfor %}
                 </div>
