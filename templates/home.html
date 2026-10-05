@@ -196,8 +196,7 @@
                         <div class="project-technologies">
                             {% for tech in p.technologies|split_csv|slice:":5" %}
                             <span class="technology-tag"
-                                style="display: inline-flex; align-items: center; padding: 8px 14px; border-radius: 6px; background: var(--bg-hover); color: var(--text); border: 1px solid var(--border);">{{
-                                tech }}</span>
+                                style="display: inline-flex; align-items: center; padding: 8px 14px; border-radius: 6px; background: var(--bg-hover); color: var(--text); border: 1px solid var(--border);">{{ tech }}</span>
                             {% endfor %}
                         </div>
 
@@ -249,8 +248,7 @@
                         <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;">
                             {% for tech in p.technologies|split_csv|slice:":3" %}
                             <span
-                                style="font-size: 0.75rem; padding: 4px 10px; background: #F3F4F6; color: #374151; border-radius: 999px;">{{
-                                tech }}</span>
+                                style="font-size: 0.75rem; padding: 4px 10px; background: #F3F4F6; color: #374151; border-radius: 999px;">{{ tech }}</span>
                             {% endfor %}
                         </div>
                         <div>
@@ -366,8 +364,7 @@
                         <div style="display: flex; flex-wrap: wrap; gap: 8px;">
                             {% for tech in t.technologies|split_csv %}
                             <span
-                                style="font-size: 0.8rem; font-weight: 500; padding: 4px 12px; background: #F3F4F6; color: #374151; border: 1px solid #E5E7EB; border-radius: 999px;">{{
-                                tech }}</span>
+                                style="font-size: 0.8rem; font-weight: 500; padding: 4px 12px; background: #F3F4F6; color: #374151; border: 1px solid #E5E7EB; border-radius: 999px;">{{ tech }}</span>
                             {% endfor %}
                         </div>
                         {% endif %}
