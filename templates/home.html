@@ -461,6 +461,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             const filterBtns = document.querySelectorAll('.cert-filter-btn');
             const certItems = document.querySelectorAll('.cert-item');
+            let filterTimeout;
 
             filterBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
@@ -468,18 +469,33 @@
                     btn.classList.add('active');
 
                     const filterValue = btn.getAttribute('data-filter');
+                    
+                    if (filterTimeout) clearTimeout(filterTimeout);
 
+                    // Step 1: Fade out the items that don't match
                     certItems.forEach(item => {
-                        item.style.transition = 'all 0.3s ease';
-                        if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
-                            item.style.display = 'flex';
-                            setTimeout(() => { item.style.opacity = '1'; item.style.transform = 'translateY(0) scale(1)'; }, 50);
-                        } else {
+                        item.style.transition = 'all 0.2s ease';
+                        if (filterValue !== 'all' && item.getAttribute('data-category') !== filterValue) {
                             item.style.opacity = '0';
-                            item.style.transform = 'translateY(10px) scale(0.98)';
-                            setTimeout(() => { item.style.display = 'none'; }, 300);
+                            item.style.transform = 'scale(0.95)';
                         }
                     });
+
+                    // Step 2: Wait for fade out, then rearrange layout and fade in the matches
+                    filterTimeout = setTimeout(() => {
+                        certItems.forEach(item => {
+                            if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
+                                item.style.display = 'flex';
+                                // Tiny delay to let the browser apply display: flex before animating opacity
+                                setTimeout(() => {
+                                    item.style.opacity = '1';
+                                    item.style.transform = 'scale(1)';
+                                }, 30);
+                            } else {
+                                item.style.display = 'none';
+                            }
+                        });
+                    }, 200); // 200ms matches the fade out transition time
                 });
             });
         });
@@ -573,7 +589,7 @@
                         <h4 class="channel-label">EMAIL</h4>
                         <div class="channel-info">
                             <span class="channel-hover-text">Let's start a conversation.</span>
-                            <span class="channel-value">{{profile.email}} <span class="arrow">↗</span></span>
+                            <span class="channel-value" style="display: inline-flex; align-items: center; gap: 4px;">{{profile.email}} <span class="arrow">↗</span></span>
                         </div>
                         <div class="channel-default">Start a conversation ↗</div>
                     </a>
@@ -585,7 +601,7 @@
                         <h4 class="channel-label">LINKEDIN</h4>
                         <div class="channel-info">
                             <span class="channel-hover-text">Connect professionally.</span>
-                            <span class="channel-value">Profile <span class="arrow">↗</span></span>
+                            <span class="channel-value" style="display: inline-flex; align-items: center; gap: 4px;">Profile <span class="arrow">↗</span></span>
                         </div>
                         <div class="channel-default">Connect professionally ↗</div>
                     </a>
@@ -598,8 +614,7 @@
                         <h4 class="channel-label">GITHUB</h4>
                         <div class="channel-info">
                             <span class="channel-hover-text">Explore my work.</span>
-                            <span class="channel-value">{{profile.github|slice:"19:"}} <span
-                                    class="arrow">↗</span></span>
+                            <span class="channel-value" style="display: inline-flex; align-items: center; gap: 4px;">{{profile.github|slice:"19:"}} <span class="arrow">↗</span></span>
                         </div>
                         <div class="channel-default">Explore my work ↗</div>
                     </a>
@@ -612,7 +627,7 @@
                         <h4 class="channel-label">PHONE</h4>
                         <div class="channel-info">
                             <span class="channel-hover-text">Give me a call.</span>
-                            <span class="channel-value">{{profile.phone}} <span class="arrow">↗</span></span>
+                            <span class="channel-value" style="display: inline-flex; align-items: center; gap: 4px;">{{profile.phone}} <span class="arrow">↗</span></span>
                         </div>
                         <div class="channel-default">Call me ↗</div>
                     </a>

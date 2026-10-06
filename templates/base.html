@@ -81,9 +81,11 @@
 
         {% block content %}{% endblock %}
 
+        {% block footer %}
         <footer class="footer" style="background: #ffffff; padding: 24px 0; text-align: center; border-top: 1px solid rgba(0,0,0,0.08); position: relative; z-index: 10;">
             <p style="margin: 0; color: #4a4f63;">© 2026 {{ profile.name|default:"Vejandla Ganesh Sharma" }}. Built with passion for AI, software, and automation.</p>
         </footer>
+        {% endblock %}
     </div>
     
     <script src="{% static 'js/portfolio.js' %}"></script>
