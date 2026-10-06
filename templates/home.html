@@ -335,7 +335,7 @@
                         {% if t.category %}
                         <div
                             style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent); margin-bottom: 20px;">
-                            {{ t.category }}
+                            EXPERIENCE
                         </div>
                         {% endif %}
 
@@ -370,11 +370,13 @@
                         {% endif %}
 
                         {% if t.technologies %}
-                        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                            {% for tech in t.technologies|split_csv %}
-                            <span
-                                style="font-size: 0.8rem; font-weight: 500; padding: 4px 12px; background: #F3F4F6; color: #374151; border: 1px solid #E5E7EB; border-radius: 999px;">{{ tech }}</span>
-                            {% endfor %}
+                        <div style="margin-top: 15px;">
+                            <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6B7280; margin-bottom: 8px; letter-spacing: 0.5px;">TECHNOLOGIES</div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                                {% for tech in t.technologies|split_csv %}
+                                <span style="font-size: 0.75rem; font-weight: 500; padding: 4px 10px; background: #F3F4F6; color: #374151; border-radius: 6px; border: 1px solid #E5E7EB;">{{ tech }}</span>
+                                {% endfor %}
+                            </div>
                         </div>
                         {% endif %}
                     </div>

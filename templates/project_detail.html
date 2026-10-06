@@ -207,7 +207,11 @@
                                             <strong style="color: var(--text-dark); display: block; margin-bottom: 8px;">{{ block|split_colon:0 }}</strong>
                                             {{ block|split_colon:1 }}
                                         {% else %}
-                                            {{ block }}
+                                            <ul style="padding-left: 20px; margin: 0; display: flex; flex-direction: column; gap: 8px;">
+                                                {% for line in block|split_lines %}
+                                                    <li>{{ line }}</li>
+                                                {% endfor %}
+                                            </ul>
                                         {% endif %}
                                     </div>
                                 </div>
