@@ -24,7 +24,19 @@
             </div>
             
             <div class="project-visual" style="width: 100%; border-radius: 12px; overflow: hidden; background: var(--bg-alt);">
-                {% if project.project_image %}
+                {% if 'carrier' in project.title|lower %}
+                <img src="{% static 'images/projects/Carrierguide.png' %}" alt="{{ project.title }} project preview" style="width: 100%; height: auto; display: block;" loading="lazy" decoding="async">
+                {% elif 'newedu' in project.title|lower %}
+                <img src="{% static 'images/projects/Newedu.png' %}" alt="{{ project.title }} project preview" style="width: 100%; height: auto; display: block;" loading="lazy" decoding="async">
+                {% elif 'playwright' in project.title|lower %}
+                <img src="{% static 'images/projects/playwright.png' %}" alt="{{ project.title }} project preview" style="width: 100%; height: auto; display: block;" loading="lazy" decoding="async">
+                {% elif 'scriptoria' in project.title|lower %}
+                <img src="{% static 'images/projects/Scriptoria.png' %}" alt="{{ project.title }} project preview" style="width: 100%; height: auto; display: block;" loading="lazy" decoding="async">
+                {% elif 'sociopedia' in project.title|lower %}
+                <img src="{% static 'images/projects/Sociopedia.png' %}" alt="{{ project.title }} project preview" style="width: 100%; height: auto; display: block;" loading="lazy" decoding="async">
+                {% elif 'urbanverse' in project.title|lower or 'urban verse' in project.title|lower %}
+                <img src="{% static 'images/projects/UrbanVerse.png' %}" alt="{{ project.title }} project preview" style="width: 100%; height: auto; display: block;" loading="lazy" decoding="async">
+                {% elif project.project_image %}
                 <img src="{{ project.project_image.url }}" alt="{{ project.title }} project preview" style="width: 100%; height: auto; display: block;" loading="lazy" decoding="async">
                 {% else %}
                 <div style="width: 100%; padding: 100px 20px; text-align: center; color: var(--text-light);">No Image Provided</div>

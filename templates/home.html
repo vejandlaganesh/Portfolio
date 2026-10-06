@@ -80,9 +80,7 @@
                         {% if profile.profile_photo %}
                         <img src="{{ profile.profile_photo.url }}" alt="Profile Photo" class="hero-photo">
                         {% else %}
-                        <div class="profile-placeholder">
-                            <div class="placeholder-shape"></div>
-                        </div>
+                        <img src="{% static 'images/ganesh.jpeg' %}" alt="Profile Photo" class="hero-photo">
                         {% endif %}
                     </div>
                     <div class="float-tag tech-python">Python</div>
@@ -215,7 +213,19 @@
                     </div>
 
                     <div class="project-visual">
-                        {% if p.project_image %}
+                        {% if 'carrier' in p.title|lower %}
+                        <img src="{% static 'images/projects/Carrierguide.png' %}" alt="{{ p.title }} project preview" class="project-image" loading="lazy" decoding="async">
+                        {% elif 'newedu' in p.title|lower %}
+                        <img src="{% static 'images/projects/Newedu.png' %}" alt="{{ p.title }} project preview" class="project-image" loading="lazy" decoding="async">
+                        {% elif 'playwright' in p.title|lower %}
+                        <img src="{% static 'images/projects/playwright.png' %}" alt="{{ p.title }} project preview" class="project-image" loading="lazy" decoding="async">
+                        {% elif 'scriptoria' in p.title|lower %}
+                        <img src="{% static 'images/projects/Scriptoria.png' %}" alt="{{ p.title }} project preview" class="project-image" loading="lazy" decoding="async">
+                        {% elif 'sociopedia' in p.title|lower %}
+                        <img src="{% static 'images/projects/Sociopedia.png' %}" alt="{{ p.title }} project preview" class="project-image" loading="lazy" decoding="async">
+                        {% elif 'urbanverse' in p.title|lower or 'urban verse' in p.title|lower %}
+                        <img src="{% static 'images/projects/UrbanVerse.png' %}" alt="{{ p.title }} project preview" class="project-image" loading="lazy" decoding="async">
+                        {% elif p.project_image %}
                         <img src="{{ p.project_image.url }}" alt="{{ p.title }} project preview" class="project-image"
                             loading="lazy" decoding="async">
                         {% else %}

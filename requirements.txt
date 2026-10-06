@@ -7,7 +7,3 @@ python-dotenv
 
 requests
 
-cloudinary==1.46.3
-django-cloudinary-storage==0.3.0
-
-
