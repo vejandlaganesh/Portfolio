@@ -17,6 +17,68 @@
 </div>
 {% endif %}
 
+<style>
+    .project-section {
+        margin-bottom: 2.5rem;
+    }
+    .project-section-title {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: var(--text-dark);
+        text-transform: uppercase;
+    }
+    .problem-solution {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-bottom: 2.5rem;
+    }
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-bottom: 2.5rem;
+    }
+    .project-bottom-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        margin-bottom: 2.5rem;
+    }
+    .project-bottom-section-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+
+    @media (min-width: 769px) {
+        .project-bottom-section-grid {
+            grid-template-columns: 1.5fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+    }
+
+    @media (max-width: 1024px) {
+        .features-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .problem-solution {
+            grid-template-columns: 1fr;
+        }
+        .features-grid {
+            grid-template-columns: 1fr;
+        }
+        .project-bottom-grid {
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+    }
+</style>
+
 <main id="project-detail" style="padding-top: 40px; padding-bottom: 80px;">
     <div class="container">
         <div style="text-align: center; margin-bottom: 2rem;">
@@ -24,7 +86,7 @@
         </div>
         
         <div class="project-showcase" style="display: flex; flex-direction: column; gap: 40px; padding: 40px; background: var(--bg); border: 1px solid var(--border); border-radius: 16px;">
-            <div class="project-header" style="text-align: center; max-width: 800px; margin: 0 auto;">
+            <div class="project-header" style="text-align: center; max-width: 1100px; margin: 0 auto; width: min(1100px, 90%);">
                 <div class="project-index" style="margin-bottom: 10px; color: var(--accent); font-weight: bold; letter-spacing: 1px;">{{ project.category|upper }}</div>
                 <h1 class="project-title" style="font-size: 3rem; margin-bottom: 20px; color: var(--text-dark);">{{ project.title }}</h1>
                 <p style="font-size: 1.15rem; color: var(--text-secondary); margin-bottom: 25px;">{{ project.description }}</p>
@@ -45,7 +107,7 @@
                 </div>
             </div>
             
-            <div class="project-visual" style="width: 100%; border-radius: 12px; overflow: hidden; background: var(--bg-alt);">
+            <div class="project-visual" style="width: 100%; max-width: 1100px; margin: 0 auto; border-radius: 12px; overflow: hidden; background: var(--bg-alt);">
                 {% if 'carrier' in project.title|lower %}
                 <img src="{% static 'images/projects/Carrierguide.png' %}" alt="{{ project.title }} project preview" style="width: 100%; height: auto; display: block;" loading="lazy" decoding="async">
                 {% elif 'newedu' in project.title|lower %}
@@ -65,39 +127,43 @@
                 {% endif %}
             </div>
 
-            <div class="project-content" style="max-width: 800px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 50px;">
+            <div class="project-content" style="max-width: 1100px; margin: 0 auto; width: min(1100px, 90%); display: flex; flex-direction: column; gap: 2.5rem;">
                 
                 {% if project.overview or project.description %}
-                <section>
-                    <h2 style="font-size: 1.5rem; margin-bottom: 15px; color: var(--text-dark); text-transform: uppercase;">Project Overview</h2>
+                <section class="project-section">
+                    <h2 class="project-section-title">Project Overview</h2>
                     <div style="font-size: 1.1rem; line-height: 1.7; color: var(--text-secondary); white-space: pre-line;">
                         {{ project.overview|default:project.description }}
                     </div>
                 </section>
                 {% endif %}
 
-                {% if project.problem %}
-                <section style="background: var(--bg-hover); padding: 30px; border-radius: 12px; border: 1px solid var(--border);">
-                    <h2 style="font-size: 1.5rem; margin-bottom: 15px; color: var(--text-dark); text-transform: uppercase;">The Problem</h2>
-                    <div style="font-size: 1.1rem; line-height: 1.7; color: var(--text-secondary); white-space: pre-line;">
-                        {{ project.problem }}
-                    </div>
-                </section>
-                {% endif %}
+                {% if project.problem or project.solution %}
+                <div class="problem-solution">
+                    {% if project.problem %}
+                    <section style="background: var(--bg-hover); padding: 30px; border-radius: 12px; border: 1px solid var(--border);">
+                        <h2 class="project-section-title">The Problem</h2>
+                        <div style="font-size: 1.1rem; line-height: 1.7; color: var(--text-secondary); white-space: pre-line;">
+                            {{ project.problem }}
+                        </div>
+                    </section>
+                    {% endif %}
 
-                {% if project.solution %}
-                <section>
-                    <h2 style="font-size: 1.5rem; margin-bottom: 15px; color: var(--text-dark); text-transform: uppercase;">The Solution</h2>
-                    <div style="font-size: 1.1rem; line-height: 1.7; color: var(--text-secondary); white-space: pre-line;">
-                        {{ project.solution }}
-                    </div>
-                </section>
+                    {% if project.solution %}
+                    <section style="background: var(--bg); padding: 30px; border-radius: 12px; border: 1px solid var(--border);">
+                        <h2 class="project-section-title">The Solution</h2>
+                        <div style="font-size: 1.1rem; line-height: 1.7; color: var(--text-secondary); white-space: pre-line;">
+                            {{ project.solution }}
+                        </div>
+                    </section>
+                    {% endif %}
+                </div>
                 {% endif %}
 
                 {% if project.key_features %}
-                <section>
-                    <h2 style="font-size: 1.5rem; margin-bottom: 20px; color: var(--text-dark); text-transform: uppercase;">Key Features</h2>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                <section class="project-section">
+                    <h2 class="project-section-title">Key Features</h2>
+                    <div class="features-grid">
                         {% for feature in project.key_features|split_lines %}
                             <div style="background: var(--bg); padding: 20px; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 2px 10px rgba(0,0,0,0.02);">
                                 <div style="display: flex; align-items: flex-start; gap: 15px;">
@@ -117,42 +183,44 @@
                 </section>
                 {% endif %}
 
+                {% if project.contribution or project.challenges %}
+                <div class="project-bottom-grid">
+                    {% if project.contribution %}
+                    <section>
+                        <h2 class="project-section-title">My Contribution</h2>
+                        <ul style="padding-left: 20px; color: var(--text-secondary); font-size: 1.1rem; line-height: 1.7; display: flex; flex-direction: column; gap: 10px;">
+                            {% for point in project.contribution|split_lines %}
+                                <li>{{ point }}</li>
+                            {% endfor %}
+                        </ul>
+                    </section>
+                    {% endif %}
 
-
-                {% if project.contribution %}
-                <section>
-                    <h2 style="font-size: 1.5rem; margin-bottom: 15px; color: var(--text-dark); text-transform: uppercase;">My Contribution</h2>
-                    <ul style="padding-left: 20px; color: var(--text-secondary); font-size: 1.1rem; line-height: 1.7; display: flex; flex-direction: column; gap: 10px;">
-                        {% for point in project.contribution|split_lines %}
-                            <li>{{ point }}</li>
-                        {% endfor %}
-                    </ul>
-                </section>
-                {% endif %}
-
-                {% if project.challenges %}
-                <section>
-                    <h2 style="font-size: 1.5rem; margin-bottom: 20px; color: var(--text-dark); text-transform: uppercase;">Challenges & Solutions</h2>
-                    <div style="display: flex; flex-direction: column; gap: 20px;">
-                        {% for block in project.challenges|split_blocks %}
-                            <div style="background: var(--bg-hover); padding: 25px; border-radius: 12px; border: 1px solid var(--border); border-left: 4px solid var(--accent);">
-                                <div style="font-size: 1.05rem; line-height: 1.7; color: var(--text-secondary); white-space: pre-line;">
-                                    {% if ":" in block %}
-                                        <strong style="color: var(--text-dark); display: block; margin-bottom: 8px;">{{ block|split_colon:0 }}</strong>
-                                        {{ block|split_colon:1 }}
-                                    {% else %}
-                                        {{ block }}
-                                    {% endif %}
+                    {% if project.challenges %}
+                    <section>
+                        <h2 class="project-section-title">Challenges & Solutions</h2>
+                        <div style="display: flex; flex-direction: column; gap: 20px;">
+                            {% for block in project.challenges|split_blocks %}
+                                <div style="background: var(--bg-hover); padding: 25px; border-radius: 12px; border: 1px solid var(--border); border-left: 4px solid var(--accent);">
+                                    <div style="font-size: 1.05rem; line-height: 1.7; color: var(--text-secondary); white-space: pre-line;">
+                                        {% if ":" in block %}
+                                            <strong style="color: var(--text-dark); display: block; margin-bottom: 8px;">{{ block|split_colon:0 }}</strong>
+                                            {{ block|split_colon:1 }}
+                                        {% else %}
+                                            {{ block }}
+                                        {% endif %}
+                                    </div>
                                 </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                </section>
+                            {% endfor %}
+                        </div>
+                    </section>
+                    {% endif %}
+                </div>
                 {% endif %}
 
                 {% if project.results_impact %}
-                <section style="background: var(--bg-alt); padding: 30px; border-radius: 12px; border: 1px dashed var(--border); text-align: center;">
-                    <h2 style="font-size: 1.5rem; margin-bottom: 15px; color: var(--text-dark); text-transform: uppercase;">Results & Impact</h2>
+                <section class="project-section" style="background: var(--bg-alt); padding: 30px; border-radius: 12px; border: 1px dashed var(--border); text-align: center;">
+                    <h2 class="project-section-title">Results & Impact</h2>
                     <div style="font-size: 1.1rem; line-height: 1.7; color: var(--text-secondary); white-space: pre-line;">
                         {{ project.results_impact }}
                     </div>
@@ -160,28 +228,14 @@
                 {% endif %}
 
                 {% if project.technologies or project.live_url or project.github_url %}
-                <div class="project-bottom-section" style="margin-top: 20px; padding-top: 40px; border-top: 1px solid var(--border);">
-                    <style>
-                        .project-bottom-section-grid {
-                            display: grid;
-                            grid-template-columns: 1fr;
-                            gap: 40px;
-                        }
-                        @media (min-width: 769px) {
-                            .project-bottom-section-grid {
-                                grid-template-columns: 1.5fr 1fr;
-                                gap: 4rem;
-                                align-items: start;
-                            }
-                        }
-                    </style>
+                <div class="project-section" style="margin-top: 20px; padding-top: 40px; border-top: 1px solid var(--border);">
                     <div class="project-bottom-section-grid">
                         
                         <!-- LEFT COLUMN: TECH STACK -->
                         <div>
                             {% if project.technologies %}
                             <section>
-                                <h2 style="font-size: 1.5rem; margin-bottom: 20px; color: var(--text-dark); text-transform: uppercase;">Technology Stack</h2>
+                                <h2 class="project-section-title">Technology Stack</h2>
                                 <div style="display: flex; flex-direction: column; gap: 20px;">
                                     {% for cat, techs in project.technologies|categorize_techs %}
                                     <div>
@@ -202,7 +256,7 @@
                         <div>
                             {% if project.live_url or project.github_url %}
                             <section>
-                                <h2 style="font-size: 1.5rem; margin-bottom: 25px; color: var(--text-dark); text-transform: uppercase;">Project Links</h2>
+                                <h2 class="project-section-title">Project Links</h2>
                                 <div class="project-actions" style="display: flex; flex-direction: column; gap: 14px; align-items: flex-start;">
                                     {% if project.github_url %}
                                     <a href="{{ project.github_url }}" target="_blank" rel="noopener noreferrer" class="btn-secondary">GitHub ↗</a>
