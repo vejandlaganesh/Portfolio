@@ -22,7 +22,7 @@
         <div class="cms-form-group">
             <label style="text-transform: capitalize;">{{ field_name|replace_underscore }}</label>
             
-            {% if field_name == 'summary' or field_name == 'about' or field_name == 'description' or field_name == 'technologies' or field_name == 'bullets' or field_name == 'skills' %}
+            {% if field_name == 'summary' or field_name == 'about' or field_name == 'description' or field_name == 'technologies' or field_name == 'bullets' or field_name == 'skills' or field_name == 'overview' or field_name == 'problem' or field_name == 'solution' or field_name == 'key_features' or field_name == 'contribution' or field_name == 'challenges' or field_name == 'results_impact' %}
                 <textarea name="{{ field_name }}" rows="6">{{ object|get_attr:field_name }}</textarea>
             
             {% elif 'image' in field_name or field_name == 'resume' or field_name == 'cert_file' or field_name == 'profile_photo' %}

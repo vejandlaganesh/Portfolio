@@ -33,8 +33,8 @@
         <div class="cms-form-group">
             <label style="text-transform: capitalize;">{{ field_name|replace_underscore }}</label>
             
-            {% if field_name == 'summary' or field_name == 'about' or field_name == 'description' or field_name == 'technologies' or field_name == 'bullets' or field_name == 'skills' %}
-                {% if field_name == 'description' or field_name == 'bullets' %}
+            {% if field_name == 'summary' or field_name == 'about' or field_name == 'description' or field_name == 'technologies' or field_name == 'bullets' or field_name == 'skills' or field_name == 'overview' or field_name == 'problem' or field_name == 'solution' or field_name == 'key_features' or field_name == 'contribution' or field_name == 'challenges' or field_name == 'results_impact' %}
+                {% if field_name == 'description' or field_name == 'bullets' or field_name == 'key_features' or field_name == 'contribution' or field_name == 'challenges' or field_name == 'results_impact' %}
                 <div style="font-size: 13px; color: var(--cms-text-muted); margin-bottom: 8px;">Enter each point on a new line. Each line will appear as a bullet point on the portfolio.</div>
                 {% endif %}
                 <textarea name="{{ field_name }}" rows="6">{{ object|get_attr:field_name }}</textarea>

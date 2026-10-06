@@ -39,3 +39,48 @@ def split_lines(value):
         line = re.sub(r'^\d+[\.\)]\s*', '', line)
         lines.append(line.strip())
     return lines
+
+@register.filter
+def split_blocks(value):
+    """Splits text by double newlines into blocks."""
+    if not value: return []
+    blocks = [b.strip() for b in re.split(r'\n\s*\n', str(value)) if b.strip()]
+    return blocks
+
+@register.filter
+def split_colon(value, index):
+    """Splits a string by colon or newline and returns the specified index. Example for 'Title: text'"""
+    if not value: return ""
+    parts = re.split(r'[:\n]', str(value), maxsplit=1)
+    try:
+        return parts[int(index)].strip()
+    except (IndexError, ValueError):
+        return ""
+
+@register.filter
+def categorize_techs(value):
+    techs = [part.strip() for part in str(value or "").split(",") if part.strip()]
+    if not techs: return {}
+    
+    categories = {
+        "Frontend": ["HTML", "CSS", "React", "React.js", "Tailwind CSS", "TailwindCSS", "JavaScript", "TypeScript", "Vite", "MERN Frontend", "Bootstrap"],
+        "Backend": ["Python", "Django", "Node.js", "Express.js", "Java", "MERN Backend"],
+        "Database": ["MySQL", "Firebase Firestore", "SQL", "MongoDB", "PostgreSQL", "SQLite"],
+        "AI / GenAI": ["Generative AI", "Groq GenAI", "Gemini GenAI", "Groq API", "Image Generation", "LLMs", "Machine Learning", "OpenAI"],
+        "Testing / Tools": ["Playwright", "ExcelJS", "POM", "Karate", "Git", "GitHub", "Docker", "AWS", "Figma"]
+    }
+    
+    result = {}
+    for tech in techs:
+        placed = False
+        for cat, list_t in categories.items():
+            if any(t.lower() == tech.lower() for t in list_t):
+                if cat not in result: result[cat] = []
+                result[cat].append(tech)
+                placed = True
+                break
+        if not placed:
+            if "Other" not in result: result["Other"] = []
+            result["Other"].append(tech)
+            
+    return list(result.items())

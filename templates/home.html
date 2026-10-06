@@ -579,10 +579,9 @@
                         Message</button>
                 </form>
 
-                <p style="color: var(--text-secondary); margin-bottom: 15px; font-size: 0.95rem;">Or reach out directly
-                    via email:</p>
+                <p style="color: var(--text-secondary); margin-bottom: 15px; font-size: 0.95rem;">Have an opportunity or want to connect?</p>
                 <a href="mailto:{{profile.email}}" class="btn-secondary"
-                    style="display: inline-flex; align-items: center; justify-content: center;">Start a conversation
+                    style="display: inline-flex; align-items: center; justify-content: center;">Send me an email
                     &nbsp;→</a>
             </div>
 
@@ -600,7 +599,7 @@
                             <span class="channel-hover-text">Let's start a conversation.</span>
                             <span class="channel-value" style="display: inline-flex; align-items: center; gap: 4px;">{{profile.email}} <span class="arrow">↗</span></span>
                         </div>
-                        <div class="channel-default">Start a conversation ↗</div>
+                        <div class="channel-default">Email me ↗</div>
                     </a>
 
                     {% if profile.linkedin %}
@@ -629,18 +628,16 @@
                     </a>
                     {% endif %}
 
-                    {% if profile.phone %}
-                    <!-- Phone -->
-                    <a href="tel:{{profile.phone|cut:' '}}" class="network-channel">
+                    <!-- Resume -->
+                    <a href="{% url 'resume_public_center' %}" class="network-channel">
                         <div class="channel-dot"></div>
-                        <h4 class="channel-label">PHONE</h4>
+                        <h4 class="channel-label">RESUME</h4>
                         <div class="channel-info">
-                            <span class="channel-hover-text">Give me a call.</span>
-                            <span class="channel-value" style="display: inline-flex; align-items: center; gap: 4px;">{{profile.phone}} <span class="arrow">↗</span></span>
+                            <span class="channel-hover-text">View my resume.</span>
+                            <span class="channel-value" style="display: inline-flex; align-items: center; gap: 4px;">Resume Center <span class="arrow">↗</span></span>
                         </div>
-                        <div class="channel-default">Call me ↗</div>
+                        <div class="channel-default">View my resume ↗</div>
                     </a>
-                    {% endif %}
                 </div>
             </div>
 

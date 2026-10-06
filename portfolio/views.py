@@ -330,12 +330,12 @@ def del_obj(request,code,pk,model,back):
  return redirect(back,code=code)
 
 def projects(request,code):return collection(request,code,'Projects',Project,'project_add','project_edit','project_delete')
-def project_add(request,code):return add_obj(request,code,'Add New Project',Project,['project_image','title','category','description','technologies','github_url','live_url','project_category','order'],'projects')
+def project_add(request,code):return add_obj(request,code,'Add New Project',Project,['project_image','title','category','description','overview','problem','solution','key_features','technologies','contribution','challenges','results_impact','github_url','live_url','project_category','order'],'projects')
 def project_edit(request,code,pk):
  e = guard(request, code)
  if e: return e
  project = get_object_or_404(Project, pk=pk)
- fields = [('project_image',Project),('title',Project),('category',Project),('description',Project),('technologies',Project),('github_url',Project),('live_url',Project),('project_category',Project),('order',Project)]
+ fields = [('project_image',Project),('title',Project),('category',Project),('description',Project),('overview',Project),('problem',Project),('solution',Project),('key_features',Project),('technologies',Project),('contribution',Project),('challenges',Project),('results_impact',Project),('github_url',Project),('live_url',Project),('project_category',Project),('order',Project)]
  error = None
  if request.method == 'POST':
   _apply_post(project, fields, request)
