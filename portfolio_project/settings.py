@@ -39,7 +39,7 @@ ALLOWED_HOSTS = [h.strip() for h in os.environ.get('ALLOWED_HOSTS', '*').split('
 # with the SAME scheme you actually serve over, e.g. "http://your-app.com"
 # or "https://your-app.onrender.com" (comma-separated for multiple).
 CSRF_TRUSTED_ORIGINS = [o.strip() for o in os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',') if o.strip()]
-INSTALLED_APPS=['django.contrib.admin','django.contrib.auth','django.contrib.contenttypes','django.contrib.sessions','django.contrib.messages','django.contrib.staticfiles','portfolio']
+INSTALLED_APPS=['django.contrib.admin','django.contrib.auth','django.contrib.contenttypes','django.contrib.sessions','django.contrib.messages','cloudinary_storage','django.contrib.staticfiles','cloudinary','portfolio']
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -78,6 +78,9 @@ STORAGES = {
     "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
 }
 
+if os.environ.get('CLOUDINARY_URL'):
+    import cloudinary
+    STORAGES["default"] = {"BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage"}
 DEFAULT_AUTO_FIELD='django.db.models.BigAutoField'
 
 # SECURITY WARNING: change this via the PORTFOLIO_ADMIN_CODE env var before
