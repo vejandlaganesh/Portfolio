@@ -39,7 +39,7 @@ ALLOWED_HOSTS = [h.strip() for h in os.environ.get('ALLOWED_HOSTS', '*').split('
 # with the SAME scheme you actually serve over, e.g. "http://your-app.com"
 # or "https://your-app.onrender.com" (comma-separated for multiple).
 CSRF_TRUSTED_ORIGINS = [o.strip() for o in os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',') if o.strip()]
-INSTALLED_APPS=['django.contrib.admin','django.contrib.auth','django.contrib.contenttypes','django.contrib.sessions','django.contrib.messages','cloudinary_storage','django.contrib.staticfiles','cloudinary','portfolio']
+INSTALLED_APPS=['django.contrib.admin','django.contrib.auth','django.contrib.contenttypes','django.contrib.sessions','django.contrib.messages','django.contrib.staticfiles','cloudinary_storage','cloudinary','portfolio']
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -75,17 +75,14 @@ STATIC_ROOT=BASE_DIR/'staticfiles'
 # WhiteNoise: serve compressed, cache-busted static files in production.
 STORAGES = {
     "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
-    "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+    "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
 }
 
 if os.environ.get('CLOUDINARY_URL'):
     import cloudinary
     STORAGES["default"] = {"BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage"}
     
-# Fallback for third-party apps that haven't updated to Django 4.2 STORAGES dict
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 WHITENOISE_MANIFEST_STRICT = False
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage' if os.environ.get('CLOUDINARY_URL') else 'django.core.files.storage.FileSystemStorage'
 
 DEFAULT_AUTO_FIELD='django.db.models.BigAutoField'
 
