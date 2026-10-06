@@ -75,7 +75,7 @@ STATIC_ROOT=BASE_DIR/'staticfiles'
 # WhiteNoise: serve compressed, cache-busted static files in production.
 STORAGES = {
     "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
-    "staticfiles": {"BACKEND": "whitenoise.storage.CompressedStaticFilesStorage"},
+    "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
 }
 
 if os.environ.get('CLOUDINARY_URL'):
@@ -83,7 +83,7 @@ if os.environ.get('CLOUDINARY_URL'):
     STORAGES["default"] = {"BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage"}
     
 # Fallback for third-party apps that haven't updated to Django 4.2 STORAGES dict
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 WHITENOISE_MANIFEST_STRICT = False
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage' if os.environ.get('CLOUDINARY_URL') else 'django.core.files.storage.FileSystemStorage'
 
