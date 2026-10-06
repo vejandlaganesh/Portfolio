@@ -141,18 +141,17 @@
 
                 <div class="verified-panel reveal-on-scroll reveal-delay-1">
                     {% if profile.is_verified %}
-                    <div class="verified-card"
-                        title="Profile verification indicates that this information is maintained through the authenticated Portfolio CMS.">
+                    <div class="verified-card">
                         <div class="verified-card-header">
                             <div class="verified-dot"></div>
-                            <div class="verified-label">VERIFIED PROFILE</div>
+                            <div class="verified-label">PROFESSIONAL PROFILE</div>
                         </div>
                         <div class="verified-name">{{ profile.name }}</div>
                         <div class="verified-headline">{{ profile.headline }}</div>
 
                         <div style="margin-top: 30px;">
-                            <div class="verified-cms">PROFILE CMS</div>
-                            <div class="verified-desc">Maintained through authenticated portfolio management.</div>
+                            <div class="verified-cms" style="color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 0.85rem; margin-bottom: 8px;">AVAILABLE FOR OPPORTUNITIES</div>
+                            <div class="verified-desc">AI/ML · Generative AI · Full-Stack Development · QA Automation</div>
                         </div>
                     </div>
                     {% endif %}

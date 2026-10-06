@@ -397,6 +397,9 @@ def resume_public_center(request):
 
 def resume_download(request, pk):
     resume = get_object_or_404(ResumeDocument, pk=pk, is_active=True)
+    if not resume.file:
+        from django.http import Http404
+        raise Http404("Document file not found.")
     ResumeDocument.objects.filter(pk=pk).update(download_count=F('download_count') + 1)
     ResumeDownload.objects.create(resume=resume)
     return redirect(resume.file.url)

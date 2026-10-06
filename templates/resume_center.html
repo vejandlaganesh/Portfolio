@@ -38,7 +38,7 @@
                     </div>
                 </div>
                 <div class="resume-actions">
-                    {% if one_page %}
+                    {% if one_page and one_page.file %}
                         <a href="{{ one_page.file.url }}" target="_blank" rel="noopener noreferrer" class="btn-secondary outline-btn">View</a>
                         <a href="{% url 'resume_download' one_page.id %}" target="_blank" rel="noopener noreferrer" class="btn-primary btn-accent">Download Resume ↓</a>
                     {% else %}
@@ -59,7 +59,7 @@
                     </div>
                 </div>
                 <div class="resume-actions">
-                    {% if two_page %}
+                    {% if two_page and two_page.file %}
                         <a href="{{ two_page.file.url }}" target="_blank" rel="noopener noreferrer" class="btn-secondary outline-btn">View</a>
                         <a href="{% url 'resume_download' two_page.id %}" target="_blank" rel="noopener noreferrer" class="btn-primary btn-accent">Download Resume ↓</a>
                     {% else %}
@@ -80,7 +80,7 @@
                     </div>
                 </div>
                 <div class="resume-actions">
-                    {% if cover_letter %}
+                    {% if cover_letter and cover_letter.file %}
                         <a href="{{ cover_letter.file.url }}" target="_blank" rel="noopener noreferrer" class="btn-secondary outline-btn">View</a>
                         <a href="{% url 'resume_download' cover_letter.id %}" target="_blank" rel="noopener noreferrer" class="btn-primary btn-accent">Download ↓</a>
                     {% else %}
