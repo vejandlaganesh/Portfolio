@@ -81,6 +81,11 @@ STORAGES = {
 if os.environ.get('CLOUDINARY_URL'):
     import cloudinary
     STORAGES["default"] = {"BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage"}
+    
+# Fallback for third-party apps that haven't updated to Django 4.2 STORAGES dict
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage' if os.environ.get('CLOUDINARY_URL') else 'django.core.files.storage.FileSystemStorage'
+
 DEFAULT_AUTO_FIELD='django.db.models.BigAutoField'
 
 # SECURITY WARNING: change this via the PORTFOLIO_ADMIN_CODE env var before
