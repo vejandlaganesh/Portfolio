@@ -84,6 +84,7 @@ if os.environ.get('CLOUDINARY_URL'):
     
 # Fallback for third-party apps that haven't updated to Django 4.2 STORAGES dict
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+WHITENOISE_MANIFEST_STRICT = False
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage' if os.environ.get('CLOUDINARY_URL') else 'django.core.files.storage.FileSystemStorage'
 
 DEFAULT_AUTO_FIELD='django.db.models.BigAutoField'
