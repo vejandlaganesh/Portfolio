@@ -319,7 +319,9 @@ def collection(request,code,title,model,add,edit,delete):
   items = items.filter(status='published')
  elif filter_cat == 'draft' and hasattr(model, 'status'):
   items = items.filter(status='draft')
- return render(request,'admin/list.html',{'code':code,'title':title,'items':items,'add':add,'edit':edit,'delete':delete, 'current_filter': filter_cat, 'has_category': hasattr(model, 'project_category')})
+ if hasattr(model, 'order'):
+  items = items.order_by('order', '-id')
+ return render(request,'admin/list.html',{'code':code,'title':title,'items':items,'add':add,'edit':edit,'delete':delete, 'current_filter': filter_cat, 'has_category': hasattr(model, 'project_category'), 'model_name': model.__name__})
 
 def add_obj(request,code,title,model,fields,back,template='admin/form.html'): return form(request,code,title,[(f,model) for f in fields],None,back,template)
 def edit_obj(request,code,pk,title,model,fields,back,template='admin/form.html'): return form(request,code,title,[(f,model) for f in fields],get_object_or_404(model,pk=pk),back,template)
@@ -637,3 +639,23 @@ def preview_project(request, code, pk):
     if e: return e
     project = get_object_or_404(Project, pk=pk)
     return render(request, 'project_detail.html', {'project': project, 'preview_mode': True, 'code': code, 'overall_status': get_overall_status()})
+
+from django.views.decorators.csrf import csrf_exempt
+from django.apps import apps
+@csrf_exempt
+def reorder(request, code, model_name):
+    e = guard(request, code)
+    if e: return e
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            model = apps.get_model('portfolio', model_name)
+            for item in data:
+                obj = model.objects.get(pk=item['id'])
+                if hasattr(obj, 'order'):
+                    obj.order = item['order']
+                    obj.save(update_fields=['order'])
+            return JsonResponse({'status': 'success'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+    return HttpResponseForbidden()

@@ -13,6 +13,7 @@ urlpatterns=[
     path('status/', views.status_page, name='status_page'),
     path('portfolio-admin/<str:code>/status/', views.status_list, name='status_list'),
     path('portfolio-admin/<str:code>/status/<int:pk>/edit/', views.status_edit, name='status_edit'),
+    path('portfolio-admin/<str:code>/reorder/<str:model_name>/', views.reorder, name='reorder'),
 
 
     path('learn/', views.learn_public, name='learn'),
