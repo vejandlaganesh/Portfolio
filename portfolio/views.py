@@ -87,9 +87,19 @@ def seed():
   SystemStatus.objects.create(component="Database", status="operational", uptime_percentage=99.9, last_checked=timezone.now(), description="Database connection is stable.", is_active=True)
   SystemStatus.objects.create(component="AI Assistant", status="operational", uptime_percentage=99.9, last_checked=timezone.now(), description="AI assistant is responding normally.", is_active=True)
 
-
-
-
+ if not Achievement.objects.exists():
+  achievements_data = [
+   ('B.Tech', 'Computer Science & Engineering (AI & ML)', 'B.Tech in Artificial Intelligence and Machine Learning at KITS Akshar Institute of Technology', 'Education', 0, True, ''),
+   ('6+', 'AI & Full-Stack Projects', 'Built and deployed intelligent solutions including Edu Carrier, Scriptoria AI, and NewEdu', 'Projects', 1, True, 'https://github.com/vejandlaganesh'),
+   ('AI/ML', 'Generative AI Engineering', 'Hands-on practical development with Foundation Models, LLMs, LangChain, and Groq', 'Experience', 2, True, ''),
+   ('8', 'Verified Certifications', 'Industry-recognized credentials across Python, SQL, SDLC, AI Tools, and Full-Stack', 'Certification', 3, True, ''),
+   ('Full-Stack', 'Application Development', 'End-to-end web architectures built with React, Node.js, Express, Django, and modern DBs', 'Projects', 4, True, ''),
+   ('Playwright', 'Karate Automation Testing', 'Robust reusable test frameworks with Page Object Model, API validations, and CI workflows', 'Experience', 5, True, ''),
+   ('60%+', 'Regression Effort Automated', 'Delivered measurable QA efficiency during internship at Publicis Sapient', 'Experience', 6, True, ''),
+   ('5', 'Public GitHub Repositories', 'Open-source software, test suites, and generative AI pre-production tooling', 'Coding', 7, True, 'https://github.com/vejandlaganesh'),
+  ]
+  for ord_val, (hl, t, desc, cat, o, is_act, lnk) in enumerate(achievements_data):
+   Achievement.objects.create(highlight=hl, title=t, description=desc, category=cat, order=ord_val, is_active=is_act, link=lnk)
 
 def log_activity(action, model_name, obj_id, obj_name, desc):
     AdminActivityLog.objects.create(action=action, model_name=model_name, object_id=str(obj_id), object_name=obj_name, description=desc)
@@ -184,7 +194,8 @@ def home(request):
         'certifications':Certification.objects.all(),
         'career_timeline':CareerTimeline.objects.filter(is_active=True).order_by('-date_sort'),
         'has_resumes': ResumeDocument.objects.filter(is_active=True).exists(),
-        'active_resume': ResumeDocument.objects.filter(document_type="one_page", is_active=True).first()
+        'active_resume': ResumeDocument.objects.filter(document_type="one_page", is_active=True).first(),
+        'achievements': Achievement.objects.filter(is_active=True).order_by('order', 'id')
     })
 
 def admin_dashboard(request,code):
@@ -221,6 +232,8 @@ def admin_dashboard(request,code):
      'certifications_count': Certification.objects.count(),
      'resume_count': ResumeDocument.objects.filter(is_active=True).count(),
      'concepts_count': Concept.objects.filter(is_active=True).count(),
+     'achievements_count': Achievement.objects.filter(is_active=True).count(),
+     'total_achievements_count': Achievement.objects.count(),
      'recent_activity': recent_activity,
      'system_status': system_status,
      'drafts': drafts,
@@ -461,6 +474,110 @@ def timeline_edit(request, code, pk):
 
 def timeline_delete(request, code, pk):
     return del_obj(request, code, pk, CareerTimeline, 'timeline_list')
+
+
+def achievements(request, code):
+    e = guard(request, code)
+    if e: return e
+    items = Achievement.objects.all().order_by('order', 'id')
+    return render(request, 'admin/achievement_list.html', {
+        'code': code,
+        'achievements': items,
+        'total_count': items.count(),
+        'active_count': items.filter(is_active=True).count(),
+        'inactive_count': items.filter(is_active=False).count(),
+    })
+
+def achievement_add(request, code):
+    e = guard(request, code)
+    if e: return e
+    if request.method == 'POST':
+        highlight = request.POST.get('highlight', '').strip()
+        title = request.POST.get('title', '').strip()
+        description = request.POST.get('description', '').strip()
+        category = request.POST.get('category', 'Other')
+        order = request.POST.get('order', 0)
+        is_active = request.POST.get('is_active') == 'on' or request.POST.get('is_active') == 'true'
+        link = request.POST.get('link', '').strip()
+
+        if not highlight or not title or not description:
+            messages.error(request, 'Highlight, Title, and Description are required fields.')
+            return redirect('achievements', code=code)
+
+        try:
+            order = int(order)
+        except (ValueError, TypeError):
+            order = 0
+
+        ach = Achievement(
+            highlight=highlight,
+            title=title,
+            description=description,
+            category=category,
+            order=order,
+            is_active=is_active,
+            link=link
+        )
+        try:
+            ach.full_clean()
+            ach.save()
+            log_activity('create', 'Achievement', ach.id, str(ach), f'Created Achievement: {ach.highlight} — {ach.title}')
+            messages.success(request, f'Achievement "{ach.highlight} — {ach.title}" added successfully.')
+        except Exception as ex:
+            messages.error(request, f'Error creating achievement: {ex}')
+            
+    return redirect('achievements', code=code)
+
+def achievement_edit(request, code, pk):
+    e = guard(request, code)
+    if e: return e
+    ach = get_object_or_404(Achievement, pk=pk)
+    if request.method == 'POST':
+        highlight = request.POST.get('highlight', '').strip()
+        title = request.POST.get('title', '').strip()
+        description = request.POST.get('description', '').strip()
+        category = request.POST.get('category', 'Other')
+        order = request.POST.get('order', 0)
+        is_active = request.POST.get('is_active') == 'on' or request.POST.get('is_active') == 'true'
+        link = request.POST.get('link', '').strip()
+
+        if not highlight or not title or not description:
+            messages.error(request, 'Highlight, Title, and Description are required fields.')
+            return redirect('achievements', code=code)
+
+        try:
+            order = int(order)
+        except (ValueError, TypeError):
+            order = 0
+
+        ach.highlight = highlight
+        ach.title = title
+        ach.description = description
+        ach.category = category
+        ach.order = order
+        ach.is_active = is_active
+        ach.link = link
+
+        try:
+            ach.full_clean()
+            ach.save()
+            log_activity('update', 'Achievement', ach.id, str(ach), f'Updated Achievement: {ach.highlight} — {ach.title}')
+            messages.success(request, f'Achievement "{ach.highlight} — {ach.title}" updated successfully.')
+        except Exception as ex:
+            messages.error(request, f'Error updating achievement: {ex}')
+
+    return redirect('achievements', code=code)
+
+def achievement_delete(request, code, pk):
+    e = guard(request, code)
+    if e: return e
+    ach = get_object_or_404(Achievement, pk=pk)
+    if request.method == 'POST':
+        name = f"{ach.highlight} — {ach.title}"
+        ach.delete()
+        log_activity('delete', 'Achievement', pk, name, f'Deleted Achievement: {name}')
+        messages.success(request, f'Achievement "{name}" deleted successfully.')
+    return redirect('achievements', code=code)
 
 import requests
 import json

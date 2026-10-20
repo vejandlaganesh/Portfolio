@@ -1,0 +1,375 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<div class="cms-page-header">
+    <div>
+        <div class="cms-eyebrow">PORTFOLIO TICKER</div>
+        <h1 class="cms-page-title">Achievements Management</h1>
+        <p class="cms-body">Manage the achievements displayed in your portfolio ticker.</p>
+    </div>
+    <div style="display: flex; gap: 12px; align-items: center;">
+        <button type="button" class="btn-primary" onclick="openAchievementModal()">+ Add Achievement</button>
+    </div>
+</div>
+
+<!-- Stats Counter Grid -->
+<div class="cms-grid cms-grid-3" style="margin-bottom: 32px;">
+    <div class="cms-stat-card">
+        <div class="cms-stat-value">{{ total_count }}</div>
+        <div class="cms-stat-label">TOTAL ACHIEVEMENTS</div>
+        <div class="cms-stat-desc">Ticker highlights</div>
+    </div>
+    <div class="cms-stat-card">
+        <div class="cms-stat-value" style="color: var(--cms-success);">{{ active_count }}</div>
+        <div class="cms-stat-label">ACTIVE ACHIEVEMENTS</div>
+        <div class="cms-stat-desc">Currently visible on portfolio</div>
+    </div>
+    <div class="cms-stat-card">
+        <div class="cms-stat-value" style="color: var(--cms-text-muted);">{{ inactive_count }}</div>
+        <div class="cms-stat-label">INACTIVE ACHIEVEMENTS</div>
+        <div class="cms-stat-desc">Hidden from public ticker</div>
+    </div>
+</div>
+
+<!-- Search & Controls Bar -->
+<div class="cms-card" style="margin-bottom: 24px; padding: 16px 20px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between;">
+    <div style="position: relative; flex: 1; max-width: 380px;">
+        <input type="text" id="achievementSearch" class="cms-form" style="width: 100%; padding: 10px 14px 10px 38px; border: 1px solid var(--cms-border); border-radius: 10px; background: white; font-size: 14px;" placeholder="Search achievements by highlight, title, or description...">
+        <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--cms-text-muted); font-size: 14px; pointer-events: none;">🔍</span>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+        <span style="font-size: 12px; font-weight: 600; color: var(--cms-text-muted); text-transform: uppercase; margin-right: 4px;">Status:</span>
+        <button type="button" class="status-filter-btn active" data-status="all" style="padding: 6px 14px; border-radius: 999px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--cms-border); background: var(--cms-text); color: white;">All ({{ total_count }})</button>
+        <button type="button" class="status-filter-btn" data-status="active" style="padding: 6px 14px; border-radius: 999px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--cms-border); background: white; color: var(--cms-text-secondary);">Active ({{ active_count }})</button>
+        <button type="button" class="status-filter-btn" data-status="inactive" style="padding: 6px 14px; border-radius: 999px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--cms-border); background: white; color: var(--cms-text-secondary);">Inactive ({{ inactive_count }})</button>
+    </div>
+</div>
+
+{% if achievements %}
+<!-- Manageable Table -->
+<div class="cms-table-wrapper" style="background: white; border: 1px solid var(--cms-border); border-radius: var(--cms-radius-md); overflow-x: auto; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+    <table class="cms-table" style="width: 100%; border-collapse: collapse; text-align: left;">
+        <thead>
+            <tr style="border-bottom: 1px solid var(--cms-border); background: #fafafa;">
+                <th style="padding: 14px 18px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cms-text-muted); width: 80px;">Order</th>
+                <th style="padding: 14px 18px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cms-text-muted);">Highlight / Number</th>
+                <th style="padding: 14px 18px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cms-text-muted);">Achievement Title</th>
+                <th style="padding: 14px 18px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cms-text-muted);">Description</th>
+                <th style="padding: 14px 18px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cms-text-muted); width: 120px;">Category</th>
+                <th style="padding: 14px 18px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cms-text-muted); width: 120px;">Status</th>
+                <th style="padding: 14px 18px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cms-text-muted); width: 140px; text-align: right;">Actions</th>
+            </tr>
+        </thead>
+        <tbody id="achievementTableBody">
+            {% for a in achievements %}
+            <tr class="achievement-row" data-id="{{ a.id }}" data-status="{% if a.is_active %}active{% else %}inactive{% endif %}" data-search="{{ a.highlight|lower }} {{ a.title|lower }} {{ a.description|lower }} {{ a.category|lower }}" style="border-bottom: 1px solid var(--cms-border-soft); transition: background 0.15s ease;">
+                <!-- Order -->
+                <td style="padding: 16px 18px; font-size: 13px; font-weight: 700; color: var(--cms-text-muted);">
+                    <span style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 8px; background: var(--cms-surface-soft); border: 1px solid var(--cms-border);">
+                        #{{ a.order }}
+                    </span>
+                </td>
+
+                <!-- Highlight / Number -->
+                <td style="padding: 16px 18px;">
+                    <div style="font-family: 'Playfair Display', Georgia, serif; font-size: 19px; font-weight: 700; color: #0d0408; letter-spacing: -0.01em;">
+                        {{ a.highlight }}
+                    </div>
+                </td>
+
+                <!-- Achievement Title -->
+                <td style="padding: 16px 18px;">
+                    <strong style="display: block; font-size: 14px; color: var(--cms-text); margin-bottom: 2px;">{{ a.title }}</strong>
+                    {% if a.link %}
+                    <a href="{{ a.link }}" target="_blank" rel="noopener noreferrer" style="font-size: 12px; color: var(--cms-primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                        Evidence link ↗
+                    </a>
+                    {% endif %}
+                </td>
+
+                <!-- Description -->
+                <td style="padding: 16px 18px; font-size: 13px; color: var(--cms-text-secondary); line-height: 1.5; max-width: 320px;">
+                    {{ a.description }}
+                </td>
+
+                <!-- Category -->
+                <td style="padding: 16px 18px;">
+                    <span style="font-size: 11px; font-weight: 600; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; background: var(--cms-surface-soft); color: var(--cms-text-secondary); border: 1px solid var(--cms-border);">
+                        {{ a.category }}
+                    </span>
+                </td>
+
+                <!-- Status -->
+                <td style="padding: 16px 18px;">
+                    {% if a.is_active %}
+                    <span class="cms-badge badge-active" style="background: rgba(34, 150, 111, 0.1); color: var(--cms-success); border: 1px solid rgba(34, 150, 111, 0.2);"><span class="status-dot" style="background: var(--cms-success);"></span> Active</span>
+                    {% else %}
+                    <span class="cms-badge badge-inactive" style="background: rgba(107, 114, 128, 0.1); color: #6b7280; border: 1px solid rgba(107, 114, 128, 0.2);">Inactive</span>
+                    {% endif %}
+                </td>
+
+                <!-- Actions -->
+                <td style="padding: 16px 18px; text-align: right;">
+                    <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
+                        <button type="button" class="btn-secondary edit-achievement-btn" style="padding: 6px 12px; font-size: 12px;"
+                            data-id="{{ a.id }}"
+                            data-highlight="{{ a.highlight }}"
+                            data-title="{{ a.title }}"
+                            data-description="{{ a.description }}"
+                            data-category="{{ a.category }}"
+                            data-order="{{ a.order }}"
+                            data-active="{{ a.is_active|yesno:'true,false' }}"
+                            data-link="{{ a.link|default:'' }}">
+                            Edit
+                        </button>
+                        <form action="{% url 'achievement_delete' code a.id %}" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this achievement?\n\n{{ a.highlight }} — {{ a.title }}\n\nThis action cannot be undone.');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-danger" style="padding: 6px 12px; font-size: 12px;">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <!-- No search results row -->
+    <div id="noSearchResults" style="display: none; padding: 40px 20px; text-align: center; color: var(--cms-text-muted);">
+        <p style="margin: 0; font-size: 14px;">No achievements matched your search.</p>
+    </div>
+</div>
+{% else %}
+<!-- Empty State -->
+<div class="cms-empty" style="background: white; border: 1px solid var(--cms-border); border-radius: var(--cms-radius-md); padding: 60px 24px; text-align: center;">
+    <div style="font-size: 48px; margin-bottom: 16px;">🏆</div>
+    <div class="cms-empty-title" style="font-size: 20px; font-weight: 700; color: var(--cms-text); margin-bottom: 8px;">No achievements added yet</div>
+    <div class="cms-empty-desc" style="font-size: 14px; color: var(--cms-text-secondary); max-width: 460px; margin: 0 auto 24px; line-height: 1.6;">
+        Add your first key achievement or milestone to highlight it in the continuous scrolling marquee ticker on your public portfolio.
+    </div>
+    <button type="button" class="btn-primary" onclick="openAchievementModal()">+ Add Achievement</button>
+</div>
+{% endif %}
+
+<!-- Add / Edit Achievement Modal -->
+<div id="achievementModal" class="achievement-modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.55); backdrop-filter: blur(4px); z-index: 1000; align-items: center; justify-content: center; padding: 20px;">
+    <div class="cms-card" style="width: 100%; max-width: 620px; max-height: 90vh; overflow-y: auto; background: white; border-radius: var(--cms-radius-lg); box-shadow: 0 20px 50px rgba(0,0,0,0.2); padding: 32px; position: relative;">
+        <!-- Modal Header -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; border-bottom: 1px solid var(--cms-border-soft); padding-bottom: 16px;">
+            <div>
+                <div class="cms-eyebrow" id="modalEyebrow">NEW ENTRY</div>
+                <h2 id="modalTitle" style="font-size: 22px; font-weight: 700; color: var(--cms-text); margin-top: 4px;">Add Achievement</h2>
+            </div>
+            <button type="button" onclick="closeAchievementModal()" style="background: none; border: none; font-size: 24px; line-height: 1; cursor: pointer; color: var(--cms-text-muted);">&times;</button>
+        </div>
+
+        <!-- Form -->
+        <form id="achievementForm" method="post" action="{% url 'achievement_add' code %}">
+            {% csrf_token %}
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 18px;">
+                <!-- Highlight / Number -->
+                <div class="cms-form-group" style="margin-bottom: 0;">
+                    <label style="display: block; font-size: 13px; font-weight: 600; color: var(--cms-text); margin-bottom: 6px;">
+                        Highlight / Number <span style="color: var(--cms-danger);">*</span>
+                    </label>
+                    <input type="text" name="highlight" id="id_highlight" required style="width: 100%; padding: 10px 14px; border: 1px solid var(--cms-border); border-radius: 8px; font-size: 14px;" placeholder="e.g. 9.10, 150+, B.Tech, 60%+">
+                    <span style="font-size: 11px; color: var(--cms-text-muted); margin-top: 4px; display: block;">Large serif highlight displayed in ticker.</span>
+                </div>
+
+                <!-- Category -->
+                <div class="cms-form-group" style="margin-bottom: 0;">
+                    <label style="display: block; font-size: 13px; font-weight: 600; color: var(--cms-text); margin-bottom: 6px;">
+                        Category <span style="color: var(--cms-danger);">*</span>
+                    </label>
+                    <select name="category" id="id_category" required style="width: 100%; padding: 10px 14px; border: 1px solid var(--cms-border); border-radius: 8px; font-size: 14px; background: white;">
+                        <option value="Education">Education</option>
+                        <option value="Coding">Coding</option>
+                        <option value="Hackathon">Hackathon</option>
+                        <option value="Certification">Certification</option>
+                        <option value="Projects">Projects</option>
+                        <option value="Experience">Experience</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Achievement Title -->
+            <div class="cms-form-group" style="margin-bottom: 18px;">
+                <label style="display: block; font-size: 13px; font-weight: 600; color: var(--cms-text); margin-bottom: 6px;">
+                    Achievement Title <span style="color: var(--cms-danger);">*</span>
+                </label>
+                <input type="text" name="title" id="id_title" required style="width: 100%; padding: 10px 14px; border: 1px solid var(--cms-border); border-radius: 8px; font-size: 14px;" placeholder="e.g. Computer Science (AI & ML), Coding Problems Solved">
+            </div>
+
+            <!-- Description -->
+            <div class="cms-form-group" style="margin-bottom: 18px;">
+                <label style="display: block; font-size: 13px; font-weight: 600; color: var(--cms-text); margin-bottom: 6px;">
+                    Description <span style="color: var(--cms-danger);">*</span>
+                </label>
+                <textarea name="description" id="id_description" required rows="3" style="width: 100%; padding: 10px 14px; border: 1px solid var(--cms-border); border-radius: 8px; font-size: 14px; font-family: inherit; resize: vertical;" placeholder="Short explanation displayed beside the highlight in the marquee ticker..."></textarea>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 18px;">
+                <!-- Display Order -->
+                <div class="cms-form-group" style="margin-bottom: 0;">
+                    <label style="display: block; font-size: 13px; font-weight: 600; color: var(--cms-text); margin-bottom: 6px;">
+                        Display Order <span style="color: var(--cms-danger);">*</span>
+                    </label>
+                    <input type="number" name="order" id="id_order" value="0" required style="width: 100%; padding: 10px 14px; border: 1px solid var(--cms-border); border-radius: 8px; font-size: 14px;">
+                    <span style="font-size: 11px; color: var(--cms-text-muted); margin-top: 4px; display: block;">Lower numbers appear first.</span>
+                </div>
+
+                <!-- Status Checkbox -->
+                <div class="cms-form-group" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: flex-end;">
+                    <label style="display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; cursor: pointer; padding: 10px 14px; border: 1px solid var(--cms-border); border-radius: 8px; background: var(--cms-surface-soft);">
+                        <input type="checkbox" name="is_active" id="id_is_active" checked style="width: 16px; height: 16px;">
+                        <span>Active (Show in ticker)</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Optional Link -->
+            <div class="cms-form-group" style="margin-bottom: 24px;">
+                <label style="display: block; font-size: 13px; font-weight: 600; color: var(--cms-text); margin-bottom: 6px;">
+                    Optional Link
+                </label>
+                <input type="url" name="link" id="id_link" style="width: 100%; padding: 10px 14px; border: 1px solid var(--cms-border); border-radius: 8px; font-size: 14px;" placeholder="https://example.com/certificate-or-repo">
+                <span style="font-size: 11px; color: var(--cms-text-muted); margin-top: 4px; display: block;">Optional URL to certificate, GitHub repo, or credential.</span>
+            </div>
+
+            <!-- Actions -->
+            <div style="display: flex; gap: 12px; justify-content: flex-end; border-top: 1px solid var(--cms-border-soft); padding-top: 18px;">
+                <button type="button" class="btn-secondary" onclick="closeAchievementModal()">Cancel</button>
+                <button type="submit" class="btn-primary" id="modalSubmitBtn">Save Achievement</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+const addUrl = "{% url 'achievement_add' code %}";
+const editUrlBase = "/portfolio-admin/{{ code }}/achievements/";
+
+function openAchievementModal() {
+    document.getElementById('modalEyebrow').textContent = "NEW ENTRY";
+    document.getElementById('modalTitle').textContent = "Add Achievement";
+    document.getElementById('modalSubmitBtn').textContent = "Save Achievement";
+    document.getElementById('achievementForm').action = addUrl;
+    
+    // Reset form fields
+    document.getElementById('id_highlight').value = '';
+    document.getElementById('id_title').value = '';
+    document.getElementById('id_description').value = '';
+    document.getElementById('id_category').value = 'Other';
+    document.getElementById('id_order').value = '{{ total_count }}';
+    document.getElementById('id_is_active').checked = true;
+    document.getElementById('id_link').value = '';
+    
+    const modal = document.getElementById('achievementModal');
+    modal.style.display = 'flex';
+    document.getElementById('id_highlight').focus();
+}
+
+function openEditModalFromButton(btn) {
+    const id = btn.dataset.id;
+    const highlight = btn.dataset.highlight || '';
+    const title = btn.dataset.title || '';
+    const description = btn.dataset.description || '';
+    const category = btn.dataset.category || 'Other';
+    const order = btn.dataset.order || '0';
+    const isActive = btn.dataset.active === 'true';
+    const link = btn.dataset.link || '';
+
+    document.getElementById('modalEyebrow').textContent = "EDIT ENTRY #" + id;
+    document.getElementById('modalTitle').textContent = "Edit Achievement";
+    document.getElementById('modalSubmitBtn').textContent = "Update Achievement";
+    document.getElementById('achievementForm').action = editUrlBase + id + "/edit/";
+    
+    document.getElementById('id_highlight').value = highlight;
+    document.getElementById('id_title').value = title;
+    document.getElementById('id_description').value = description;
+    document.getElementById('id_category').value = category;
+    document.getElementById('id_order').value = order;
+    document.getElementById('id_is_active').checked = isActive;
+    document.getElementById('id_link').value = link;
+    
+    const modal = document.getElementById('achievementModal');
+    modal.style.display = 'flex';
+    document.getElementById('id_highlight').focus();
+}
+
+function closeAchievementModal() {
+    document.getElementById('achievementModal').style.display = 'none';
+}
+
+// Close modal when clicking outside of it
+window.addEventListener('click', function(e) {
+    const modal = document.getElementById('achievementModal');
+    if (e.target === modal) {
+        closeAchievementModal();
+    }
+});
+
+// Search and filter logic
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('achievementSearch');
+    const filterBtns = document.querySelectorAll('.status-filter-btn');
+    const rows = document.querySelectorAll('.achievement-row');
+    const noResults = document.getElementById('noSearchResults');
+
+    // Attach click listeners to edit buttons
+    document.querySelectorAll('.edit-achievement-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            openEditModalFromButton(this);
+        });
+    });
+
+    function filterTable() {
+        const query = (searchInput ? searchInput.value.toLowerCase().trim() : '');
+        const activeBtn = document.querySelector('.status-filter-btn.active');
+        const statusFilter = activeBtn ? activeBtn.dataset.status : 'all';
+
+        let visibleCount = 0;
+
+        rows.forEach(row => {
+            const rowSearch = row.dataset.search || '';
+            const rowStatus = row.dataset.status || '';
+
+            const matchesQuery = !query || rowSearch.includes(query);
+            const matchesStatus = (statusFilter === 'all') || (rowStatus === statusFilter);
+
+            if (matchesQuery && matchesStatus) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        if (noResults) {
+            noResults.style.display = (visibleCount === 0 && rows.length > 0) ? 'block' : 'none';
+        }
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('input', filterTable);
+    }
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            filterBtns.forEach(b => {
+                b.classList.remove('active');
+                b.style.background = 'white';
+                b.style.color = 'var(--cms-text-secondary)';
+            });
+            this.classList.add('active');
+            this.style.background = 'var(--cms-text)';
+            this.style.color = 'white';
+            filterTable();
+        });
+    });
+});
+</script>
+{% endblock %}

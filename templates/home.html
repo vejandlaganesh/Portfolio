@@ -33,6 +33,18 @@
         color: #FFFFFF !important;
         border-color: #2f3ec0 !important;
     }
+
+    .contact-message-banner.msg-success {
+        background: rgba(40, 167, 69, 0.12);
+        color: #28a745;
+        border: 1px solid rgba(40, 167, 69, 0.25);
+    }
+
+    .contact-message-banner.msg-error {
+        background: rgba(220, 53, 69, 0.12);
+        color: #dc3545;
+        border: 1px solid rgba(220, 53, 69, 0.25);
+    }
 </style>
 <main id="home">
 
@@ -91,6 +103,49 @@
             </div>
         </div>
     </section>
+ 
+    <!-- Achievements & Statistics Marquee Strip -->
+    {% if achievements %}
+    <aside class="achievements-marquee-section" aria-label="Achievements and Highlights Ticker">
+        <div class="achievements-marquee-wrapper">
+            <!-- Primary Track (Accessible to screen readers) -->
+            <div class="achievements-marquee-track">
+                {% for a in achievements %}
+                <div class="achievement-item">
+                    {% if a.link %}
+                    <a href="{{ a.link }}" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit; display: inline-flex; align-items: center; gap: 12px;">
+                        <span class="achievement-highlight">{{ a.highlight }}</span>
+                        <span class="achievement-label">{{ a.title }}</span>
+                    </a>
+                    {% else %}
+                    <span class="achievement-highlight">{{ a.highlight }}</span>
+                    <span class="achievement-label">{{ a.title }}</span>
+                    {% endif %}
+                    <span class="achievement-separator" aria-hidden="true"></span>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Duplicate Track (Seamless Infinite Loop, Hidden from screen readers) -->
+            <div class="achievements-marquee-track" aria-hidden="true">
+                {% for a in achievements %}
+                <div class="achievement-item">
+                    {% if a.link %}
+                    <a href="{{ a.link }}" tabindex="-1" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit; display: inline-flex; align-items: center; gap: 12px;">
+                        <span class="achievement-highlight">{{ a.highlight }}</span>
+                        <span class="achievement-label">{{ a.title }}</span>
+                    </a>
+                    {% else %}
+                    <span class="achievement-highlight">{{ a.highlight }}</span>
+                    <span class="achievement-label">{{ a.title }}</span>
+                    {% endif %}
+                    <span class="achievement-separator" aria-hidden="true"></span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </aside>
+    {% endif %}
 
     <section id="about" class="about-section" style="position: relative;">
 
@@ -526,8 +581,8 @@
                 <div class="messages"
                     style="margin-bottom: 20px; max-width: 600px; margin-left: auto; margin-right: auto;">
                     {% for message in messages %}
-                    <div
-                        style="padding: 15px; border-radius: 8px; margin-bottom: 10px; {% if message.tags == 'success' %}background: #28a74520; color: #28a745; border: 1px solid #28a74540;{% else %}background: #dc354520; color: #dc3545; border: 1px solid #dc354540;{% endif %}">
+                    <div class="contact-message-banner {% if message.tags == 'success' %}msg-success{% else %}msg-error{% endif %}"
+                        style="padding: 15px; border-radius: 8px; margin-bottom: 10px;">
                         {{ message }}
                     </div>
                     {% endfor %}

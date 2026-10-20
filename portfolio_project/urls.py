@@ -16,6 +16,11 @@ urlpatterns=[
     path('portfolio-admin/<str:code>/reorder/<str:model_name>/', views.reorder, name='reorder'),
 
 
+    path('portfolio-admin/<str:code>/achievements/', views.achievements, name='achievements'),
+    path('portfolio-admin/<str:code>/achievements/add/', views.achievement_add, name='achievement_add'),
+    path('portfolio-admin/<str:code>/achievements/<int:pk>/edit/', views.achievement_edit, name='achievement_edit'),
+    path('portfolio-admin/<str:code>/achievements/<int:pk>/delete/', views.achievement_delete, name='achievement_delete'),
+
     path('learn/', views.learn_public, name='learn'),
     path('portfolio-admin/<str:code>/concepts/', views.concept_list, name='concept_list'),
     path('portfolio-admin/<str:code>/concepts/add/', views.concept_add, name='concept_add'),

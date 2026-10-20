@@ -115,3 +115,30 @@ class PageVisit(models.Model):
     path = models.CharField(max_length=500)
     timestamp = models.DateTimeField(auto_now_add=True)
     visitor_hash = models.CharField(max_length=64)
+
+ACHIEVEMENT_CATEGORY_CHOICES = [
+    ('Education', 'Education'),
+    ('Coding', 'Coding'),
+    ('Hackathon', 'Hackathon'),
+    ('Certification', 'Certification'),
+    ('Projects', 'Projects'),
+    ('Experience', 'Experience'),
+    ('Other', 'Other'),
+]
+
+class Achievement(models.Model):
+    highlight = models.CharField(max_length=60, help_text="Prominent highlight or number (e.g., 9.10, 150+, Top 100, B.Tech, 2026)")
+    title = models.CharField(max_length=150, help_text="Achievement Title (e.g., CGPA, Coding Problems Solved, Hackathon Finalist)")
+    description = models.TextField(help_text="Short explanation displayed beside the highlight")
+    category = models.CharField(max_length=50, choices=ACHIEVEMENT_CATEGORY_CHOICES, default='Other')
+    order = models.IntegerField(default=0, help_text="Display order in the ticker")
+    is_active = models.BooleanField(default=True, help_text="Controls visibility on the public portfolio")
+    link = models.URLField(blank=True, help_text="Optional URL to supporting evidence (certificate, GitHub repo, credential, etc.)")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['order', 'id']
+
+    def __str__(self):
+        return f"{self.highlight} — {self.title}"

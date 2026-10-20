@@ -165,6 +165,26 @@ body {
     border-left: 3px solid var(--cms-primary);
 }
 
+/* Alert Banners */
+.cms-alert-banner.alert-success {
+    background: var(--cms-success-soft);
+    color: var(--cms-success);
+    border: 1px solid rgba(34, 150, 111, 0.2);
+}
+
+.cms-alert-banner.alert-error {
+    background: var(--cms-danger-soft);
+    color: var(--cms-danger);
+    border: 1px solid rgba(217, 72, 72, 0.2);
+}
+
+.cms-alert-banner.alert-info,
+.cms-alert-banner.alert-warning {
+    background: var(--cms-primary-soft);
+    color: var(--cms-primary);
+    border: 1px solid rgba(91, 92, 226, 0.2);
+}
+
 /* Buttons */
 .btn-primary, .btn-secondary, .btn-danger {
     display: inline-flex;
